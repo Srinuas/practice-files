@@ -1,0 +1,46 @@
+---
+services:
+  food:
+    image: srinuas/swiggy:food
+    ports:
+      - '121:80'
+    deploy:
+      replicas: 6
+    volumes:
+      - type: volume
+        source: fodvol
+        target: /usr/local/apache2/htdocs/
+
+  genie:
+    image: srinuas/swiggy:genie
+    ports:
+      - '122:80'
+    deploy:
+      replicas: 6
+    volumes:
+      - type: volume
+        source: genvol
+        target: /usr/share/nginx/html
+
+volumes:
+  fodvol:
+  genvol: 
+
+
+# edhi run cheyyalante commands
+# docker stack deploy swiggy -c compose.yml
+# ekkada
+# deploy అంటే create or modify ani
+# swiggy అంటే stack name ani
+# -c అంటే compose file specify చేయడానికి ఉపయోగించే option
+# compose.yml అంటే mana compose file
+# stack loo unde commands
+# Usage:  docker stack COMMAND
+# Manage Swarm stacks
+# Commands:
+# config      Outputs the final config file, after doing merges and interpolations
+# deploy      Deploy a new stack or update an existing stack
+# ls          List stacks
+# ps          List the tasks in the stack
+# rm          Remove one or more stacks
+# services    List the services in the stack

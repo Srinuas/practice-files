@@ -1,0 +1,57 @@
+minikube install:
+curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+
+kubectl install:
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+
+mv kubectl /usr/local/bin/
+sh install/docker.sh
+minikube start --force
+
+kubectl get pods
+kubectl run pod1 --image nginx
+kubectl run pod2 --image httpd
+kubectl create -f s.yml
+kubectl describe pod pod3
+timedatectl set-timezone Asia/Kolkata
+kubectl describe pod pod1
+kubectl describe pod pod2
+kubectl get po
+kubectl describe pod pod4
+kubectl get pod -o wide
+kubectl get pod
+kubectl get pod -o yaml pod4
+kubectl get pod -o json pod4
+kubectl create -f pod5
+kubectl get po -o wide
+kubectl get po -l env=test
+kubectl get pods -l env=test
+kubectl get pods --show-labels
+kubectl get po --show-labels
+kubectl label pod pod4 env=wip
+kubectl label pod pod3 env=prod
+kubectl label pod pod4 env-
+kubectl label pod pod4 env=dev comp=wip
+kubectl label pod pod3 comp=tcs
+kubectl label pod pod2 comp=info env=prod
+kubectl label pod pod1 comp=wip env=dev
+kubectl get -l env=prod
+kubectl get po -o wide
+kubectl get pods -l env=test --show-labels
+kubectl get pods -l 'env in (dev,test)' --show-labels
+kubectl get pods -l 'comp in (tcs,info),env in (dev,test)' --show-labels
+kubectl get pods -l 'env in (test,prod), comp in (accenture,wip
+,info)' --show-labels
+kubectl get nodes
+kubectl get nodes --show-labels
+kubectl label nodes minikube env=test
+kubectl get nodes --show-labels | grep env
+kubectl label nodes minikube comp=del location=hyd site=synergy
+kubectl label nodes minikube beta.kubernetes.io/arch-
+kubectl label nodes minikube beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os-
+kubectl label nodes minikube env-
+kubectl get nodes --show-labels | grep env
+kubectl create -f /root/s.yml
+kubectl get pods --show-labels

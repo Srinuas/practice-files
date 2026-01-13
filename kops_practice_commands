@@ -1,0 +1,80 @@
+hostnamectl set-hostname instance
+exit
+yum install git -y && git clone https://github.com/Srinuas/notes.git && git clone https://github.com/Srinuas/install.git
+aws s3 mb s3://srinu.as
+aws s3 ls
+curl -Lo kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+chmod +x kops
+sudo mv kops /usr/local/bin/kops
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+mv kubectl /usr/local/bin/
+kubectl version
+kops version
+export KOPS_STATE_STORE=s3://srinu.as
+kops update cluster --name srinu.k8s.local --yes --admin
+kubectl get nodes
+kubectl get nodes -o wide
+vim s.yml
+kubectl create -f s.yml
+cat s.yml
+vim s.yml
+kubectl create -f s.yml
+vim s.yml
+kubectl create -f s.yml
+cat s.yml
+vim s.yml
+kubectl create -f s.yml
+kubectl api-resources
+kubectl create -f s.yml
+vim s.yml
+kubectl create -f s.yml
+kubectl get pods
+kubectl get pods -o wide
+kubectl get pods --show-labels
+kubectl get pods --show-labels -o wide
+vim s.yml
+kubectl create -f s.yml
+kubectl get pods --show-labels -o wide
+vim s.yml
+kubectl create -f s.yml
+kubectl get pods --show-labels -o wide
+vim s.yml
+kubectl create -f s.yml
+kubectl get pods --show-labels -o wide
+history
+export KOPS_STATE_STORE=s3://srinu.as
+kops delete cluster --name srinu.k8s.local
+kops delete cluster --name srinu.k8s.local --yes
+kubectl get nodes
+kubectl get node
+
+kops create cluster --name srinu.k8s.local --cloud aws --zones us-east-2a,us-east-2b --master-size c7i-flex.large
+--master-count 1 --master-volume-size 24 --node-size t3.micro --node-count 2 --node-volume-size 15 --image ami-0f5fcdfbd140e4ab7
+
+Cluster configuration has been created.
+
+Suggestions:
+ * list clusters with: kops get cluster
+ * edit this cluster with: kops edit cluster srinu.k8s.local
+ * edit your node instance group: kops edit ig --name=srinu.k8s.local nodes-us-east-2a
+ * edit your control-plane instance group: kops edit ig --name=srinu.k8s.local control-plane-us-east-2a
+
+Finally configure your cluster with: kops update cluster --name srinu.k8s.local --yes --admin
+
+
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod1
+  labels:
+    env: prod
+    comp: info
+spec:
+  containers:
+    - name: con1
+      image: nginx
+      ports:
+        containerPort: 80

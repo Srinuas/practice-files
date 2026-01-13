@@ -1,0 +1,202 @@
+[root@Instance ~]# docker images
+REPOSITORY          TAG       IMAGE ID       CREATED        SIZE
+httpd               latest    95708e927277   36 hours ago   117MB
+nginx               latest    058f4935d1cb   36 hours ago   152MB
+srinuas/swiggy      food      39ac82c3e8f4   6 days ago     67.1MB
+mysql               latest    43463387c19a   7 days ago     932MB
+srinuas/devopsapp   mysqldb   06d3b06d6295   11 days ago    372MB
+srinuas/devopsapp   jsapp     e666473061d7   11 days ago    323MB
+srinuas/ecom2       httpd     a5067a47c10e   11 days ago    117MB
+srinuas/metro       nginx     d5e5e8662e09   11 days ago    152MB
+srinuas/flight      py        167e8166118b   11 days ago    1.08GB
+srinuas/ecom        nex       4a807612f389   11 days ago    493MB
+sonarqube           latest    247ce055a80b   2 weeks ago    1.27GB
+tomcat              latest    557466b563c2   3 weeks ago    412MB
+[root@Instance ~]# df -h
+Filesystem        Size  Used Avail Use% Mounted on
+devtmpfs          4.0M     0  4.0M   0% /dev
+tmpfs             459M     0  459M   0% /dev/shm
+tmpfs             184M  516K  183M   1% /run
+/dev/nvme0n1p1    8.0G  7.2G  837M  90% /
+tmpfs             459M     0  459M   0% /tmp
+/dev/nvme0n1p128   10M  1.3M  8.7M  13% /boot/efi
+tmpfs              92M     0   92M   0% /run/user/1000
+[root@Instance ~]#
+
+[root@Instance ~]# docker images
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+[root@Instance ~]# df -h
+Filesystem        Size  Used Avail Use% Mounted on
+devtmpfs          4.0M     0  4.0M   0% /dev
+tmpfs             459M     0  459M   0% /dev/shm
+tmpfs             184M  516K  183M   1% /run
+/dev/nvme0n1p1    8.0G  2.0G  6.1G  25% /
+tmpfs             459M     0  459M   0% /tmp
+/dev/nvme0n1p128   10M  1.3M  8.7M  13% /boot/efi
+tmpfs              92M     0   92M   0% /run/user/1000
+[root@Instance ~]#
+
+
+[root@Instance ~]# fdisk -l
+Disk /dev/nvme0n1: 8 GiB, 8589934592 bytes, 16777216 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disklabel type: gpt
+Disk identifier: 9344EBEF-95C4-4F85-B6D2-126FF822A43E
+
+Device           Start      End  Sectors Size Type
+/dev/nvme0n1p1   24576 16777182 16752607   8G Linux filesystem
+/dev/nvme0n1p127 22528    24575     2048   1M BIOS boot
+/dev/nvme0n1p128  2048    22527    20480  10M EFI System
+
+Partition table entries are not in disk order.
+
+
+Disk /dev/nvme1n1: 10 GiB, 10737418240 bytes, 20971520 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+[root@Instance ~]#
+
+
+[root@Instance ~]# docker images
+REPOSITORY          TAG       IMAGE ID       CREATED        SIZE
+httpd               latest    95708e927277   36 hours ago   117MB
+nginx               latest    058f4935d1cb   36 hours ago   152MB
+srinuas/swiggy      food      39ac82c3e8f4   6 days ago     67.1MB
+mysql               latest    43463387c19a   7 days ago     932MB
+srinuas/devopsapp   mysqldb   06d3b06d6295   11 days ago    372MB
+srinuas/devopsapp   jsapp     e666473061d7   11 days ago    323MB
+srinuas/ecom2       httpd     a5067a47c10e   11 days ago    117MB
+srinuas/metro       nginx     d5e5e8662e09   11 days ago    152MB
+srinuas/flight      py        167e8166118b   11 days ago    1.08GB
+srinuas/ecom        nex       4a807612f389   11 days ago    493MB
+sonarqube           latest    247ce055a80b   2 weeks ago    1.27GB
+tomcat              latest    557466b563c2   3 weeks ago    412MB
+[root@Instance ~]# df -h
+Filesystem        Size  Used Avail Use% Mounted on
+devtmpfs          4.0M     0  4.0M   0% /dev
+tmpfs             459M     0  459M   0% /dev/shm
+tmpfs             184M  516K  183M   1% /run
+/dev/nvme0n1p1    8.0G  2.0G  6.1G  25% /
+tmpfs             459M     0  459M   0% /tmp
+/dev/nvme0n1p128   10M  1.3M  8.7M  13% /boot/efi
+tmpfs              92M     0   92M   0% /run/user/1000
+/dev/nvme1n1       10G  5.3G  4.7G  54% /var/lib/docker
+[root@Instance ~]#
+
+[root@Instance ~]# docker images
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+[root@Instance ~]# df -h
+Filesystem        Size  Used Avail Use% Mounted on
+devtmpfs          4.0M     0  4.0M   0% /dev
+tmpfs             459M     0  459M   0% /dev/shm
+tmpfs             184M  508K  183M   1% /run
+/dev/nvme0n1p1    8.0G  2.0G  6.1G  25% /
+tmpfs             459M     0  459M   0% /tmp
+/dev/nvme0n1p128   10M  1.3M  8.7M  13% /boot/efi
+tmpfs              92M     0   92M   0% /run/user/1000
+/dev/nvme1n1       10G  108M  9.9G   2% /var/lib/docker
+[root@Instance ~]#
+
+[root@Instance ~]# umount /dev/nvme1n1
+umount: /var/lib/docker: target is busy.
+[root@Instance ~]# systemctl stop docker
+Warning: Stopping docker.service, but it can still be activated by:
+  docker.socket
+[root@Instance ~]# umount /dev/nvme1n1
+[root@Instance ~]# df -h
+Filesystem        Size  Used Avail Use% Mounted on
+devtmpfs          4.0M     0  4.0M   0% /dev
+tmpfs             459M     0  459M   0% /dev/shm
+tmpfs             184M  500K  183M   1% /run
+/dev/nvme0n1p1    8.0G  2.0G  6.1G  25% /
+tmpfs             459M     0  459M   0% /tmp
+/dev/nvme0n1p128   10M  1.3M  8.7M  13% /boot/efi
+tmpfs              92M     0   92M   0% /run/user/1000
+[root@Instance ~]# fdisk -l
+Disk /dev/nvme0n1: 8 GiB, 8589934592 bytes, 16777216 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disklabel type: gpt
+Disk identifier: 9344EBEF-95C4-4F85-B6D2-126FF822A43E
+
+Device           Start      End  Sectors Size Type
+/dev/nvme0n1p1   24576 16777182 16752607   8G Linux filesystem
+/dev/nvme0n1p127 22528    24575     2048   1M BIOS boot
+/dev/nvme0n1p128  2048    22527    20480  10M EFI System
+
+Partition table entries are not in disk order.
+
+
+Disk /dev/nvme1n1: 10 GiB, 10737418240 bytes, 20971520 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+[root@Instance ~]# systemctl start docker
+
+[root@Instance ~]# df -h
+Filesystem        Size  Used Avail Use% Mounted on
+devtmpfs          4.0M     0  4.0M   0% /dev
+tmpfs             459M     0  459M   0% /dev/shm
+tmpfs             184M  508K  183M   1% /run
+/dev/nvme0n1p1    8.0G  3.0G  5.0G  38% /
+tmpfs             459M     0  459M   0% /tmp
+/dev/nvme0n1p128   10M  1.3M  8.7M  13% /boot/efi
+tmpfs              92M     0   92M   0% /run/user/1000
+[root@Instance ~]# docker images
+REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+httpd        latest    95708e927277   37 hours ago   117MB
+mysql        latest    43463387c19a   7 days ago     932MB
+[root@Instance ~]#
+
+[root@Instance ~]# history
+    1  hostnamectl set-hostname Instance
+    2  exit
+    3  vi pull.sh
+    4  sh pull.sh
+    5  docker images
+    6  df -h
+    7  docker rmi $(docker images)
+    8  docker images
+    9  df -h
+   10  fdish -l
+   11  fdisk -l
+   12  mkfs -t xfs /dev/nvme1n1
+   13  mount /dev/nvme1n1 /var/lib/docker/
+   14  systemctl restart docker
+   15  sh pull.sh
+   16  docker images
+   17  df -h
+   18  docker rmi $(docker images)
+   19  docker images
+   20  df -h
+   21  history
+   22  df -h | grep docker
+   23  systemctl status docker
+   24  lsblk -f | grep nvme1n1
+   25  df -h | grep docker
+   26  lsblk -f | grep nvme1n1
+   27  umount /dev/nvme1n1
+   28  systemctl stop docker
+   29  umount /dev/nvme1n1
+   30  df -h
+   31  fdisk -l
+   32  systemctl start docker
+   33  docker pull httpd
+   34  df -h
+   35  docker pull mysql
+   36  df -h
+   37  docker images
+   48  docker run -itd --name cont1 -p 1212:80 --cpus='0.25' --memory=250m srinuas/swiggy:dineout
+   49  docker inspect con1
+   50  docker inspect cont1
+   51  docker inspect cont1 | grep -i cpu
+   52  docker inspect cont1 | grep -i memory
+   53  docker stats cont1

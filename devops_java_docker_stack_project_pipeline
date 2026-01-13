@@ -1,0 +1,79 @@
+pipeline {
+    agent {
+        node {
+            label 'manager'
+        }
+    }
+    tools {
+        maven 'mvn'
+    }
+    stages {
+        stage('code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Srinuas/dockerapp.git'
+            }
+        }
+        stage('cqa') {
+            steps {
+                withSonarQubeEnv('snr') {
+                    sh 'mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=myproj'
+                }
+            }
+        }
+        stage('artifact') {
+            steps {
+                nexusArtifactUploader artifacts: [[artifactId: 'vprofile', classifier: '', file: 'target/vprofile-v2.war', type: 'war']], credentialsId: 'nexus', groupId: 'com.visualpathit', nexusUrl: '107.21.130.148:344/', nexusVersion: 'nexus3', protocol: 'http', repository: 'myrepo', version: 'v2'
+            }
+        }
+        stage('build') {
+            steps {
+                sh 'mvn clean package'
+                sh 'cp -r target Docker-app'
+            }
+        } 
+        stage('image') { 
+            steps { 
+                sh 'docker build -t dbimage Docker-db' 
+                sh 'docker build -t apimage Docker-app' 
+            } 
+        } 
+        stage('trivy') { 
+            steps { 
+                sh 'trivy image dbimage' 
+                sh 'trivy image apimage' 
+            } 
+        } 
+        stage('tags') { 
+            steps { 
+                sh 'docker tag dbimage srinuas/myreponew:db' 
+                sh 'docker tag apimage srinuas/myreponew:ap' 
+            } 
+        } 
+        stage('push') { 
+            steps { 
+                script { 
+                    withDockerRegistry(credentialsId: 'docker') { 
+                        sh 'docker push srinuas/myreponew:db' 
+                        sh 'docker push srinuas/myreponew:ap' 
+                    } 
+                } 
+            } 
+        } 
+        stage ('deploy') { 
+            steps { 
+                sh 'docker stack deploy srinu --compose-file=compose.yml' 
+            }
+        }
+    }
+    post {
+        always {
+            mail to: 'srinivasvanapalli0499@gmail.com',
+            subject: "Pipeline status - ${currentBuild.currentResult}",
+            body: """Your pipeline name: ${JOB_NAME}
+Build #${BUILD_NUMBER}
+Status: ${currentBuild.currentResult}
+Build URL: ${BUILD_URL}
+Console Output: ${BUILD_URL}console"""
+        }
+    }
+}

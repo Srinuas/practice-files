@@ -1,0 +1,141 @@
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+chmod +x kubectl
+
+mv kubectl /usr/local/bin/
+
+curl -Lo kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+
+chmod +x kops
+
+sudo mv kops /usr/local/bin/kops
+
+aws s3 ls
+
+export KOPS_STATE_STORE=s3://srinu.as
+
+kops create cluster --name srinu.k8s.local --zones us-east-2a,us-east-2b,us-east-2c --master-size c7i-flex.large --master-volume-size 30 --node-count 2 --node-volume-size 20 --node-size t3.micro --image=ami-0f5fcdfbd140e4ab7
+
+kops update cluster --name srinu.k8s.local --yes --admin
+
+kubectl get nodes
+
+kubectl get nodes -o wide
+
+kubectl get pods --show-labels
+
+kubectl get pods --show-labels -o wide
+
+export KOPS_STATE_STORE=s3://srinu.as
+
+kops delete cluster --name srinu.k8s.local --yes
+
+kubectl api-resources
+[root@instance ~]# kubectl get svc -o wide
+NAME         TYPE           CLUSTER-IP       EXTERNAL-IP                                                              PORT(S)        AGE     SELECTOR
+kubernetes   ClusterIP      100.64.0.1       <none>                                                                   443/TCP        4h53m   <none>
+ser1         ClusterIP      100.68.72.112    <none>                                                                   80/TCP         22m     comp=wip
+ser2         NodePort       100.64.45.75     <none>                                                                   80:30755/TCP   15m     comp=wip
+ser2-1       NodePort       100.66.196.230   <none>                                                                   80:30001/TCP   2m44s   comp=wip
+ser3         LoadBalancer   100.71.239.170   a150afed8028c429092cf48c3220ea2d-134486728.us-east-2.elb.amazonaws.com   80:32470/TCP   8m49s   comp=wip
+ser3-1       LoadBalancer   100.68.205.79    a15486c15c9f146338f8b925cfed8a91-563945302.us-east-2.elb.amazonaws.com   80:30002/TCP   14s     comp=wip
+[root@instance ~]#
+[root@instance ~]# ll
+total 56
+-rw-r--r--. 1 root root   202 Jan 13 16:34 foodpod.yml
+-rw-r--r--. 1 root root   152 Jan 13 16:54 foodsvcclus.yml
+-rw-r--r--. 1 root root   155 Jan 13 17:01 foodsvcloadbalancer.yml
+-rw-r--r--. 1 root root   179 Jan 13 17:10 foodsvcloadbalancer2.yml
+-rw-r--r--. 1 root root   151 Jan 13 16:58 foodsvcnodeport.yml
+-rw-r--r--. 1 root root   175 Jan 13 17:08 foodsvcnodeport2.yml
+drwxr-xr-x. 3 root root 16384 Jan 13 11:51 install
+drwxr-xr-x. 3 root root 16384 Jan 13 11:51 notes
+
+
+[root@instance ~]# cat foodpod.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod1
+  labels:
+    comp: wip
+    env: test
+spec:
+  containers:
+    - name: con1
+      image: srinuas/swiggy:food
+      ports:
+        - containerPort: 80
+#for checking the app, you need to connect that node and use curl CLUSTER-IP of that service
+# ex: curl 100.68.72.112
+
+
+[root@instance ~]# cat foodsvcclus.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ser1
+spec:
+  type: ClusterIP
+  selector:
+    comp: wip
+  ports:
+    - port: 80
+      targetPort: 80
+[root@instance ~]# cat foodsvcloadbalancer.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ser3
+spec:
+  type: LoadBalancer
+  selector:
+    comp: wip
+  ports:
+    - port: 80
+      targetPort: 80
+[root@instance ~]# cat foodsvcloadbalancer2.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ser3-1
+spec:
+  type: LoadBalancer
+  selector:
+    comp: wip
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30002
+[root@instance ~]# cat foodsvcnodeport.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ser2
+spec:
+  type: NodePort
+  selector:
+    comp: wip
+  ports:
+    - port: 80
+      targetPort: 80
+[root@instance ~]# cat foodsvcnodeport2.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ser2-1
+spec:
+  type: NodePort
+  selector:
+    comp: wip
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30001
+[root@instance ~]#
