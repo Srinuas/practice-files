@@ -1,0 +1,139 @@
+[root@instance ~]# ll
+total 36
+-rw-r--r--. 1 root root   341 Jan 16 13:09 dep.yml
+drwxr-xr-x. 3 root root 16384 Jan 16 06:58 install
+drwxr-xr-x. 3 root root    35 Jan 16 06:58 notes
+-rw-r--r--. 1 root root   202 Jan 16 07:23 po.yml
+-rw-r--r--. 1 root root   324 Jan 16 07:43 rc.yml
+-rw-r--r--. 1 root root   337 Jan 16 10:04 rs.yml
+-rw-r--r--. 1 root root   188 Jan 16 07:43 svc.yml
+drwxr-xr-x. 7 root root   172 Jan 16 12:37 swiggycompose
+[root@instance ~]# cat po.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod-1
+  labels:
+    app: swiggy
+spec:
+  containers:
+    - name: my-container
+      image: srinuas/swiggy:genie
+      ports:
+        - containerPort: 80
+[root@instance ~]# cat rc.yml
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: my-rc-1
+spec:
+  replicas: 3
+  selector:
+    app: swiggy
+  template:
+    metadata:
+      labels:
+        app: swiggy
+    spec:
+      containers:
+        - name: my-con1
+          image: srinuas/swiggy:instamart
+          ports:
+            - containerPort: 80
+[root@instance ~]# cat svc.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-svc-1
+spec:
+  selector:
+    app: swiggy
+  ports:
+      - port: 80
+        targetPort: 80
+        nodePort: 30001
+  type: LoadBalancer
+[root@instance ~]# cat rs.yml
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: my-rs-1
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: swiggy
+  template:
+    metadata:
+      labels:
+        app: swiggy
+    spec:
+      containers:
+        - name: my-con1
+          image: srinuas/swiggy:instamart
+          ports:
+            - containerPort: 80
+[root@instance ~]# cat dep.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deploy-1
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: swiggy
+  template:
+    metadata:
+      labels:
+        app: swiggy
+    spec:
+      containers:
+        - name: my-con2
+          image: srinuas/swiggy:instamart
+          ports:
+            - containerPort: 80
+[root@instance ~]#
+
+[root@instance ~]# kubectl get rs
+NAME      DESIRED   CURRENT   READY   AGE
+my-rs-1   6         6         6       50s
+[root@instance ~]# kubectl get pods
+NAME            READY   STATUS    RESTARTS   AGE
+my-rc-1-9hl5m   1/1     Running   0          4m53s
+my-rc-1-nbwzq   1/1     Running   0          4m53s
+my-rc-1-tn9rg   1/1     Running   0          4m53s
+my-rs-1-6mfdd   1/1     Running   0          60s
+my-rs-1-6rk7x   1/1     Running   0          60s
+my-rs-1-9d7l8   1/1     Running   0          60s
+my-rs-1-c25tm   1/1     Running   0          60s
+my-rs-1-pd7sp   1/1     Running   0          60s
+my-rs-1-wl8bw   1/1     Running   0          60s
+[root@instance ~]
+
+kubectl apply -f rs.yml
+kubectl get rs
+kubectl delete rs my-rs-1
+kubectl apply -f rs.yml
+kubectl delete rs my-rs-1
+kubectl apply -f rs.yml
+vi dep.yml
+kubectl get rs
+kubectl delete rs my-rs-1
+kubectl apply -f dep.yml
+vi dep.yml
+kubectl apply -f dep.yml
+kubectl get deployments
+kubectl delete deployments my-deploy-1
+kubectl apply -f dep.yml
+kubectl get deployments
+kubectl delete pods --all
+kubectl scale deployments my-deploy-1 --replicas=2
+kubectl scale deployments my-deploy-1 --replicas=8
+export KOPS_STATE_STORE=s3://srinu.as
+kops delete cluster --name srinu.k8s.local --yes
