@@ -11,10 +11,7 @@
 [root@instance ~]# aws s3 ls
 2026-01-13 07:00:18 srinu.as
 [root@instance ~]# export KOPS_STATE_STORE=s3://srinu.as
-[root@instance ~]# kops create cluster --name srinu.k8s.local --zones us-east-2a,us-east-2b --master-size c7i-flex.la
-rge --master-count 1 --master-volume-size 30 --node-count 2 --node-volume-size 20 --node-size t3.micro --image=ami-0f
-5fcdfbd140e4ab7
-
+[root@instance ~]# kops create cluster --name srinu.k8s.local --zones us-east-2a,us-east-2b --master-size c7i-flex.large --master-count 1 --master-volume-size 30 --node-count 2 --node-volume-size 20 --node-size t3.micro --image=ami-0f5fcdfbd140e4ab7
 [root@instance ~]# kops update cluster --name srinu.k8s.local --yes --admin
 
 [root@instance ~]# kubectl get deploy
