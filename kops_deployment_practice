@@ -1,0 +1,318 @@
+[root@instance ~]# sh install/kops.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  263M  100  263M    0     0  87.0M      0  0:00:03  0:00:03 --:--:-- 90.9M
+[root@instance ~]# sh install/kubectl.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   138  100   138    0     0   2954      0 --:--:-- --:--:-- --:--:--  3000
+100 55.8M  100 55.8M    0     0   193M      0 --:--:-- --:--:-- --:--:--  193M
+[root@instance ~]# aws s3 ls
+2026-01-13 07:00:18 srinu.as
+[root@instance ~]# export KOPS_STATE_STORE=s3://srinu.as
+[root@instance ~]# kops create cluster --name srinu.k8s.local --zones us-east-2a,us-east-2b --master-size c7i-flex.la
+rge --master-count 1 --master-volume-size 30 --node-count 2 --node-volume-size 20 --node-size t3.micro --image=ami-0f
+5fcdfbd140e4ab7
+
+[root@instance ~]# kops update cluster --name srinu.k8s.local --yes --admin
+
+[root@instance ~]# kubectl get deploy
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE
+mydep1   3/3     1            3           18m
+[root@instance ~]# kubectl get rs
+NAME                DESIRED   CURRENT   READY   AGE
+mydep1-548766547    1         1         0       39s
+mydep1-69c49cb6c6   3         3         3       4m34s
+mydep1-84dbf94565   0         0         0       18m
+[root@instance ~]# kubectl get version
+error: the server doesn't have a resource type "version"
+[root@instance ~]# kubectl rollout history deployment mydep
+Error from server (NotFound): deployments.apps "mydep" not found
+[root@instance ~]# kubectl rollout history deployment mydep1
+deployment.apps/mydep1
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+3         <none>
+
+[root@instance ~]# kubectl rollout undo deployment mydep1 --to-revision=1
+deployment.apps/mydep1 rolled back
+[root@instance ~]# kubectl rollout history deployment mydep1
+deployment.apps/mydep1
+REVISION  CHANGE-CAUSE
+2         <none>
+3         <none>
+4         <none>
+
+[root@instance ~]# kubectl rollout undo deployment mydep1 --to-revision=2
+deployment.apps/mydep1 rolled back
+[root@instance ~]# kubectl rollout undo deployment mydep1 --to-revision=3
+deployment.apps/mydep1 rolled back
+
+
+___________________________________________
+
+[root@instance ~]# kubectl top pods mydep1-678db5f874-6td2k
+error: Metrics API not available
+[root@instance ~]# kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+serviceaccount/metrics-server created
+clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+service/metrics-server created
+deployment.apps/metrics-server created
+apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
+[root@instance ~]# kubectl top pods mydep1-678db5f874-6td2k
+error: Metrics API not available
+[root@instance ~]# kubectl get hpa
+NAME     REFERENCE           TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+myhpa1   Deployment/mydep1   cpu: 1%/60%   2         8         2          26m
+[root@instance ~]#
+
+___________________________________________
+[root@instance ~]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+mydep1-678db5f874-6td2k   1/1     Running   0          18m
+mydep1-678db5f874-f5kb7   1/1     Running   0          18m
+[root@instance ~]# kubectl get pods -w
+NAME                      READY   STATUS    RESTARTS   AGE
+mydep1-678db5f874-6td2k   1/1     Running   0          20m
+mydep1-678db5f874-f5kb7   1/1     Running   0          20m
+mydep1-678db5f874-n7h22   0/1     Pending   0          0s
+mydep1-678db5f874-mr8pt   0/1     Pending   0          0s
+mydep1-678db5f874-n7h22   0/1     Pending   0          0s
+mydep1-678db5f874-mr8pt   0/1     Pending   0          0s
+mydep1-678db5f874-mr8pt   0/1     ContainerCreating   0          0s
+mydep1-678db5f874-n7h22   0/1     ContainerCreating   0          0s
+mydep1-678db5f874-mr8pt   1/1     Running             0          1s
+mydep1-678db5f874-n7h22   1/1     Running             0          2s
+mydep1-678db5f874-9qpzm   0/1     Pending             0          0s
+mydep1-678db5f874-9jxzj   0/1     Pending             0          0s
+mydep1-678db5f874-cs9k4   0/1     Pending             0          0s
+mydep1-678db5f874-9qpzm   0/1     Pending             0          0s
+mydep1-678db5f874-9jxzj   0/1     Pending             0          0s
+mydep1-678db5f874-t5m6q   0/1     Pending             0          0s
+mydep1-678db5f874-cs9k4   0/1     Pending             0          0s
+mydep1-678db5f874-t5m6q   0/1     Pending             0          0s
+mydep1-678db5f874-9jxzj   0/1     ContainerCreating   0          0s
+mydep1-678db5f874-9qpzm   0/1     ContainerCreating   0          0s
+mydep1-678db5f874-t5m6q   0/1     ContainerCreating   0          0s
+mydep1-678db5f874-cs9k4   0/1     ContainerCreating   0          0s
+mydep1-678db5f874-t5m6q   1/1     Running             0          2s
+mydep1-678db5f874-9jxzj   1/1     Running             0          2s
+mydep1-678db5f874-cs9k4   1/1     Running             0          2s
+mydep1-678db5f874-9qpzm   1/1     Running             0          2s
+mydep1-678db5f874-9jxzj   1/1     Terminating         0          8m45s
+mydep1-678db5f874-9jxzj   1/1     Terminating         0          8m45s
+mydep1-678db5f874-9jxzj   0/1     Completed           0          8m46s
+mydep1-678db5f874-9jxzj   0/1     Completed           0          8m46s
+mydep1-678db5f874-9jxzj   0/1     Completed           0          8m46s
+mydep1-678db5f874-9qpzm   1/1     Terminating         0          9m
+mydep1-678db5f874-9qpzm   1/1     Terminating         0          9m
+mydep1-678db5f874-9qpzm   0/1     Completed           0          9m1s
+mydep1-678db5f874-9qpzm   0/1     Completed           0          9m2s
+mydep1-678db5f874-9qpzm   0/1     Completed           0          9m2s
+mydep1-678db5f874-t5m6q   1/1     Terminating         0          9m15s
+mydep1-678db5f874-cs9k4   1/1     Terminating         0          9m15s
+mydep1-678db5f874-mr8pt   1/1     Terminating         0          9m30s
+mydep1-678db5f874-n7h22   1/1     Terminating         0          9m30s
+mydep1-678db5f874-n7h22   1/1     Terminating         0          9m30s
+mydep1-678db5f874-t5m6q   1/1     Terminating         0          9m15s
+mydep1-678db5f874-mr8pt   1/1     Terminating         0          9m31s
+mydep1-678db5f874-cs9k4   1/1     Terminating         0          9m16s
+mydep1-678db5f874-n7h22   0/1     Completed           0          9m31s
+mydep1-678db5f874-cs9k4   0/1     Completed           0          9m16s
+mydep1-678db5f874-mr8pt   0/1     Completed           0          9m31s
+mydep1-678db5f874-t5m6q   0/1     Completed           0          9m16s
+mydep1-678db5f874-mr8pt   0/1     Completed           0          9m32s
+mydep1-678db5f874-mr8pt   0/1     Completed           0          9m32s
+mydep1-678db5f874-t5m6q   0/1     Completed           0          9m17s
+mydep1-678db5f874-t5m6q   0/1     Completed           0          9m17s
+mydep1-678db5f874-cs9k4   0/1     Completed           0          9m17s
+mydep1-678db5f874-cs9k4   0/1     Completed           0          9m17s
+mydep1-678db5f874-n7h22   0/1     Completed           0          9m32s
+mydep1-678db5f874-n7h22   0/1     Completed           0          9m32s
+^C[root@instance ~]#
+___________________________________________
+
+
+
+[root@instance ~]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+mydep1-678db5f874-6td2k   1/1     Running   0          18m
+mydep1-678db5f874-f5kb7   1/1     Running   0          18m
+[root@instance ~]# kubectl top pods mydep1-678db5f874-6td2k
+NAME                      CPU(cores)   MEMORY(bytes)
+mydep1-678db5f874-6td2k   0m           5Mi
+[root@instance ~]# kubectl top pods mydep1-678db5f874-6td2k
+NAME                      CPU(cores)   MEMORY(bytes)
+mydep1-678db5f874-6td2k   1m           9Mi
+[root@instance ~]# kubectl top pods mydep1-678db5f874-6td2k
+NAME                      CPU(cores)   MEMORY(bytes)
+mydep1-678db5f874-6td2k   132m         10Mi
+[root@instance ~]# kubectl top pods mydep1-678db5f874-6td2k
+NAME                      CPU(cores)   MEMORY(bytes)
+mydep1-678db5f874-6td2k   132m         10Mi
+[root@instance ~]# kubectl top pods mydep1-678db5f874-6td2k
+NAME                      CPU(cores)   MEMORY(bytes)
+mydep1-678db5f874-6td2k   1968m        10Mi
+[root@instance ~]# kubectl top pods mydep1-678db5f874-6td2k
+NAME                      CPU(cores)   MEMORY(bytes)
+mydep1-678db5f874-6td2k   1912m        6Mi
+[root@instance ~]# kubectl top pods mydep1-678db5f874-6td2k
+NAME                      CPU(cores)   MEMORY(bytes)
+mydep1-678db5f874-6td2k   1964m        7Mi
+[root@instance ~]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+mydep1-678db5f874-6td2k   1/1     Running   0          24m
+mydep1-678db5f874-9jxzj   1/1     Running   0          3m16s
+mydep1-678db5f874-9qpzm   1/1     Running   0          3m16s
+mydep1-678db5f874-cs9k4   1/1     Running   0          3m16s
+mydep1-678db5f874-f5kb7   1/1     Running   0          24m
+mydep1-678db5f874-mr8pt   1/1     Running   0          3m31s
+mydep1-678db5f874-n7h22   1/1     Running   0          3m31s
+mydep1-678db5f874-t5m6q   1/1     Running   0          3m16s
+[root@instance ~]# kubectl top pods mydep1-678db5f874-6td2k
+NAME                      CPU(cores)   MEMORY(bytes)
+mydep1-678db5f874-6td2k   1m           5Mi
+[root@instance ~]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+mydep1-678db5f874-6td2k   1/1     Running   0          26m
+mydep1-678db5f874-9jxzj   1/1     Running   0          5m7s
+mydep1-678db5f874-9qpzm   1/1     Running   0          5m7s
+mydep1-678db5f874-cs9k4   1/1     Running   0          5m7s
+mydep1-678db5f874-f5kb7   1/1     Running   0          26m
+mydep1-678db5f874-mr8pt   1/1     Running   0          5m22s
+mydep1-678db5f874-n7h22   1/1     Running   0          5m22s
+mydep1-678db5f874-t5m6q   1/1     Running   0          5m7s
+[root@instance ~]#
+[root@instance ~]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+mydep1-678db5f874-6td2k   1/1     Running   0          32m
+mydep1-678db5f874-f5kb7   1/1     Running   0          32m
+[root@instance ~]#
+___________________________________________
+
+
+[root@instance ~]# kubectl exec -it mydep1-678db5f874-6td2k -- bash
+root@mydep1-678db5f874-6td2k:/# apt update -y
+Get:1 http://deb.debian.org/debian trixie InRelease [140 kB]
+Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+Get:4 http://deb.debian.org/debian trixie/main amd64 Packages [9670 kB]
+Get:5 http://deb.debian.org/debian trixie-updates/main amd64 Packages [5412 B]
+Get:6 http://deb.debian.org/debian-security trixie-security/main amd64 Packages [95.9 kB]
+Fetched 10.0 MB in 1s (7723 kB/s)
+9 packages can be upgraded. Run 'apt list --upgradable' to see them.
+root@mydep1-678db5f874-6td2k:/# apt install stress -y
+Installing:
+  stress
+
+Summary:
+  Upgrading: 0, Installing: 1, Removing: 0, Not Upgrading: 9
+  Download size: 21.9 kB
+  Space needed: 57.3 kB / 12.7 GB available
+
+Get:1 http://deb.debian.org/debian trixie/main amd64 stress amd64 1.0.7-1 [21.9 kB]
+Fetched 21.9 kB in 0s (470 kB/s)
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 79, <STDIN> line 1.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 1.)
+debconf: falling back to frontend: Teletype
+Selecting previously unselected package stress.
+(Reading database ... 6699 files and directories currently installed.)
+Preparing to unpack .../stress_1.0.7-1_amd64.deb ...
+Unpacking stress (1.0.7-1) ...
+Setting up stress (1.0.7-1) ...
+[root@instance ~]# kubectl exec -it mydep1-678db5f874-6td2k -- bash
+root@mydep1-678db5f874-6td2k:/# stress -c 6 -t 300 -v
+stress: info: [120] dispatching hogs: 6 cpu, 0 io, 0 vm, 0 hdd
+stress: dbug: [120] using backoff sleep of 18000us
+stress: dbug: [120] setting timeout to 300s
+stress: dbug: [120] --> hogcpu worker 6 [121] forked
+stress: dbug: [120] using backoff sleep of 15000us
+stress: dbug: [120] setting timeout to 300s
+stress: dbug: [120] --> hogcpu worker 5 [122] forked
+stress: dbug: [120] using backoff sleep of 12000us
+stress: dbug: [120] setting timeout to 300s
+stress: dbug: [120] --> hogcpu worker 4 [123] forked
+stress: dbug: [120] using backoff sleep of 9000us
+stress: dbug: [120] setting timeout to 300s
+stress: dbug: [120] --> hogcpu worker 3 [124] forked
+stress: dbug: [120] using backoff sleep of 6000us
+stress: dbug: [120] setting timeout to 300s
+stress: dbug: [120] --> hogcpu worker 2 [125] forked
+stress: dbug: [120] using backoff sleep of 3000us
+stress: dbug: [120] setting timeout to 300s
+stress: dbug: [120] --> hogcpu worker 1 [126] forked
+^C
+root@mydep1-678db5f874-6td2k:/#
+___________________________________________
+
+[root@instance ~]# ll
+total 28
+-rw-r--r--. 1 root root   344 Jan 17 07:44 dep.yml
+-rw-r--r--. 1 root root   337 Jan 17 07:26 hpa.yml
+drwxr-xr-x. 3 root root 16384 Jan 17 05:43 install
+drwxr-xr-x. 3 root root    35 Jan 17 05:43 notes
+-rw-r--r--. 1 root root   158 Jan 17 07:44 svc.yml
+[root@instance ~]# cat dep.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydep1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: swiggy
+  template:
+    metadata:
+      name: mytem
+      labels:
+        app: swiggy
+    spec:
+      containers:
+        - name: con1
+          image: srinuas/metro:nginx
+          ports:
+            - containerPort: 3000
+[root@instance ~]# cat svc.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myser1
+spec:
+  type: LoadBalancer
+  selector:
+    app: swiggy
+  ports:
+    - port: 80
+      targetPort: 80
+[root@instance ~]# cat hpa.yml
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: myhpa1
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mydep1
+  minReplicas: 2
+  maxReplicas: 8
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
+[root@instance ~]#
