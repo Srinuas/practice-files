@@ -1,0 +1,152 @@
+[root@instance ~]# cat doc_cre
+username=srinuas
+password=Praise@143
+[root@instance ~]#
+[root@instance ~]# kubectl create secret generic sc5 --from-env-file doc_cre -n myns1
+secret/sc5 created
+[root@instance ~]# kubectl get secret sc5 -n myns1 -o json
+{
+    "apiVersion": "v1",
+    "data": {
+        "password": "UHJhaXNlQDE0Mw==",
+        "username": "c3JpbnVhcw=="
+    },
+    "kind": "Secret",
+    "metadata": {
+        "creationTimestamp": "2026-01-19T17:45:59Z",
+        "name": "sc5",
+        "namespace": "myns1",
+        "resourceVersion": "20030",
+        "uid": "ed62fe05-83bc-4698-80cc-13e77d0ace26"
+    },
+    "type": "Opaque"
+}
+[root@instance ~]#
+[root@instance ~]# kubectl create secret docker-registry regcred \
+  --docker-username="srinuas" \
+  --docker-password="dckr_pat_m5xLxMtsTL0g3rEMOThZ7WQw-qE" \
+  --docker-server="https://index.docker.io/v1/" \
+  -n myns1
+secret/regcred created
+[root@instance ~]# kubectl get secret regcred -n myns1 -o yaml
+apiVersion: v1
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOnsidXNlcm5hbWUiOiJzcmludWFzIiwicGFzc3dvcmQiOiJkY2tyX3BhdF9tNXhMeE10c1RMMGczckVNT1RoWjdXUXctcUUiLCJhdXRoIjoiYzNKcGJuVmhjenBrWTJ0eVgzQmhkRjl0TlhoTWVFMTBjMVJNTUdjemNrVk5UMVJvV2pkWFVYY3RjVVU9In19fQ==
+kind: Secret
+metadata:
+  creationTimestamp: "2026-01-19T18:01:41Z"
+  name: regcred
+  namespace: myns1
+  resourceVersion: "20786"
+  uid: 9fbe7763-843e-49bc-b049-ceeec40fcadf
+type: kubernetes.io/dockerconfigjson
+[root@instance ~]
+[root@instance ~]# cat pvt.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod9
+  namespace: myns1
+  labels:
+    comp: ecom
+spec:
+  imagePullSecrets:
+    - name: regcred   # DockerHub auth secret
+  containers:
+    - name: con1
+      image: srinuas/private:nginx
+      ports:
+        - containerPort: 80
+      envFrom:
+        - secretRef:
+            name: sc5
+[root@instance ~]#
+[root@instance ~]# kubectl apply -f pvt.yml
+pod/pod9 created
+[root@instance ~]#kubectl describe pod pod9 -n myns1
+Name:             pod9
+Namespace:        myns1
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Mon, 19 Jan 2026 18:04:06 +0000
+Labels:           comp=ecom
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.19
+IPs:
+  IP:  10.244.0.19
+Containers:
+  con1:
+    Container ID:   docker://8ff34b30a4cd710e8b1a01bd83c3aa24e414a67e1613b384dd65a40a972b02d2
+    Image:          srinuas/private:nginx
+    Image ID:       docker-pullable://srinuas/private@sha256:09119f329d0da79037e444d619d98ff256af4f90543729c2a7333765c9245698
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Mon, 19 Jan 2026 18:04:09 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment Variables from:
+      sc5         Secret  Optional: false
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-j995c (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-j995c:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  15s   default-scheduler  Successfully assigned myns1/pod9 to minikube
+  Normal  Pulling    15s   kubelet            spec.containers{con1}: Pulling image "srinuas/private:nginx"
+  Normal  Pulled     13s   kubelet            spec.containers{con1}: Successfully pulled image "srinuas/private:nginx" in 2.147s (2.147s including waiting). Image size: 160646317 bytes.
+  Normal  Created    12s   kubelet            spec.containers{con1}: Created container: con1
+  Normal  Started    12s   kubelet            spec.containers{con1}: Started container con1
+[root@instance ~]# kubectl exec -it pod9 -- bash
+root@pod9:/# ll
+bash: ll: command not found
+root@pod9:/# apt update -y
+Get:1 http://deb.debian.org/debian trixie InRelease [140 kB]
+Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+Get:4 http://deb.debian.org/debian trixie/main amd64 Packages [9670 kB]
+Get:5 http://deb.debian.org/debian trixie-updates/main amd64 Packages [5412 B]
+Get:6 http://deb.debian.org/debian-security trixie-security/main amd64 Packages [96.1 kB]
+Fetched 10.0 MB in 1s (12.5 MB/s)
+All packages are up to date.
+root@pod9:/# ll
+bash: ll: command not found
+root@pod9:/# cd /usr/share/nginx/html
+root@pod9:/usr/share/nginx/html# ls -l
+total 8
+-rw-r--r--. 1 root root 497 Dec  9 18:28 50x.html
+-rw-r--r--. 1 root root 615 Dec  9 18:28 index.html
+root@pod9:/usr/share/nginx/html#
+exit
+[root@instance ~]#
+[root@instance ~]# kubectl get secret
+NAME      TYPE                             DATA   AGE
+regcred   kubernetes.io/dockerconfigjson   1      19m
+sc1       Opaque                           2      5h12m
+sc2       Opaque                           3      5h11m
+sc3       Opaque                           3      5h7m
+sc4       Opaque                           2      4h28m
+sc5       Opaque                           2      34m
+[root@instance ~]#
