@@ -86,7 +86,7 @@ Context "minikube" modified.
 [root@instance ~]# kubectl config view --minify --output 'jsonpath={..namespace}'
 Srinu
 [root@instance ~]#
-[root@instance ~]# kubectl create secret docker-registry sec1 --docker-username="srinuas" --docker-password="dockerhub token" --docker-server="https://index.docker.io/v1/"
+[root@instance ~]# kubectl create secret docker-registry sec1 --docker-username="srinuas" --docker-password="dckr_pat_hpYOLmppS81OSGdcQtgJBRPKFqc" --docker-server="https://index.docker.io/v1/"
 secret/sec1 created
 [root@instance ~]#
 [root@instance ~]# kubectl get secret
