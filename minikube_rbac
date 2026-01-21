@@ -1,0 +1,532 @@
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@18.220.123.38
+The authenticity of host '18.220.123.38 (18.220.123.38)' can't be established.
+ED25519 key fingerprint is SHA256:NGl6GmH4dJRKY9dhTaqgSsM1Z/A1wat+K6nVFH0xgqQ.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '18.220.123.38' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-8-227 ~]$ sudo -i
+hostnamectl set-hostname instance
+hostnamectl set-hostname instance
+[root@ip-172-31-8-227 ~]# hostnamectl set-hostname instance
+[root@ip-172-31-8-227 ~]# exit
+logout
+[ec2-user@ip-172-31-8-227 ~]$ sudo -i
+[root@instance ~]# yum install git -y && git clone https://github.com/Srinuas/install.git
+[root@instance ~]# ll
+total 16
+drwxr-xr-x. 3 root root 16384 Jan 21 09:55 install
+[root@instance ~]# sh install/kubectl.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   138  100   138    0     0   2770      0 --:--:-- --:--:-- --:--:--  2816
+100 55.8M  100 55.8M    0     0   183M      0 --:--:-- --:--:-- --:--:--  333M
+[root@instance ~]# sh install/docker.sh
+[root@instance ~]# sh install/minikube.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  133M  100  133M    0     0   118M      0  0:00:01  0:00:01 --:--:--  172M
+😄  minikube v1.37.0 on Amazon 2023.10.20260105
+❗  minikube skips various validations when --force is supplied; this may lead to unexpected behavior
+✨  Automatically selected the docker driver. Other choices: none, ssh
+🛑  The "docker" driver should not be used with root privileges. If you wish to continue as root, use --force.
+💡  If you are running minikube within a VM, consider using --driver=none:
+📘    https://minikube.sigs.k8s.io/docs/reference/drivers/none/
+
+🧯  The requested memory allocation of 3072MiB does not leave room for system overhead (total system memory: 3819MiB). You may face stability issues.
+💡  Suggestion: Start minikube with less memory allocated: 'minikube start --memory=3072mb'
+
+📌  Using Docker driver with root privileges
+👍  Starting "minikube" primary control-plane node in "minikube" cluster
+🚜  Pulling base image v0.0.48 ...
+💾  Downloading Kubernetes v1.34.0 preload ...
+    > preloaded-images-k8s-v18-v1...:  337.07 MiB / 337.07 MiB  100.00% 241.85
+    > gcr.io/k8s-minikube/kicbase...:  488.52 MiB / 488.52 MiB  100.00% 78.20 M
+🔥  Creating docker container (CPUs=2, Memory=3072MB) ...
+🐳  Preparing Kubernetes v1.34.0 on Docker 28.4.0 ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+[root@instance ~]# ll
+total 16
+drwxr-xr-x. 3 root root 16384 Jan 21 09:55 install
+[root@instance ~]# kubectl config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /root/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Wed, 21 Jan 2026 09:57:17 UTC
+        provider: minikube.sigs.k8s.io
+        version: v1.37.0
+      name: cluster_info
+    server: https://192.168.49.2:8443
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Wed, 21 Jan 2026 09:57:17 UTC
+        provider: minikube.sigs.k8s.io
+        version: v1.37.0
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+users:
+- name: minikube
+  user:
+    client-certificate: /root/.minikube/profiles/minikube/client.crt
+    client-key: /root/.minikube/profiles/minikube/client.key
+[root@instance ~]# kubectl config current-context
+minikube
+[root@instance ~]# mkdir srinu_usr && cd srinu_usr
+[root@instance srinu_usr]# openssl genrsa -out srinu.key 2048
+[root@instance srinu_usr]# openssl req -new -key srinu.key -out srinu.csr -subj "/CN=srinu/O=group1"
+[root@instance srinu_usr]# ll
+total 8
+-rw-r--r--. 1 root root  907 Jan 21 10:10 srinu.csr
+-rw-------. 1 root root 1704 Jan 21 10:09 srinu.key
+[root@instance srinu_usr]# openssl x509 -req -in srinu.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out srinu.crt -days 500
+Certificate request self-signature ok
+subject=CN=srinu, O=group1
+[root@instance srinu_usr]# openssl x509 -req -in srinu.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out srinu.crt -days 500
+Certificate request self-signature ok
+subject=CN=srinu, O=group1
+[root@instance srinu_usr]# kubectl config set-credentials srinu --client-certificate=srinu.crt --client-key=srinu.key
+User "srinu" set.
+[root@instance srinu_usr]#
+[root@instance ~]# kubectl config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /root/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Wed, 21 Jan 2026 09:57:17 UTC
+        provider: minikube.sigs.k8s.io
+        version: v1.37.0
+      name: cluster_info
+    server: https://192.168.49.2:8443
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Wed, 21 Jan 2026 09:57:17 UTC
+        provider: minikube.sigs.k8s.io
+        version: v1.37.0
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+users:
+- name: minikube
+  user:
+    client-certificate: /root/.minikube/profiles/minikube/client.crt
+    client-key: /root/.minikube/profiles/minikube/client.key
+- name: srinu
+  user:
+    client-certificate: /root/srinu_usr/srinu.crt
+    client-key: /root/srinu_usr/srinu.key
+[root@instance ~]#
+[root@instance ~]# kubectl config set-context srinu-context --cluster=minikube --user=srinu
+Context "srinu-context" created.
+[root@instance ~]# kubectl config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /root/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Wed, 21 Jan 2026 09:57:17 UTC
+        provider: minikube.sigs.k8s.io
+        version: v1.37.0
+      name: cluster_info
+    server: https://192.168.49.2:8443
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Wed, 21 Jan 2026 09:57:17 UTC
+        provider: minikube.sigs.k8s.io
+        version: v1.37.0
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+- context:
+    cluster: minikube
+    user: srinu
+  name: srinu-context
+current-context: minikube
+kind: Config
+users:
+- name: minikube
+  user:
+    client-certificate: /root/.minikube/profiles/minikube/client.crt
+    client-key: /root/.minikube/profiles/minikube/client.key
+- name: srinu
+  user:
+    client-certificate: /root/srinu_usr/srinu.crt
+    client-key: /root/srinu_usr/srinu.key
+[root@instance ~]#
+[root@instance ~]# kubectl config use-context srinu-context
+Switched to context "srinu-context".
+[root@instance ~]# kubectl config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /root/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Wed, 21 Jan 2026 09:57:17 UTC
+        provider: minikube.sigs.k8s.io
+        version: v1.37.0
+      name: cluster_info
+    server: https://192.168.49.2:8443
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Wed, 21 Jan 2026 09:57:17 UTC
+        provider: minikube.sigs.k8s.io
+        version: v1.37.0
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+- context:
+    cluster: minikube
+    user: srinu
+  name: srinu-context
+current-context: srinu-context
+kind: Config
+users:
+- name: minikube
+  user:
+    client-certificate: /root/.minikube/profiles/minikube/client.crt
+    client-key: /root/.minikube/profiles/minikube/client.key
+- name: srinu
+  user:
+    client-certificate: /root/srinu_usr/srinu.crt
+    client-key: /root/srinu_usr/srinu.key
+[root@instance ~]#
+[root@instance ~]# kubectl get pods
+Error from server (Forbidden): pods is forbidden: User "srinu" cannot list resource "pods" in API group "" in the namespace "default"
+[root@instance ~]# kubectl get svc
+Error from server (Forbidden): services is forbidden: User "srinu" cannot list resource "services" in API group "" in the namespace "default"
+[root@instance ~]# kubectl get rc
+Error from server (Forbidden): replicationcontrollers is forbidden: User "srinu" cannot list resource "replicationcontrollers" in API group "" in the namespace "default"
+[root@instance ~]# kubectl get rs
+Error from server (Forbidden): replicasets.apps is forbidden: User "srinu" cannot list resource "replicasets" in API group "apps" in the namespace "default"
+[root@instance ~]# kubectl get ns
+Error from server (Forbidden): namespaces is forbidden: User "srinu" cannot list resource "namespaces" in API group "" at the cluster scope
+[root@instance ~]# kubectl get ds
+Error from server (Forbidden): daemonsets.apps is forbidden: User "srinu" cannot list resource "daemonsets" in API group "apps" in the namespace "default"
+[root@instance ~]#
+[root@instance ~]# kubectl config use-context minikube
+Switched to context "minikube".
+[root@instance ~]# kubectl get pods
+No resources found in default namespace.
+[root@instance ~]# kubectl get svc
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   56m
+[root@instance ~]# kubectl get ns
+NAME              STATUS   AGE
+default           Active   57m
+kube-node-lease   Active   57m
+kube-public       Active   57m
+kube-system       Active   57m
+[root@instance ~]# kubectl get ds
+No resources found in default namespace.
+[root@instance ~]#
+[root@instance ~]# kubectl create ns dev
+namespace/dev created
+[root@instance ~]# kubectl create ns test
+namespace/test created
+[root@instance ~]# kubectl run pod1 --image nginx -n dev
+pod/pod1 created
+[root@instance ~]# kubectl run pod2 --image nginx -n test
+pod/pod2 created
+[root@instance ~]#
+[root@instance ~]# vi role1.yml
+[root@instance ~]# kubectl api-resources | grep -i 'role'
+clusterrolebindings                              rbac.authorization.k8s.io/v1      false        ClusterRoleBinding
+clusterroles                                     rbac.authorization.k8s.io/v1      false        ClusterRole
+rolebindings                                     rbac.authorization.k8s.io/v1      true         RoleBinding
+roles                                            rbac.authorization.k8s.io/v1      true         Role
+[root@instance ~]#
+[root@instance ~]# vi role1.yml
+[root@instance ~]# cat role1.yml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: dev
+  name: dev-role
+rules:
+  - apiGroups: [""] #all types of api versions
+    resources: ["pods"] #objects
+    verbs: ["get", "watch", "list", "create"] #operation
+
+  - apiGroups: [""] #all types of api versions
+    resources: ["services"] #objects
+    verbs: ["get", "watch", "list"] #operation
+
+[root@instance ~]# kubectl create -f role1.yml
+role.rbac.authorization.k8s.io/dev-role created
+[root@instance ~]# kubectl get role -o wide
+No resources found in default namespace.
+[root@instance ~]# kubectl get role -o wide -n dev
+NAME       CREATED AT
+dev-role   2026-01-21T11:10:33Z
+[root@instance ~]#
+[root@instance ~]# vi rolebinding.yml
+[root@instance ~]# cat rolebinding.yml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dev_role_binding
+  namespace: dev
+subjects:
+  - kind: User
+    name: srinu
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: dev-role
+  apiGroup: rbac.authorization.k8s.io
+
+[root@instance ~]# kubectl create -f rolebinding.yml
+rolebinding.rbac.authorization.k8s.io/dev_role_binding created
+[root@instance ~]# kubectl get rolebinding -n dev
+NAME               ROLE            AGE
+dev_role_binding   Role/dev-role   15s
+[root@instance ~]# kubectl config use-context srinu-context
+Switched to context "srinu-context".
+[root@instance ~]# kubectl get pods -n dev
+NAME   READY   STATUS    RESTARTS   AGE
+pod1   1/1     Running   0          30m
+[root@instance ~]# kubectl get svc -n dev
+No resources found in dev namespace.
+[root@instance ~]#
+[root@instance ~]# kubectl run pod2 --image nginx -n dev
+pod/pod2 created
+[root@instance ~]# kubectl get pods -n dev
+NAME   READY   STATUS    RESTARTS   AGE
+pod1   1/1     Running   0          33m
+pod2   1/1     Running   0          4s
+[root@instance ~]# kubectl delete pod pod2 -n dev
+Error from server (Forbidden): pods "pod2" is forbidden: User "srinu" cannot delete resource "pods" in API group "" in the namespace "dev"
+[root@instance ~]#
+[root@instance ~]# kubectl config use-context minikube
+Switched to context "minikube".
+[root@instance ~]# ll
+total 24
+drwxr-xr-x. 3 root root 16384 Jan 21 09:55 install
+-rw-r--r--. 1 root root   377 Jan 21 11:08 role1.yml
+-rw-r--r--. 1 root root   270 Jan 21 11:29 rolebinding.yml
+drwxr-xr-x. 2 root root    57 Jan 21 10:17 srinu_usr
+[root@instance ~]# vi role1.yml
+[root@instance ~]# cat role1.yml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: dev
+  name: dev-role
+rules:
+  - apiGroups: [""] #all types of api versions
+    resources: ["pods"] #objects
+    verbs: ["get", "watch", "list", "create", "delete"] #operation
+
+  - apiGroups: [""] #all types of api versions
+    resources: ["services"] #objects
+    verbs: ["get", "watch", "list"] #operation
+
+[root@instance ~]#
+[root@instance ~]# kubectl apply -f role1.yml -n dev
+role.rbac.authorization.k8s.io/dev-role unchanged
+[root@instance ~]# kubectl config use-context srinu-context
+Switched to context "srinu-context".
+[root@instance ~]# kubectl get pods -o wide -n dev
+NAME   READY   STATUS    RESTARTS   AGE     IP           NODE       NOMINATED NODE   READINESS GATES
+pod1   1/1     Running   0          41m     10.244.0.3   minikube   <none>           <none>
+pod2   1/1     Running   0          7m37s   10.244.0.5   minikube   <none>           <none>
+[root@instance ~]#
+[root@instance ~]# kubectl delete pods pod1 -n dev
+pod "pod1" deleted from dev namespace
+[root@instance ~]# kubectl get pods -o wide
+Error from server (Forbidden): pods is forbidden: User "srinu" cannot list resource "pods" in API group "" in the namespace "default"
+[root@instance ~]# kubectl get pods -o wide -n dev
+NAME   READY   STATUS    RESTARTS   AGE     IP           NODE       NOMINATED NODE   READINESS GATES
+pod2   1/1     Running   0          9m24s   10.244.0.5   minikube   <none>           <none>
+[root@instance ~]#
+[root@instance ~]# kubectl get pods -o wide -n test
+Error from server (Forbidden): pods is forbidden: User "srinu" cannot list resource "pods" in API group "" in the namespace "test"
+[root@instance ~]# kubectl config use-context minikube
+Switched to context "minikube".
+[root@instance ~]# vi role1.yml
+[root@instance ~]# cp role1.yml cluster_role.yml
+[root@instance ~]# vi cluster_role.yml
+[root@instance ~]# cat cluster_role.yml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-role
+rules:
+  - apiGroups: [""] #all types of api versions
+    resources: ["pods"] #objects
+    verbs: ["get", "watch", "list", "create", "delete"] #operation
+
+  - apiGroups: [""] #all types of api versions
+    resources: ["services"] #objects
+    verbs: ["get", "watch", "list"] #operation
+
+[root@instance ~]# kubectl apply -f cluster_role.yml
+clusterrole.rbac.authorization.k8s.io/cluster-role created
+[root@instance ~]# cp rolebinding.yml clusterrolebinding.yml
+[root@instance ~]# vi clusterrolebinding.yml
+[root@instance ~]# vi clusterrolebinding.yml
+[root@instance ~]# cat clusterrolebinding.yml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: srinu-context
+
+subjects:
+  - kind: User
+    name: srinu
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-role
+  apiGroup: rbac.authorization.k8s.io
+
+[root@instance ~]#
+[root@instance ~]# kubectl config view | grep -i 'current-context'
+current-context: minikube
+[root@instance ~]#
+[root@instance ~]# ll
+total 32
+-rw-r--r--. 1 root root   381 Jan 21 11:49 cluster_role.yml
+-rw-r--r--. 1 root root   269 Jan 21 11:54 clusterrolebinding.yml
+drwxr-xr-x. 3 root root 16384 Jan 21 09:55 install
+-rw-r--r--. 1 root root   387 Jan 21 11:47 role1.yml
+-rw-r--r--. 1 root root   270 Jan 21 11:29 rolebinding.yml
+drwxr-xr-x. 2 root root    57 Jan 21 10:17 srinu_usr
+[root@instance ~]#
+[root@instance ~]# kubectl apply -f cluster_role.yml
+clusterrole.rbac.authorization.k8s.io/cluster-role unchanged
+[root@instance ~]# kubectl apply -f clusterrolebinding.yml
+clusterrolebinding.rbac.authorization.k8s.io/srinu-context created
+[root@instance ~]#
+[root@instance ~]# kubectl get clusterrole -o wide -n dev | grep -i 'cluster'
+NAME                                                                   CREATED AT
+cluster-admin                                                          2026-01-21T09:57:14Z
+cluster-role                                                           2026-01-21T11:49:30Z
+system:controller:clusterrole-aggregation-controller                   2026-01-21T09:57:14Z
+[root@instance ~]#
+[root@instance ~]# kubectl get clusterrolebinding -o wide -n dev | grep -i 'srinu'
+NAME                                                            ROLE                                                                               AGE     USERS                            GROUPS                                            SERVICEACCOUNTS
+srinu-context                                                   ClusterRole/cluster-role                                                           4m11s   srinu
+[root@instance ~]#
+[root@instance ~]# kubectl config view | grep -i 'current-context'
+current-context: minikube
+[root@instance ~]# kubectl config use-context srinu-context
+Switched to context "srinu-context".
+[root@instance ~]# kubectl config view | grep -i 'current-context'
+current-context: srinu-context
+[root@instance ~]# kubectl get pods
+No resources found in default namespace.
+[root@instance ~]# kubectl get pods -o wide -n dev
+NAME   READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+pod2   1/1     Running   0          34m   10.244.0.5   minikube   <none>           <none>
+[root@instance ~]# kubectl get pods -o wide -n test
+NAME   READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+pod2   1/1     Running   0          68m   10.244.0.4   minikube   <none>           <none>
+[root@instance ~]# kubectl get svc -o wide
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE    SELECTOR
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   131m   <none>
+[root@instance ~]#
+[root@instance ~]# kubectl run pod2 --image nginx -n test
+Error from server (AlreadyExists): pods "pod2" already exists
+[root@instance ~]# kubectl run pod1 --image nginx -n test
+pod/pod1 created
+[root@instance ~]# kubectl run pod1 --image nginx -ndev
+pod/pod1 created
+[root@instance ~]# kubectl run pod1 --image nginx -n dev
+Error from server (AlreadyExists): pods "pod1" already exists
+[root@instance ~]#
+[root@instance ~]# kubectl config use-context minikube
+Switched to context "minikube".
+[root@instance ~]# ll
+total 32
+-rw-r--r--. 1 root root   381 Jan 21 11:49 cluster_role.yml
+-rw-r--r--. 1 root root   269 Jan 21 11:54 clusterrolebinding.yml
+drwxr-xr-x. 3 root root 16384 Jan 21 09:55 install
+-rw-r--r--. 1 root root   387 Jan 21 11:47 role1.yml
+-rw-r--r--. 1 root root   270 Jan 21 11:29 rolebinding.yml
+drwxr-xr-x. 2 root root    57 Jan 21 10:17 srinu_usr
+[root@instance ~]# vi cluster_role.yml
+[root@instance ~]# kubectl apply -f cluster_role.yml
+clusterrole.rbac.authorization.k8s.io/cluster-role configured
+[root@instance ~]# kubectl config set-context srinu-context
+Context "srinu-context" modified.
+[root@instance ~]# 
+[root@instance ~]# cat cluster_role.yml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-role
+rules:
+  - apiGroups: [""] #all types of api versions
+    resources: ["pods", "svc", "cm"] #objects
+    verbs: ["get", "watch", "list", "create", "delete"] #operation
+
+  - apiGroups: [""] #all types of api versions
+    resources: ["services"] #objects
+    verbs: ["get", "watch", "list"] #operation
+
+[root@instance ~]# kubectl get pods -o wide -n dev
+NAME   READY   STATUS    RESTARTS   AGE     IP           NODE       NOMINATED NODE   READINESS GATES
+pod1   1/1     Running   0          4m52s   10.244.0.7   minikube   <none>           <none>
+pod2   1/1     Running   0          42m     10.244.0.5   minikube   <none>           <none>
+[root@instance ~]# kubectl get pods -o wide -n test
+NAME   READY   STATUS    RESTARTS   AGE    IP           NODE       NOMINATED NODE   READINESS GATES
+pod1   1/1     Running   0          5m9s   10.244.0.6   minikube   <none>           <none>
+pod2   1/1     Running   0          75m    10.244.0.4   minikube   <none>           <none>
+[root@instance ~]# kubectl get cm -o wide
+NAME               DATA   AGE
+kube-root-ca.crt   1      139m
+[root@instance ~]# kubectl get svc -o wide
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE    SELECTOR
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   140m   <none>
+[root@instance ~]#
