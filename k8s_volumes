@@ -1,0 +1,971 @@
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@3.135.197.86
+The authenticity of host '3.135.197.86 (3.135.197.86)' can't be established.
+ED25519 key fingerprint is SHA256:eY/CkM5QhoqD0XV5Glcb0d1j07j+E28n/5kjh5ZLfJg.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '3.135.197.86' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-5-88 ~]$ sudo -i
+hostnamectl set-hostname minikube
+hostnamectl set-hostname minikube
+[root@ip-172-31-5-88 ~]# hostnamectl set-hostname minikube
+[root@ip-172-31-5-88 ~]# exit
+logout
+[ec2-user@ip-172-31-5-88 ~]$ sudo -i
+y[root@minikube ~]# yum install git -y && git clone https://github.com/Srinuas/install.git && git clone https://github.com/Srinuas/practice-files.git
+Amazon Linux 2023 Kernel Livepatch repository                                 275 kB/s |  30 kB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                    Architecture     Version                              Repository             Size
+==============================================================================================================
+Installing:
+ git                        x86_64           2.50.1-1.amzn2023.0.1                amazonlinux            53 k
+Installing dependencies:
+ git-core                   x86_64           2.50.1-1.amzn2023.0.1                amazonlinux           4.9 M
+ git-core-doc               noarch           2.50.1-1.amzn2023.0.1                amazonlinux           2.8 M
+ perl-Error                 noarch           1:0.17029-5.amzn2023.0.2             amazonlinux            41 k
+ perl-File-Find             noarch           1.37-477.amzn2023.0.7                amazonlinux            25 k
+ perl-Git                   noarch           2.50.1-1.amzn2023.0.1                amazonlinux            41 k
+ perl-TermReadKey           x86_64           2.38-9.amzn2023.0.2                  amazonlinux            36 k
+ perl-lib                   x86_64           0.65-477.amzn2023.0.7                amazonlinux            15 k
+
+Transaction Summary
+==============================================================================================================
+Install  8 Packages
+
+Total download size: 7.9 M
+Installed size: 41 M
+Downloading Packages:
+(1/8): git-2.50.1-1.amzn2023.0.1.x86_64.rpm                                   1.4 MB/s |  53 kB     00:00
+(2/8): git-core-doc-2.50.1-1.amzn2023.0.1.noarch.rpm                           61 MB/s | 2.8 MB     00:00
+(3/8): perl-Error-0.17029-5.amzn2023.0.2.noarch.rpm                           1.7 MB/s |  41 kB     00:00
+(4/8): git-core-2.50.1-1.amzn2023.0.1.x86_64.rpm                               68 MB/s | 4.9 MB     00:00
+(5/8): perl-File-Find-1.37-477.amzn2023.0.7.noarch.rpm                        954 kB/s |  25 kB     00:00
+(6/8): perl-Git-2.50.1-1.amzn2023.0.1.noarch.rpm                              1.8 MB/s |  41 kB     00:00
+(7/8): perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64.rpm                        1.5 MB/s |  36 kB     00:00
+(8/8): perl-lib-0.65-477.amzn2023.0.7.x86_64.rpm                              619 kB/s |  15 kB     00:00
+--------------------------------------------------------------------------------------------------------------
+Total                                                                          60 MB/s | 7.9 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                      1/1
+  Installing       : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                1/8
+  Installing       : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            2/8
+  Installing       : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                3/8
+  Installing       : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          4/8
+  Installing       : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Installing       : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           6/8
+  Installing       : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                7/8
+  Installing       : git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Running scriptlet: git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Verifying        : git-2.50.1-1.amzn2023.0.1.x86_64                                                     1/8
+  Verifying        : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                2/8
+  Verifying        : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            3/8
+  Verifying        : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           4/8
+  Verifying        : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Verifying        : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                6/8
+  Verifying        : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          7/8
+  Verifying        : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                8/8
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64                       git-core-2.50.1-1.amzn2023.0.1.x86_64
+  git-core-doc-2.50.1-1.amzn2023.0.1.noarch              perl-Error-1:0.17029-5.amzn2023.0.2.noarch
+  perl-File-Find-1.37-477.amzn2023.0.7.noarch            perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64            perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 68, done.
+remote: Counting objects: 100% (68/68), done.
+remote: Compressing objects: 100% (66/66), done.
+remote: Total 68 (delta 31), reused 14 (delta 2), pack-reused 0 (from 0)
+Receiving objects: 100% (68/68), 19.73 KiB | 19.73 MiB/s, done.
+Resolving deltas: 100% (31/31), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 45, done.
+remote: Counting objects: 100% (45/45), done.
+remote: Compressing objects: 100% (40/40), done.
+remote: Total 45 (delta 15), reused 18 (delta 5), pack-reused 0 (from 0)
+Receiving objects: 100% (45/45), 35.24 KiB | 2.94 MiB/s, done.
+Resolving deltas: 100% (15/15), done.
+[root@minikube ~]# ll
+total 32
+drwxr-xr-x. 3 root root 16384 Jan 22 10:45 install
+drwxr-xr-x. 3 root root 16384 Jan 22 10:45 practice-files
+[root@minikube ~]# cd install/
+[root@minikube install]# sh docker.sh kubectl.sh minikube.sh
+Last metadata expiration check: 0:01:01 ago on Thu Jan 22 10:45:44 2026.
+Dependencies resolved.
+==============================================================================================================
+ Package                         Architecture    Version                           Repository            Size
+==============================================================================================================
+Installing:
+ docker                          x86_64          25.0.14-1.amzn2023.0.1            amazonlinux           46 M
+Installing dependencies:
+ container-selinux               noarch          4:2.242.0-1.amzn2023              amazonlinux           58 k
+ containerd                      x86_64          2.1.5-1.amzn2023.0.3              amazonlinux           23 M
+ iptables-libs                   x86_64          1.8.8-3.amzn2023.0.2              amazonlinux          401 k
+ iptables-nft                    x86_64          1.8.8-3.amzn2023.0.2              amazonlinux          183 k
+ libcgroup                       x86_64          3.0-1.amzn2023.0.1                amazonlinux           75 k
+ libnetfilter_conntrack          x86_64          1.0.8-2.amzn2023.0.2              amazonlinux           58 k
+ libnfnetlink                    x86_64          1.0.1-19.amzn2023.0.2             amazonlinux           30 k
+ libnftnl                        x86_64          1.2.2-2.amzn2023.0.2              amazonlinux           84 k
+ pigz                            x86_64          2.5-1.amzn2023.0.3                amazonlinux           83 k
+ runc                            x86_64          1.3.4-1.amzn2023.0.1              amazonlinux          3.9 M
+
+Transaction Summary
+==============================================================================================================
+Install  11 Packages
+
+Total download size: 74 M
+Installed size: 280 M
+Downloading Packages:
+(1/11): container-selinux-2.242.0-1.amzn2023.noarch.rpm                       1.7 MB/s |  58 kB     00:00
+(2/11): iptables-libs-1.8.8-3.amzn2023.0.2.x86_64.rpm                          21 MB/s | 401 kB     00:00
+(3/11): iptables-nft-1.8.8-3.amzn2023.0.2.x86_64.rpm                          5.6 MB/s | 183 kB     00:00
+(4/11): libcgroup-3.0-1.amzn2023.0.1.x86_64.rpm                               2.4 MB/s |  75 kB     00:00
+(5/11): libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64.rpm                2.2 MB/s |  58 kB     00:00
+(6/11): libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64.rpm                         1.4 MB/s |  30 kB     00:00
+(7/11): libnftnl-1.2.2-2.amzn2023.0.2.x86_64.rpm                              3.1 MB/s |  84 kB     00:00
+(8/11): pigz-2.5-1.amzn2023.0.3.x86_64.rpm                                    3.8 MB/s |  83 kB     00:00
+(9/11): runc-1.3.4-1.amzn2023.0.1.x86_64.rpm                                   73 MB/s | 3.9 MB     00:00
+(10/11): containerd-2.1.5-1.amzn2023.0.3.x86_64.rpm                            73 MB/s |  23 MB     00:00
+(11/11): docker-25.0.14-1.amzn2023.0.1.x86_64.rpm                              80 MB/s |  46 MB     00:00
+--------------------------------------------------------------------------------------------------------------
+Total                                                                         121 MB/s |  74 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                      1/1
+  Installing       : runc-1.3.4-1.amzn2023.0.1.x86_64                                                    1/11
+  Installing       : containerd-2.1.5-1.amzn2023.0.3.x86_64                                              2/11
+  Running scriptlet: containerd-2.1.5-1.amzn2023.0.3.x86_64                                              2/11
+  Installing       : pigz-2.5-1.amzn2023.0.3.x86_64                                                      3/11
+  Installing       : libnftnl-1.2.2-2.amzn2023.0.2.x86_64                                                4/11
+  Installing       : libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64                                           5/11
+  Installing       : libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64                                  6/11
+  Installing       : iptables-libs-1.8.8-3.amzn2023.0.2.x86_64                                           7/11
+  Installing       : iptables-nft-1.8.8-3.amzn2023.0.2.x86_64                                            8/11
+  Running scriptlet: iptables-nft-1.8.8-3.amzn2023.0.2.x86_64                                            8/11
+  Installing       : libcgroup-3.0-1.amzn2023.0.1.x86_64                                                 9/11
+  Running scriptlet: container-selinux-4:2.242.0-1.amzn2023.noarch                                      10/11
+  Installing       : container-selinux-4:2.242.0-1.amzn2023.noarch                                      10/11
+  Running scriptlet: container-selinux-4:2.242.0-1.amzn2023.noarch                                      10/11
+  Running scriptlet: docker-25.0.14-1.amzn2023.0.1.x86_64                                               11/11
+  Installing       : docker-25.0.14-1.amzn2023.0.1.x86_64                                               11/11
+  Running scriptlet: docker-25.0.14-1.amzn2023.0.1.x86_64                                               11/11
+Created symlink /etc/systemd/system/sockets.target.wants/docker.socket → /usr/lib/systemd/system/docker.socket.
+
+  Running scriptlet: container-selinux-4:2.242.0-1.amzn2023.noarch                                      11/11
+  Running scriptlet: docker-25.0.14-1.amzn2023.0.1.x86_64                                               11/11
+  Verifying        : container-selinux-4:2.242.0-1.amzn2023.noarch                                       1/11
+  Verifying        : containerd-2.1.5-1.amzn2023.0.3.x86_64                                              2/11
+  Verifying        : docker-25.0.14-1.amzn2023.0.1.x86_64                                                3/11
+  Verifying        : iptables-libs-1.8.8-3.amzn2023.0.2.x86_64                                           4/11
+  Verifying        : iptables-nft-1.8.8-3.amzn2023.0.2.x86_64                                            5/11
+  Verifying        : libcgroup-3.0-1.amzn2023.0.1.x86_64                                                 6/11
+  Verifying        : libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64                                  7/11
+  Verifying        : libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64                                           8/11
+  Verifying        : libnftnl-1.2.2-2.amzn2023.0.2.x86_64                                                9/11
+  Verifying        : pigz-2.5-1.amzn2023.0.3.x86_64                                                     10/11
+  Verifying        : runc-1.3.4-1.amzn2023.0.1.x86_64                                                   11/11
+
+Installed:
+  container-selinux-4:2.242.0-1.amzn2023.noarch              containerd-2.1.5-1.amzn2023.0.3.x86_64
+  docker-25.0.14-1.amzn2023.0.1.x86_64                       iptables-libs-1.8.8-3.amzn2023.0.2.x86_64
+  iptables-nft-1.8.8-3.amzn2023.0.2.x86_64                   libcgroup-3.0-1.amzn2023.0.1.x86_64
+  libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64         libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64
+  libnftnl-1.2.2-2.amzn2023.0.2.x86_64                       pigz-2.5-1.amzn2023.0.3.x86_64
+  runc-1.3.4-1.amzn2023.0.1.x86_64
+
+Complete!
+● docker.service - Docker Application Container Engine
+     Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; preset: disabled)
+     Active: active (running) since Thu 2026-01-22 10:47:09 UTC; 30ms ago
+TriggeredBy: ● docker.socket
+       Docs: https://docs.docker.com
+    Process: 28790 ExecStartPre=/bin/mkdir -p /run/docker (code=exited, status=0/SUCCESS)
+    Process: 28791 ExecStartPre=/usr/libexec/docker/docker-setup-runtimes.sh (code=exited, status=0/SUCCESS)
+   Main PID: 28792 (dockerd)
+      Tasks: 9
+     Memory: 29.8M
+        CPU: 226ms
+     CGroup: /system.slice/docker.service
+             └─28792 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --default-ulimit >
+
+Jan 22 10:47:08 minikube systemd[1]: Starting docker.service - Docker Application Container Engine...
+Jan 22 10:47:08 minikube dockerd[28792]: time="2026-01-22T10:47:08.633340338Z" level=info msg="Starting up"
+Jan 22 10:47:08 minikube dockerd[28792]: time="2026-01-22T10:47:08.665257622Z" level=info msg="Loading contai>
+Jan 22 10:47:09 minikube dockerd[28792]: time="2026-01-22T10:47:09.034049855Z" level=info msg="Loading contai>
+Jan 22 10:47:09 minikube dockerd[28792]: time="2026-01-22T10:47:09.048706384Z" level=info msg="Docker daemon">
+Jan 22 10:47:09 minikube dockerd[28792]: time="2026-01-22T10:47:09.048973463Z" level=info msg="Daemon has com>
+Jan 22 10:47:09 minikube dockerd[28792]: time="2026-01-22T10:47:09.074463675Z" level=info msg="API listen on >
+Jan 22 10:47:09 minikube systemd[1]: Started docker.service - Docker Application Container Engine.
+[root@minikube install]# sh kubectl.sh && sh minikube.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   138  100   138    0     0   2885      0 --:--:-- --:--:-- --:--:--  2936
+100 55.8M  100 55.8M    0     0   186M      0 --:--:-- --:--:-- --:--:--  186M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  133M  100  133M    0     0   190M      0 --:--:-- --:--:-- --:--:--  320M
+😄  minikube v1.37.0 on Amazon 2023.10.20260105
+❗  minikube skips various validations when --force is supplied; this may lead to unexpected behavior
+✨  Automatically selected the docker driver. Other choices: ssh, none
+🛑  The "docker" driver should not be used with root privileges. If you wish to continue as root, use --force.
+💡  If you are running minikube within a VM, consider using --driver=none:
+📘    https://minikube.sigs.k8s.io/docs/reference/drivers/none/
+
+🧯  The requested memory allocation of 3072MiB does not leave room for system overhead (total system memory: 3819MiB). You may face stability issues.
+💡  Suggestion: Start minikube with less memory allocated: 'minikube start --memory=3072mb'
+
+📌  Using Docker driver with root privileges
+👍  Starting "minikube" primary control-plane node in "minikube" cluster
+🚜  Pulling base image v0.0.48 ...
+💾  Downloading Kubernetes v1.34.0 preload ...
+    > preloaded-images-k8s-v18-v1...:  337.07 MiB / 337.07 MiB  100.00% 178.37
+    > gcr.io/k8s-minikube/kicbase...:  488.52 MiB / 488.52 MiB  100.00% 84.13 M
+🔥  Creating docker container (CPUs=2, Memory=3072MB) ...
+🐳  Preparing Kubernetes v1.34.0 on Docker 28.4.0 ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+[root@minikube install]#
+[root@minikube ~]# kubectl get nodes
+NAME       STATUS   ROLES           AGE   VERSION
+minikube   Ready    control-plane   25s   v1.34.0
+[root@minikube ~]# kubectl get pods -A
+NAMESPACE     NAME                               READY   STATUS    RESTARTS   AGE
+kube-system   coredns-66bc5c9577-6rzkd           0/1     Running   0          29s
+kube-system   etcd-minikube                      1/1     Running   0          35s
+kube-system   kube-apiserver-minikube            1/1     Running   0          35s
+kube-system   kube-controller-manager-minikube   1/1     Running   0          34s
+kube-system   kube-proxy-rpzg9                   1/1     Running   0          29s
+kube-system   kube-scheduler-minikube            1/1     Running   0          35s
+kube-system   storage-provisioner                1/1     Running   0          32s
+[root@minikube ~]# vi dep.yml
+[root@minikube ~]# ll
+total 36
+-rw-r--r--. 1 root root   329 Jan 22 10:58 dep.yml
+drwxr-xr-x. 3 root root 16384 Jan 22 10:47 install
+drwxr-xr-x. 3 root root 16384 Jan 22 10:45 practice-files
+[root@minikube ~]# cat dep.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydep1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      name: mytemp1
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: con1
+          image: nginx
+
+        - name: con2
+          image: httpd
+
+[root@minikube ~]# kubectl apply -f dep.yml
+deployment.apps/mydep1 created
+[root@minikube ~]# kubectl get pods -o wide
+NAME                      READY   STATUS             RESTARTS     AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+mydep1-7c46f5cbd4-4gv7g   1/2     CrashLoopBackOff   1 (6s ago)   11s   10.244.0.3   minikube   <none>           <none>
+[root@minikube ~]#
+[root@minikube ~]# kubectl get deploy -o wide
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES        SELECTOR
+mydep1   0/1     1            0           91s   con1,con2    nginx,httpd   app=nginx
+[root@minikube ~]# kubectl describe pods mydep1-7c46f5cbd4-4gv7g
+Name:             mydep1-7c46f5cbd4-4gv7g
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Thu, 22 Jan 2026 10:58:30 +0000
+Labels:           app=nginx
+                  pod-template-hash=7c46f5cbd4
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.3
+IPs:
+  IP:           10.244.0.3
+Controlled By:  ReplicaSet/mydep1-7c46f5cbd4
+Containers:
+  con1:
+    Container ID:   docker://ecf676b5d699dd82d638b8793e3aeda3acf22db362146525ce5cb498fd6fc569
+    Image:          nginx
+    Image ID:       docker-pullable://nginx@sha256:c881927c4077710ac4b1da63b83aa163937fb47457950c267d92f7e4dedf4aec
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Thu, 22 Jan 2026 10:58:33 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-pfzb7 (ro)
+  con2:
+    Container ID:   docker://c4d94e4014156434cd7606e7a85c021ca2a82a883856182706e074a756187868
+    Image:          httpd
+    Image ID:       docker-pullable://httpd@sha256:dd178595edd6d4f49296f62f9587238db2cd1045adfff6fccc15a6c4d08f5d2e
+    Port:           <none>
+    Host Port:      <none>
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Thu, 22 Jan 2026 11:01:33 +0000
+      Finished:     Thu, 22 Jan 2026 11:01:33 +0000
+    Ready:          False
+    Restart Count:  5
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-pfzb7 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  kube-api-access-pfzb7:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                    From               Message
+  ----     ------     ----                   ----               -------
+  Normal   Scheduled  4m30s                  default-scheduler  Successfully assigned default/mydep1-7c46f5cbd4-4gv7g to minikube
+  Normal   Pulling    4m30s                  kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     4m27s                  kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 2.512s (2.512s including waiting). Image size: 160646317 bytes.
+  Normal   Created    4m27s                  kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    4m27s                  kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     4m26s                  kubelet            spec.containers{con2}: Successfully pulled image "httpd" in 1.029s (1.029s including waiting). Image size: 116775579 bytes.
+  Normal   Pulled     4m12s (x2 over 4m25s)  kubelet            spec.containers{con2}: Successfully pulled image "httpd" in 200ms (200ms including waiting). Image size: 116775579 bytes.
+  Normal   Pulled     3m46s                  kubelet            spec.containers{con2}: Successfully pulled image "httpd" in 204ms (204ms including waiting). Image size: 116775579 bytes.
+  Normal   Created    2m56s (x5 over 4m26s)  kubelet            spec.containers{con2}: Created container: con2
+  Normal   Started    2m56s (x5 over 4m26s)  kubelet            spec.containers{con2}: Started container con2
+  Normal   Pulled     2m56s                  kubelet            spec.containers{con2}: Successfully pulled image "httpd" in 1.22s (1.22s including waiting). Image size: 116775579 bytes.
+  Normal   Pulling    93s (x6 over 4m27s)    kubelet            spec.containers{con2}: Pulling image "httpd"
+  Warning  BackOff    4s (x21 over 4m24s)    kubelet            spec.containers{con2}: Back-off restarting failed container con2 in pod mydep1-7c46f5cbd4-4gv7g_default(4d3785a4-3362-4c5f-a96a-1f88d3002289)
+[root@minikube ~]#
+[root@minikube ~]# kubectl get pods
+NAME                      READY   STATUS             RESTARTS      AGE
+mydep1-7c46f5cbd4-4gv7g   1/2     CrashLoopBackOff   6 (33s ago)   6m17s
+[root@minikube ~]#
+[root@minikube ~]# vi dep.yml
+[root@minikube ~]# cat dep.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydep1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      name: mytemp1
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: con1
+          image: nginx
+
+        - name: con2
+          image: httpd
+          command: ['/bin/bash', '-c', 'while true; do echo happy pongal; sleep 10; done']
+
+[root@minikube ~]# kubectl apply -f dep.yml
+deployment.apps/mydep1 configured
+[root@minikube ~]#
+[root@minikube ~]# kubectl get deploy
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE
+mydep1   1/1     1            1           108s
+[root@minikube ~]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+mydep1-7c56fc89c7-nxr8j   2/2     Running   0          33s
+[root@minikube ~]# kubectl exec -it mydep1-6b58f96598-xrmzv -c con1 -- bash
+root@mydep1-6b58f96598-xrmzv:/# cd /opt/srinu/
+root@mydep1-6b58f96598-xrmzv:/opt/srinu# ls -la
+total 0
+drwxrwxrwx. 2 root root  6 Jan 22 11:20 .
+drwxr-xr-x. 1 root root 19 Jan 22 11:20 ..
+root@mydep1-6b58f96598-xrmzv:/opt/srinu# touch aws azu gcp ibm ten
+root@mydep1-6b58f96598-xrmzv:/opt/srinu# ls -la
+total 0
+drwxrwxrwx. 2 root root 61 Jan 22 11:23 .
+drwxr-xr-x. 1 root root 19 Jan 22 11:20 ..
+-rw-r--r--. 1 root root  0 Jan 22 11:23 aws
+-rw-r--r--. 1 root root  0 Jan 22 11:23 azu
+-rw-r--r--. 1 root root  0 Jan 22 11:23 gcp
+-rw-r--r--. 1 root root  0 Jan 22 11:23 ibm
+-rw-r--r--. 1 root root  0 Jan 22 11:23 ten
+root@mydep1-6b58f96598-xrmzv:/opt/srinu#
+exit
+[root@minikube ~]# kubectl exec -it mydep1-6b58f96598-xrmzv -c con2 -- bash
+root@mydep1-6b58f96598-xrmzv:/usr/local/apache2# cd /opt/siri/
+root@mydep1-6b58f96598-xrmzv:/opt/siri# ls -la
+total 0
+drwxrwxrwx. 2 root root 61 Jan 22 11:23 .
+drwxr-xr-x. 1 root root 18 Jan 22 11:20 ..
+-rw-r--r--. 1 root root  0 Jan 22 11:23 aws
+-rw-r--r--. 1 root root  0 Jan 22 11:23 azu
+-rw-r--r--. 1 root root  0 Jan 22 11:23 gcp
+-rw-r--r--. 1 root root  0 Jan 22 11:23 ibm
+-rw-r--r--. 1 root root  0 Jan 22 11:23 ten
+root@mydep1-6b58f96598-xrmzv:/opt/siri# touch ammu{1..6}
+root@mydep1-6b58f96598-xrmzv:/opt/siri# ls -la
+total 0
+drwxrwxrwx. 2 root root 139 Jan 22 11:24 .
+drwxr-xr-x. 1 root root  18 Jan 22 11:20 ..
+-rw-r--r--. 1 root root   0 Jan 22 11:24 ammu1
+-rw-r--r--. 1 root root   0 Jan 22 11:24 ammu2
+-rw-r--r--. 1 root root   0 Jan 22 11:24 ammu3
+-rw-r--r--. 1 root root   0 Jan 22 11:24 ammu4
+-rw-r--r--. 1 root root   0 Jan 22 11:24 ammu5
+-rw-r--r--. 1 root root   0 Jan 22 11:24 ammu6
+-rw-r--r--. 1 root root   0 Jan 22 11:23 aws
+-rw-r--r--. 1 root root   0 Jan 22 11:23 azu
+-rw-r--r--. 1 root root   0 Jan 22 11:23 gcp
+-rw-r--r--. 1 root root   0 Jan 22 11:23 ibm
+-rw-r--r--. 1 root root   0 Jan 22 11:23 ten
+root@mydep1-6b58f96598-xrmzv:/opt/siri#
+exit
+[root@minikube ~]# kubectl exec -it mydep1-6b58f96598-xrmzv -c con1 -- bash
+root@mydep1-6b58f96598-xrmzv:/# cd /opt/srinu/
+root@mydep1-6b58f96598-xrmzv:/opt/srinu# ls -la
+total 0
+drwxrwxrwx. 2 root root 139 Jan 22 11:24 .
+drwxr-xr-x. 1 root root  19 Jan 22 11:20 ..
+-rw-r--r--. 1 root root   0 Jan 22 11:24 ammu1
+-rw-r--r--. 1 root root   0 Jan 22 11:24 ammu2
+-rw-r--r--. 1 root root   0 Jan 22 11:24 ammu3
+-rw-r--r--. 1 root root   0 Jan 22 11:24 ammu4
+-rw-r--r--. 1 root root   0 Jan 22 11:24 ammu5
+-rw-r--r--. 1 root root   0 Jan 22 11:24 ammu6
+-rw-r--r--. 1 root root   0 Jan 22 11:23 aws
+-rw-r--r--. 1 root root   0 Jan 22 11:23 azu
+-rw-r--r--. 1 root root   0 Jan 22 11:23 gcp
+-rw-r--r--. 1 root root   0 Jan 22 11:23 ibm
+-rw-r--r--. 1 root root   0 Jan 22 11:23 ten
+root@mydep1-6b58f96598-xrmzv:/opt/srinu#
+exit
+[root@minikube ~]#
+[root@minikube ~]# cp dep.yml dep_hostpathvol.yml
+[root@minikube ~]# vi dep_hostpathvol.yml
+[root@minikube ~]# cat dep_hostpathvol.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydep1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      name: mytemp1
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: con1
+          image: nginx
+          volumeMounts:
+            - mountPath: /opt/srinu
+              name: myvol1
+
+        - name: con2
+          image: httpd
+          command: ['/bin/bash', '-c', 'while true; do echo happy pongal; sleep 10; done']
+          volumeMounts:
+            - mountPath: /opt/siri
+              name: myvol1
+
+      volumes:
+        - name: myvol1
+          hostPath:
+            path: /etc/anu
+[root@minikube ~]# kubectl apply -f dep_hostpathvol.yml
+deployment.apps/mydep1 configured
+[root@minikube ~]# kubectl get deploy
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE
+mydep1   1/1     1            1           24m
+[root@minikube ~]# kubectl get pods
+NAME                      READY   STATUS        RESTARTS   AGE
+mydep1-579ffbfd6b-mzvf5   2/2     Running       0          18s
+mydep1-6b58f96598-xrmzv   2/2     Terminating   0          14m
+[root@minikube ~]# kubectl exec -it mydep1-579ffbfd6b-mzvf5 -c con1 -- bash
+root@mydep1-579ffbfd6b-mzvf5:/# cd /opt/srinu/
+root@mydep1-579ffbfd6b-mzvf5:/opt/srinu# ls -la
+total 0
+drwxr-xr-x. 2 root root  6 Jan 22 11:35 .
+drwxr-xr-x. 1 root root 19 Jan 22 11:35 ..
+root@mydep1-579ffbfd6b-mzvf5:/opt/srinu# touch aws azure gcp
+root@mydep1-579ffbfd6b-mzvf5:/opt/srinu# ls -la
+total 0
+drwxr-xr-x. 2 root root 41 Jan 22 11:36 .
+drwxr-xr-x. 1 root root 19 Jan 22 11:35 ..
+-rw-r--r--. 1 root root  0 Jan 22 11:36 aws
+-rw-r--r--. 1 root root  0 Jan 22 11:36 azure
+-rw-r--r--. 1 root root  0 Jan 22 11:36 gcp
+root@mydep1-579ffbfd6b-mzvf5:/opt/srinu#
+exit
+[root@minikube ~]# kubectl exec -it mydep1-579ffbfd6b-mzvf5 -c con2 -- bash
+root@mydep1-579ffbfd6b-mzvf5:/usr/local/apache2# cd /opt/siri/
+root@mydep1-579ffbfd6b-mzvf5:/opt/siri# ls -la
+total 0
+drwxr-xr-x. 2 root root 41 Jan 22 11:36 .
+drwxr-xr-x. 1 root root 18 Jan 22 11:35 ..
+-rw-r--r--. 1 root root  0 Jan 22 11:36 aws
+-rw-r--r--. 1 root root  0 Jan 22 11:36 azure
+-rw-r--r--. 1 root root  0 Jan 22 11:36 gcp
+root@mydep1-579ffbfd6b-mzvf5:/opt/siri# touch ammu{1..6}
+root@mydep1-579ffbfd6b-mzvf5:/opt/siri# ls -la
+total 0
+drwxr-xr-x. 2 root root 119 Jan 22 11:37 .
+drwxr-xr-x. 1 root root  18 Jan 22 11:35 ..
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu1
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu2
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu3
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu4
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu5
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu6
+-rw-r--r--. 1 root root   0 Jan 22 11:36 aws
+-rw-r--r--. 1 root root   0 Jan 22 11:36 azure
+-rw-r--r--. 1 root root   0 Jan 22 11:36 gcp
+root@mydep1-579ffbfd6b-mzvf5:/opt/siri#
+exit
+[root@minikube ~]#
+[root@minikube ~]# kubectl exec -it mydep1-579ffbfd6b-mzvf5 -c con1 -- bash
+root@mydep1-579ffbfd6b-mzvf5:/# cd /opt/srinu/
+root@mydep1-579ffbfd6b-mzvf5:/opt/srinu# ls -la
+total 0
+drwxr-xr-x. 2 root root 119 Jan 22 11:37 .
+drwxr-xr-x. 1 root root  19 Jan 22 11:35 ..
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu1
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu2
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu3
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu4
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu5
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu6
+-rw-r--r--. 1 root root   0 Jan 22 11:36 aws
+-rw-r--r--. 1 root root   0 Jan 22 11:36 azure
+-rw-r--r--. 1 root root   0 Jan 22 11:36 gcp
+root@mydep1-579ffbfd6b-mzvf5:/opt/srinu#
+exit
+[root@minikube ~]#
+[root@minikube ~]# kubectl get nodes
+NAME       STATUS   ROLES           AGE   VERSION
+minikube   Ready    control-plane   55m   v1.34.0
+[root@minikube ~]# minikube ssh
+docker@minikube:~$ cd /etc/anu/
+docker@minikube:/etc/anu$ ls -la
+total 0
+drwxr-xr-x. 2 root root 119 Jan 22 11:37 .
+drwxr-xr-x. 1 root root 186 Jan 22 11:35 ..
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu1
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu2
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu3
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu4
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu5
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu6
+-rw-r--r--. 1 root root   0 Jan 22 11:36 aws
+-rw-r--r--. 1 root root   0 Jan 22 11:36 azure
+-rw-r--r--. 1 root root   0 Jan 22 11:36 gcp
+docker@minikube:/etc/anu$ rm -rf am*{4..6}
+rm: cannot remove 'ammu4': Permission denied
+rm: cannot remove 'ammu5': Permission denied
+rm: cannot remove 'ammu6': Permission denied
+docker@minikube:/etc/anu$ sudo -i
+root@minikube:~# cd /etc/anu/
+root@minikube:/etc/anu# ls -la
+total 0
+drwxr-xr-x. 2 root root 119 Jan 22 11:37 .
+drwxr-xr-x. 1 root root 186 Jan 22 11:35 ..
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu1
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu2
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu3
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu4
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu5
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu6
+-rw-r--r--. 1 root root   0 Jan 22 11:36 aws
+-rw-r--r--. 1 root root   0 Jan 22 11:36 azure
+-rw-r--r--. 1 root root   0 Jan 22 11:36 gcp
+root@minikube:/etc/anu# rm -rf am*{4..6}
+root@minikube:/etc/anu# ls -la
+total 0
+drwxr-xr-x. 2 root root  80 Jan 22 11:45 .
+drwxr-xr-x. 1 root root 186 Jan 22 11:35 ..
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu1
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu2
+-rw-r--r--. 1 root root   0 Jan 22 11:37 ammu3
+-rw-r--r--. 1 root root   0 Jan 22 11:36 aws
+-rw-r--r--. 1 root root   0 Jan 22 11:36 azure
+-rw-r--r--. 1 root root   0 Jan 22 11:36 gcp
+root@minikube:/etc/anu#
+logout
+docker@minikube:/etc/anu$
+logout
+[root@minikube ~]# kubectl exec -it mydep1-579ffbfd6b-mzvf5 -c con1 -- bash
+root@mydep1-579ffbfd6b-mzvf5:/# cd /opt/srinu/
+root@mydep1-579ffbfd6b-mzvf5:/opt/srinu# ls -la
+total 0
+drwxr-xr-x. 2 root root 80 Jan 22 11:45 .
+drwxr-xr-x. 1 root root 19 Jan 22 11:35 ..
+-rw-r--r--. 1 root root  0 Jan 22 11:37 ammu1
+-rw-r--r--. 1 root root  0 Jan 22 11:37 ammu2
+-rw-r--r--. 1 root root  0 Jan 22 11:37 ammu3
+-rw-r--r--. 1 root root  0 Jan 22 11:36 aws
+-rw-r--r--. 1 root root  0 Jan 22 11:36 azure
+-rw-r--r--. 1 root root  0 Jan 22 11:36 gcp
+root@mydep1-579ffbfd6b-mzvf5:/opt/srinu#
+exit
+[root@minikube ~]#
+[root@minikube ~]# kubectl api-resources | grep -i 'Persist'
+persistentvolumeclaims              pvc          v1                                true         PersistentVolumeClaim
+persistentvolumes                   pv           v1                                false        PersistentVolume
+[root@minikube ~]#
+[root@minikube ~]# vi pv.yml
+[root@minikube ~]# cat pv.yml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv1
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  awsElasticBlockStore:
+    volumeID: vol-0da8aa2c58256ecd5
+    fsType: ext4
+[root@minikube ~]# kubectl apply -f pv.yml
+persistentvolume/pv1 configured
+[root@minikube ~]# kubectl get pv pv1 -o wide
+NAME   CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE   VOLUMEMODE
+pv1    2Gi        RWO            Retain           Available           standard       <unset>                          10m   Filesystem
+[root@minikube ~]# kubectl describe pv pv1
+Name:            pv1
+Labels:          <none>
+Annotations:     <none>
+Finalizers:      [kubernetes.io/pv-protection]
+StorageClass:    standard
+Status:          Available
+Claim:
+Reclaim Policy:  Retain
+Access Modes:    RWO
+VolumeMode:      Filesystem
+Capacity:        2Gi
+Node Affinity:   <none>
+Message:
+Source:
+    Type:       AWSElasticBlockStore (a Persistent Disk resource in AWS)
+    VolumeID:   vol-0da8aa2c58256ecd5
+    FSType:     ext4
+    Partition:  0
+    ReadOnly:   false
+Events:         <none>
+[root@minikube ~]#
+[root@minikube ~]# vi pvc.yml
+[root@minikube ~]# cat pvc.yml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc1
+spec:
+  storageClassName: standard  # Add this line (must match PV)
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+[root@minikube ~]# kubectl apply -f pvc.yml
+persistentvolumeclaim/pvc1 created
+[root@minikube ~]# kubectl get pvc pvc1 -o wide
+NAME   STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE   VOLUMEMODE
+pvc1   Bound    pv1      2Gi        RWO            standard       <unset>                 13s   Filesystem
+[root@minikube ~]# kubectl describe pvc pvc1
+Name:          pvc1
+Namespace:     default
+StorageClass:  standard
+Status:        Bound
+Volume:        pv1
+Labels:        <none>
+Annotations:   pv.kubernetes.io/bind-completed: yes
+               pv.kubernetes.io/bound-by-controller: yes
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:      2Gi
+Access Modes:  RWO
+VolumeMode:    Filesystem
+Used By:       <none>
+Events:        <none>
+[root@minikube ~]#
+[root@minikube ~]# ll
+total 48
+-rw-r--r--. 1 root root   661 Jan 22 11:20 dep.yml
+-rw-r--r--. 1 root root   684 Jan 22 11:34 dep_hostpathvol.yml
+drwxr-xr-x. 3 root root 16384 Jan 22 10:47 install
+drwxr-xr-x. 3 root root 16384 Jan 22 10:45 practice-files
+-rw-r--r--. 1 root root   276 Jan 22 12:20 pv.yml
+-rw-r--r--. 1 root root   215 Jan 22 12:24 pvc.yml
+[root@minikube ~]# cp dep_hostpathvol.yml dep_pvc.yml
+[root@minikube ~]# vi dep_pvc.yml
+[root@minikube ~]# cat dep_pvc.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydep1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      name: mytemp1
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: con1
+          image: nginx
+          volumeMounts:
+            - mountPath: /opt/srinu
+              name: myvol1
+
+        - name: con2
+          image: httpd
+          command: ['/bin/bash', '-c', 'while true; do echo happy pongal; sleep 10; done']
+          volumeMounts:
+            - mountPath: /opt/siri
+              name: myvol1
+
+      volumes:
+        - name: myvol1
+          persistentVolumeClaim:
+            claimName: pvc1
+[root@minikube ~]# kubectl apply -f dep_pvc.yml
+deployment.apps/mydep1 configured
+[root@minikube ~]#
+[root@minikube ~]# kubectl get pods
+NAME                      READY   STATUS              RESTARTS   AGE
+mydep1-579ffbfd6b-mzvf5   2/2     Running             0          64m
+mydep1-796d9f49d5-qzqwk   0/2     ContainerCreating   0          91s   --> #issue, still creating containers
+[root@minikube ~]
+[root@minikube ~]# kubectl delete pv pv1
+persistentvolume "pv1" deleted
+^C[root@minikube ~]# kubectl delete pv pv1
+persistentvolume "pv1" deleted
+^C[root@minikube ~]# kubectl delete pvc pvc1
+persistentvolumeclaim "pvc1" deleted from default namespace
+^C[root@minikube ~]# kubectl delete deploy mydep1
+deployment.apps "mydep1" deleted from default namespace
+[root@minikube ~]# kubectl apply -f pv.yml
+persistentvolume/pv1 created
+[root@minikube ~]# kubectl apply -f pvc.yml
+persistentvolumeclaim/pvc1 created
+[root@minikube ~]# kubectl apply -f dep_pvc.yml
+deployment.apps/mydep1 created
+[root@minikube ~]# cat pv.yml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv1
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  awsElasticBlockStore:
+    volumeID: vol-0da8aa2c58256ecd5
+    fsType: ext4
+[root@minikube ~]# cat pvc.yml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+[root@minikube ~]# cat dep_pvc.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydep1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      name: mytemp1
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: con1
+          image: nginx
+          volumeMounts:
+            - mountPath: /opt/srinu
+              name: myvol1
+
+        - name: con2
+          image: httpd
+          command: ['/bin/bash', '-c', 'while true; do echo happy pongal; sleep 10; done']
+          volumeMounts:
+            - mountPath: /opt/siri
+              name: myvol1
+
+      volumes:
+        - name: myvol1
+          persistentVolumeClaim:
+            claimName: pvc1
+[root@minikube ~]# kubectl get deploy
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE
+mydep1   1/1     1            1           80s
+[root@minikube ~]# kubectl get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM          STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+pv1                                        2Gi        RWO            Retain           Available                                 <unset>                          2m4s
+pvc-7674b8a9-28ba-49f7-8618-12f53d24ee5d   1Gi        RWO            Delete           Bound       default/pvc1   standard       <unset>                          118s
+[root@minikube ~]# kubectl get pvc
+NAME   STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+pvc1   Bound    pvc-7674b8a9-28ba-49f7-8618-12f53d24ee5d   1Gi        RWO            standard       <unset>                 2m7s
+[root@minikube ~]# kubectl get po
+NAME                      READY   STATUS    RESTARTS   AGE
+mydep1-796d9f49d5-z2ddl   2/2     Running   0          115s
+[root@minikube ~]#
+[root@minikube ~]# kubectl exec -it mydep1-796d9f49d5-z2ddl -c con1 --bash
+error: unknown flag: --bash
+See 'kubectl exec --help' for usage.
+[root@minikube ~]# kubectl exec -it mydep1-796d9f49d5-z2ddl -c con1 -- bash
+root@mydep1-796d9f49d5-z2ddl:/# cd /opt/srinu/
+root@mydep1-796d9f49d5-z2ddl:/opt/srinu# ls -la
+total 0
+drwxrwxrwx. 2 root root  6 Jan 22 12:56 .
+drwxr-xr-x. 1 root root 19 Jan 22 12:57 ..
+root@mydep1-796d9f49d5-z2ddl:/opt/srinu# touch aws azu gcp
+root@mydep1-796d9f49d5-z2ddl:/opt/srinu# ls -la
+total 0
+drwxrwxrwx. 2 root root 39 Jan 22 13:02 .
+drwxr-xr-x. 1 root root 19 Jan 22 12:57 ..
+-rw-r--r--. 1 root root  0 Jan 22 13:02 aws
+-rw-r--r--. 1 root root  0 Jan 22 13:02 azu
+-rw-r--r--. 1 root root  0 Jan 22 13:02 gcp
+root@mydep1-796d9f49d5-z2ddl:/opt/srinu#
+exit
+[root@minikube ~]# kubectl exec -it mydep1-796d9f49d5-z2ddl -c con2 -- bash
+root@mydep1-796d9f49d5-z2ddl:/usr/local/apache2# cd /opt/siri/
+root@mydep1-796d9f49d5-z2ddl:/opt/siri# ls -ls
+total 0
+0 -rw-r--r--. 1 root root 0 Jan 22 13:02 aws
+0 -rw-r--r--. 1 root root 0 Jan 22 13:02 azu
+0 -rw-r--r--. 1 root root 0 Jan 22 13:02 gcp
+root@mydep1-796d9f49d5-z2ddl:/opt/siri# touch ammu{1..6}
+root@mydep1-796d9f49d5-z2ddl:/opt/siri# ls -la
+total 0
+drwxrwxrwx. 2 root root 117 Jan 22 13:02 .
+drwxr-xr-x. 1 root root  18 Jan 22 12:57 ..
+-rw-r--r--. 1 root root   0 Jan 22 13:02 ammu1
+-rw-r--r--. 1 root root   0 Jan 22 13:02 ammu2
+-rw-r--r--. 1 root root   0 Jan 22 13:02 ammu3
+-rw-r--r--. 1 root root   0 Jan 22 13:02 ammu4
+-rw-r--r--. 1 root root   0 Jan 22 13:02 ammu5
+-rw-r--r--. 1 root root   0 Jan 22 13:02 ammu6
+-rw-r--r--. 1 root root   0 Jan 22 13:02 aws
+-rw-r--r--. 1 root root   0 Jan 22 13:02 azu
+-rw-r--r--. 1 root root   0 Jan 22 13:02 gcp
+root@mydep1-796d9f49d5-z2ddl:/opt/siri#
+exit
+[root@minikube ~]# kubectl describe pv pv1
+Name:            pv1
+Labels:          <none>
+Annotations:     <none>
+Finalizers:      [kubernetes.io/pv-protection]
+StorageClass:
+Status:          Available
+Claim:
+Reclaim Policy:  Retain
+Access Modes:    RWO
+VolumeMode:      Filesystem
+Capacity:        2Gi
+Node Affinity:   <none>
+Message:
+Source:
+    Type:       AWSElasticBlockStore (a Persistent Disk resource in AWS)
+    VolumeID:   vol-0da8aa2c58256ecd5
+    FSType:     ext4
+    Partition:  0
+    ReadOnly:   false
+Events:         <none>
+[root@minikube ~]#
+[root@minikube ~]# minikube ssh
+docker@minikube:~$ sudo -i
+root@minikube:~# cd /var/lib/minikube/
+root@minikube:/var/lib/minikube# ls -la
+total 36
+drwxr-xr-x.  7 root root   101 Jan 22 10:48 .
+drwxr-xr-x. 21 root root 16384 Jan 22 10:48 ..
+drwxr-xr-x.  3 root root    21 Aug 27 17:37 binaries
+drwxr-xr-x.  3 root root 16384 Jan 22 10:48 certs
+drwx------.  3 root root    20 Jan 22 10:48 etcd
+drwxr-xr-x.  2 root root     6 Jan 22 10:48 images
+-rw-r--r--.  1 root root   738 Jan 22 10:48 kubeconfig
+drwxr-xr-x.  2 root root    37 Jan 22 10:47 scheduled-stop
+root@minikube:/var/lib/minikube#
+
+
+_______________________________________
+
+verification on cluster
+
+
+
