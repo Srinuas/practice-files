@@ -1,0 +1,512 @@
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@3.145.177.181
+The authenticity of host '3.145.177.181 (3.145.177.181)' can't be established.
+ED25519 key fingerprint is SHA256:nlAmt7p1cJf3ulpR9ZoedH13b5SYM3Me8qtzVAhZAbM.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '3.145.177.181' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-4-97 ~]$ sudo -i
+hostnamectl set-hostname instance
+[root@ip-172-31-4-97 ~]# hostnamectl set-hostname instance
+[root@ip-172-31-4-97 ~]# exit
+logout
+[ec2-user@ip-172-31-4-97 ~]$ sudo -i
+[root@instance ~]# yum install git -y && git clone https://github.com/Srinuas/install.git && git clone https://github.com/Srinuas/practice-files.git
+[root@instance ~]# ll
+total 32
+drwxr-xr-x. 3 root root 16384 Jan 22 06:55 install
+drwxr-xr-x. 3 root root 16384 Jan 22 06:56 practice-files
+[root@instance ~]# sh install/docker.sh
+[root@instance ~]# sh install/minikube.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  133M  100  133M    0     0  92.3M      0  0:00:01  0:00:01 --:--:-- 94.4M
+😄  minikube v1.37.0 on Amazon 2023.10.20260105
+❗  minikube skips various validations when --force is supplied; this may lead to unexpected behavior
+✨  Automatically selected the docker driver. Other choices: none, ssh
+🛑  The "docker" driver should not be used with root privileges. If you wish to continue as root, use --force.
+💡  If you are running minikube within a VM, consider using --driver=none:
+📘    https://minikube.sigs.k8s.io/docs/reference/drivers/none/
+📌  Using Docker driver with root privileges
+👍  Starting "minikube" primary control-plane node in "minikube" cluster
+🚜  Pulling base image v0.0.48 ...
+💾  Downloading Kubernetes v1.34.0 preload ...
+    > preloaded-images-k8s-v18-v1...:  337.07 MiB / 337.07 MiB  100.00% 157.82
+    > gcr.io/k8s-minikube/kicbase...:  488.51 MiB / 488.52 MiB  100.00% 73.83 M
+🔥  Creating docker container (CPUs=2, Memory=3072MB) ...
+🐳  Preparing Kubernetes v1.34.0 on Docker 28.4.0 ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+💡  kubectl not found. If you need it, try: 'minikube kubectl -- get pods -A'
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+[root@instance ~]# sh install/kubectl.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   138  100   138    0     0   2866      0 --:--:-- --:--:-- --:--:--  2875
+100 55.8M  100 55.8M    0     0   188M      0 --:--:-- --:--:-- --:--:--  369M
+[root@instance ~]#
+[root@instance ~]# kubectl get nodes
+NAME       STATUS   ROLES           AGE   VERSION
+minikube   Ready    control-plane   43s   v1.34.0
+[root@instance ~]#
+[root@instance ~]# kubectl get ns -o wide
+NAME              STATUS   AGE
+default           Active   3m33s
+kube-node-lease   Active   3m33s
+kube-public       Active   3m33s
+kube-system       Active   3m33s
+[root@instance ~]# kubectl create ns test
+namespace/test created
+[root@instance ~]# kubectl get ns -o wide
+NAME              STATUS   AGE
+default           Active   4m24s
+kube-node-lease   Active   4m24s
+kube-public       Active   4m24s
+kube-system       Active   4m24s
+test              Active   10s
+[root@instance ~]# kubectl api-resources | grep -i 'resourcequota'
+NAME                                SHORTNAMES   APIVERSION                        NAMESPACED   KIND
+resourcequotas                      quota        v1                                true         ResourceQuota
+[root@instance ~]#
+[root@instance ~]# vi rq.yml
+[root@instance ~]# cat rq.yml
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: myrq
+  namespaces: test
+spec:
+  hard:
+    limits.cpu: '400m'
+    requests.cpu: '200m'
+    limits.memory: '100Mi'
+    requests.memory: '50Mi'
+[root@instance ~]# kubectl describe ns test
+Name:         test
+Labels:       kubernetes.io/metadata.name=test
+Annotations:  <none>
+Status:       Active
+
+No resource quota.
+
+No LimitRange resource.
+[root@instance ~]# kubectl apply -f rq.yml
+Error from server (BadRequest): error when creating "rq.yml": ResourceQuota in version "v1" cannot be handled as a ResourceQuota: strict decoding error: unknown field "metadata.namespaces"
+[root@instance ~]# vi rq.yml
+[root@instance ~]# kubectl describe ns test
+Name:         test
+Labels:       kubernetes.io/metadata.name=test
+Annotations:  <none>
+Status:       Active
+
+No resource quota.
+
+No LimitRange resource.
+[root@instance ~]# kubectl apply -f rq.yml
+resourcequota/myrq created
+[root@instance ~]# kubectl describe ns test
+Name:         test
+Labels:       kubernetes.io/metadata.name=test
+Annotations:  <none>
+Status:       Active
+
+Resource Quotas
+  Name:            myrq
+  Resource         Used  Hard
+  --------         ---   ---
+  limits.cpu       0     400m
+  limits.memory    0     100Mi
+  requests.cpu     0     200m
+  requests.memory  0     50Mi
+
+No LimitRange resource.
+[root@instance ~]# kubectl get quota -o wide -n test
+NAME   REQUEST                                         LIMIT                                        AGE
+myrq   requests.cpu: 0/200m, requests.memory: 0/50Mi   limits.cpu: 0/400m, limits.memory: 0/100Mi   50s
+[root@instance ~]# kubectl describe quota myrq
+Error from server (NotFound): resourcequotas "myrq" not found
+[root@instance ~]# kubectl describe quota myrq -n test
+Name:            myrq
+Namespace:       test
+Resource         Used  Hard
+--------         ----  ----
+limits.cpu       0     400m
+limits.memory    0     100Mi
+requests.cpu     0     200m
+requests.memory  0     50Mi
+[root@instance ~]#
+[root@instance ~]# vi pod.yml
+[root@instance ~]# cat pod.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+  namespace: test
+spec:
+  containers:
+    - name: con1
+      image: nginx
+      ports:
+        - containerPort: 80
+
+      resources:
+        requests:
+          memory: '5Mi'
+          cpu: '50m'
+
+        limits:
+          memory: '10Mi'
+          cpu: '100m'
+[root@instance ~]# kubectl apply -f pod.yml
+pod/mypod created
+[root@instance ~]# kubectl get pods -o wide -n test
+NAME    READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+mypod   1/1     Running   0          19s   10.244.0.3   minikube   <none>           <none>
+[root@instance ~]# kubectl describe pod mypod -n test
+Name:             mypod
+Namespace:        test
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Thu, 22 Jan 2026 07:27:01 +0000
+Labels:           <none>
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.3
+IPs:
+  IP:  10.244.0.3
+Containers:
+  con1:
+    Container ID:   docker://78813abd1f3889fe75e7c19ba5b111840b362391c15d972bc8b5ed511456d811
+    Image:          nginx
+    Image ID:       docker-pullable://nginx@sha256:c881927c4077710ac4b1da63b83aa163937fb47457950c267d92f7e4dedf4aec
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Thu, 22 Jan 2026 07:27:05 +0000
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  10Mi
+    Requests:
+      cpu:        50m
+      memory:     5Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-kl8cv (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-kl8cv:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  40s   default-scheduler  Successfully assigned test/mypod to minikube
+  Normal  Pulling    39s   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal  Pulled     36s   kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 2.561s (2.561s including waiting). Image size: 160646317 bytes.
+  Normal  Created    36s   kubelet            spec.containers{con1}: Created container: con1
+  Normal  Started    36s   kubelet            spec.containers{con1}: Started container con1
+[root@instance ~]# kubectl describe quota myrq
+Error from server (NotFound): resourcequotas "myrq" not found
+[root@instance ~]# kubectl describe quota myrq -n test
+Name:            myrq
+Namespace:       test
+Resource         Used  Hard
+--------         ----  ----
+limits.cpu       100m  400m
+limits.memory    10Mi  100Mi
+requests.cpu     50m   200m
+requests.memory  5Mi   50Mi
+[root@instance ~]# kubectl describe ns test
+Name:         test
+Labels:       kubernetes.io/metadata.name=test
+Annotations:  <none>
+Status:       Active
+
+Resource Quotas
+  Name:            myrq
+  Resource         Used  Hard
+  --------         ---   ---
+  limits.cpu       100m  400m
+  limits.memory    10Mi  100Mi
+  requests.cpu     50m   200m
+  requests.memory  5Mi   50Mi
+
+No LimitRange resource.
+[root@instance ~]#
+[root@instance ~]# vi pod.yml
+[root@instance ~]# cat pod.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod2
+  namespace: test
+spec:
+  containers:
+    - name: con1
+      image: nginx
+      ports:
+        - containerPort: 80
+
+      resources:
+        requests:
+          memory: '20Mi'
+          cpu: '200m'
+
+        limits:
+          memory: '50Mi'
+          cpu: '400m'
+[root@instance ~]# kubectl apply -f pod.yml
+Error from server (Forbidden): error when creating "pod.yml": pods "mypod2" is forbidden: exceeded quota: myrq, requested: limits.cpu=400m,requests.cpu=200m, used: limits.cpu=100m,requests.cpu=50m, limited: limits.cpu=400m,requests.cpu=200m
+[root@instance ~]# kubectl describe ns test
+Name:         test
+Labels:       kubernetes.io/metadata.name=test
+Annotations:  <none>
+Status:       Active
+
+Resource Quotas
+  Name:            myrq
+  Resource         Used  Hard
+  --------         ---   ---
+  limits.cpu       100m  400m
+  limits.memory    10Mi  100Mi
+  requests.cpu     50m   200m
+  requests.memory  5Mi   50Mi
+
+No LimitRange resource.
+[root@instance ~]# vi pod.yml
+[root@instance ~]# cat pod.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod2
+  namespace: test
+spec:
+  containers:
+    - name: con1
+      image: nginx
+      ports:
+        - containerPort: 80
+
+      resources:
+        requests:
+          memory: '45Mi'
+          cpu: '150m'
+
+        limits:
+          memory: '90Mi'
+          cpu: '300m'
+[root@instance ~]# kubectl apply -f pod.yml
+pod/mypod2 created
+[root@instance ~]# kubectl describe ns test
+Name:         test
+Labels:       kubernetes.io/metadata.name=test
+Annotations:  <none>
+Status:       Active
+
+Resource Quotas
+  Name:            myrq
+  Resource         Used   Hard
+  --------         ---    ---
+  limits.cpu       400m   400m
+  limits.memory    100Mi  100Mi
+  requests.cpu     200m   200m
+  requests.memory  50Mi   50Mi
+
+No LimitRange resource.
+[root@instance ~]# kubectl describe quota myrq -n test
+Name:            myrq
+Namespace:       test
+Resource         Used   Hard
+--------         ----   ----
+limits.cpu       400m   400m
+limits.memory    100Mi  100Mi
+requests.cpu     200m   200m
+requests.memory  50Mi   50Mi
+[root@instance ~]#
+[root@instance ~]# kubectl get pods -o wide -n test
+NAME     READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+mypod    1/1     Running   0          12m   10.244.0.3   minikube   <none>           <none>
+mypod2   1/1     Running   0          74s   10.244.0.4   minikube   <none>           <none>
+[root@instance ~]# kubectl describe pods mypod2 -n test
+Name:             mypod2
+Namespace:        test
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Thu, 22 Jan 2026 07:37:56 +0000
+Labels:           <none>
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.4
+IPs:
+  IP:  10.244.0.4
+Containers:
+  con1:
+    Container ID:   docker://171ccab013dd78f4bf3e3d26ea883a957b5e9ccddb4e683f3c768ee9338b8f5b
+    Image:          nginx
+    Image ID:       docker-pullable://nginx@sha256:c881927c4077710ac4b1da63b83aa163937fb47457950c267d92f7e4dedf4aec
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Thu, 22 Jan 2026 07:37:57 +0000
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     300m
+      memory:  90Mi
+    Requests:
+      cpu:        150m
+      memory:     45Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-hqq8h (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-hqq8h:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  2m20s  default-scheduler  Successfully assigned test/mypod2 to minikube
+  Normal  Pulling    2m19s  kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal  Pulled     2m19s  kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 218ms (218ms including waiting). Image size: 160646317 bytes.
+  Normal  Created    2m19s  kubelet            spec.containers{con1}: Created container: con1
+  Normal  Started    2m19s  kubelet            spec.containers{con1}: Started container con1
+[root@instance ~]#
+[root@instance ~]# cat pod.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod2
+  namespace: test
+spec:
+  containers:
+    - name: con1
+      image: nginx
+      ports:
+        - containerPort: 80
+
+      resources:
+        requests:
+          memory: '45Mi'
+          cpu: '150m'
+
+        limits:
+          memory: '90Mi'
+          cpu: '300m'
+[root@instance ~]# kubectl apply -f pod.yml
+pod/mypod2 unchanged
+[root@instance ~]# vi pod.yml
+[root@instance ~]# cat pod.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod3
+  namespace: test
+spec:
+  containers:
+    - name: con1
+      image: nginx
+      ports:
+        - containerPort: 80
+
+      resources:
+        requests:
+          memory: '45Mi'
+          cpu: '150m'
+
+        limits:
+          memory: '90Mi'
+          cpu: '300m'
+[root@instance ~]# kubectl apply -f pod.yml
+Error from server (Forbidden): error when creating "pod.yml": pods "mypod3" is forbidden: exceeded quota: myrq, requested: limits.cpu=300m,limits.memory=90Mi,requests.cpu=150m,requests.memory=45Mi, used: limits.cpu=400m,limits.memory=100Mi,requests.cpu=200m,requests.memory=50Mi, limited: limits.cpu=400m,limits.memory=100Mi,requests.cpu=200m,requests.memory=50Mi
+[root@instance ~]# vi rq.yml
+[root@instance ~]# cat rq.yml
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: myrq
+  namespace: test
+spec:
+  hard:
+    limits.cpu: '800m'
+    requests.cpu: '400m'
+    limits.memory: '200Mi'
+    requests.memory: '100Mi'
+[root@instance ~]# kubectl apply -f pod.yml
+Error from server (Forbidden): error when creating "pod.yml": pods "mypod3" is forbidden: exceeded quota: myrq, requested: limits.cpu=300m,limits.memory=90Mi,requests.cpu=150m,requests.memory=45Mi, used: limits.cpu=400m,limits.memory=100Mi,requests.cpu=200m,requests.memory=50Mi, limited: limits.cpu=400m,limits.memory=100Mi,requests.cpu=200m,requests.memory=50Mi
+[root@instance ~]# kubectl apply -f rq.yml
+resourcequota/myrq configured
+[root@instance ~]# kubectl describe quota myrq -n test
+Name:            myrq
+Namespace:       test
+Resource         Used   Hard
+--------         ----   ----
+limits.cpu       400m   800m
+limits.memory    100Mi  200Mi
+requests.cpu     200m   400m
+requests.memory  50Mi   100Mi
+[root@instance ~]# kubectl apply -f pod.yml
+pod/mypod3 created
+[root@instance ~]#
+[root@instance ~]# kubectl describe quota myrq -n test
+Name:            myrq
+Namespace:       test
+Resource         Used   Hard
+--------         ----   ----
+limits.cpu       700m   800m
+limits.memory    190Mi  200Mi
+requests.cpu     350m   400m
+requests.memory  95Mi   100Mi
+[root@instance ~]#
+
