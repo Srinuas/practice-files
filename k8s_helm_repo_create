@@ -1,0 +1,749 @@
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@3.133.161.221
+The authenticity of host '3.133.161.221 (3.133.161.221)' can't be established.
+ED25519 key fingerprint is SHA256:UH9SePABlpKsLjCcxoDJMX7HpGTVkEfuFwdbR5k09Y0.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '3.133.161.221' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-2-204 ~]$ sudo -i
+host[root@ip-172-31-2-204 ~]# hostnamectl set-hostname helm
+[root@ip-172-31-2-204 ~]# exit
+logout
+[ec2-user@ip-172-31-2-204 ~]$ sudo -i
+y[root@helm ~]# yum install git -y && git clone https://github.com/Srinuas/install.git && git clone https://gihub.com/Srinuas/practice-files.git && sh install/gitconfig.sh
+Amazon Linux 2023 Kernel Livepatch repository                                 298 kB/s |  30 kB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                    Architecture     Version                              Repository             Size
+==============================================================================================================
+Installing:
+ git                        x86_64           2.50.1-1.amzn2023.0.1                amazonlinux            53 k
+Installing dependencies:
+ git-core                   x86_64           2.50.1-1.amzn2023.0.1                amazonlinux           4.9 M
+ git-core-doc               noarch           2.50.1-1.amzn2023.0.1                amazonlinux           2.8 M
+ perl-Error                 noarch           1:0.17029-5.amzn2023.0.2             amazonlinux            41 k
+ perl-File-Find             noarch           1.37-477.amzn2023.0.7                amazonlinux            25 k
+ perl-Git                   noarch           2.50.1-1.amzn2023.0.1                amazonlinux            41 k
+ perl-TermReadKey           x86_64           2.38-9.amzn2023.0.2                  amazonlinux            36 k
+ perl-lib                   x86_64           0.65-477.amzn2023.0.7                amazonlinux            15 k
+
+Transaction Summary
+==============================================================================================================
+Install  8 Packages
+
+Total download size: 7.9 M
+Installed size: 41 M
+Downloading Packages:
+(1/8): git-2.50.1-1.amzn2023.0.1.x86_64.rpm                                   1.5 MB/s |  53 kB     00:00
+(2/8): git-core-doc-2.50.1-1.amzn2023.0.1.noarch.rpm                           55 MB/s | 2.8 MB     00:00
+(3/8): perl-Error-0.17029-5.amzn2023.0.2.noarch.rpm                           1.6 MB/s |  41 kB     00:00
+(4/8): git-core-2.50.1-1.amzn2023.0.1.x86_64.rpm                               64 MB/s | 4.9 MB     00:00
+(5/8): perl-File-Find-1.37-477.amzn2023.0.7.noarch.rpm                        965 kB/s |  25 kB     00:00
+(6/8): perl-Git-2.50.1-1.amzn2023.0.1.noarch.rpm                              1.4 MB/s |  41 kB     00:00
+(7/8): perl-lib-0.65-477.amzn2023.0.7.x86_64.rpm                              628 kB/s |  15 kB     00:00
+(8/8): perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64.rpm                        1.3 MB/s |  36 kB     00:00
+--------------------------------------------------------------------------------------------------------------
+Total                                                                          58 MB/s | 7.9 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                      1/1
+  Installing       : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                1/8
+  Installing       : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            2/8
+  Installing       : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                3/8
+  Installing       : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          4/8
+  Installing       : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Installing       : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           6/8
+  Installing       : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                7/8
+  Installing       : git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Running scriptlet: git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Verifying        : git-2.50.1-1.amzn2023.0.1.x86_64                                                     1/8
+  Verifying        : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                2/8
+  Verifying        : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            3/8
+  Verifying        : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           4/8
+  Verifying        : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Verifying        : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                6/8
+  Verifying        : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          7/8
+  Verifying        : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                8/8
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64                       git-core-2.50.1-1.amzn2023.0.1.x86_64
+  git-core-doc-2.50.1-1.amzn2023.0.1.noarch              perl-Error-1:0.17029-5.amzn2023.0.2.noarch
+  perl-File-Find-1.37-477.amzn2023.0.7.noarch            perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64            perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 77, done.
+remote: Counting objects: 100% (77/77), done.
+remote: Compressing objects: 100% (74/74), done.
+remote: Total 77 (delta 35), reused 20 (delta 3), pack-reused 0 (from 0)
+Receiving objects: 100% (77/77), 23.20 KiB | 11.60 MiB/s, done.
+Resolving deltas: 100% (35/35), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 52, done.
+remote: Counting objects: 100% (52/52), done.
+remote: Compressing objects: 100% (46/46), done.
+remote: Total 52 (delta 18), reused 23 (delta 6), pack-reused 0 (from 0)
+Receiving objects: 100% (52/52), 42.79 KiB | 4.75 MiB/s, done.
+Resolving deltas: 100% (18/18), done.
+[root@helm ~]# ll
+total 32
+drwxr-xr-x. 3 root root 16384 Jan 28 08:48 install
+drwxr-xr-x. 3 root root 16384 Jan 28 08:48 practice-files
+[root@helm ~]# sh install/kubectl.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   138  100   138    0     0   2976      0 --:--:-- --:--:-- --:--:--  3000
+100 55.8M  100 55.8M    0     0   185M      0 --:--:-- --:--:-- --:--:--  185M
+[root@helm ~]# sh install/kops.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  263M  100  263M    0     0   230M      0  0:00:01  0:00:01 --:--:--  270M
+[root@helm ~]# sh install/k8s_cluster_setup.sh
+kOps has set your kubectl context to srinu.k8s.local
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster --wait 10m
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to a control-plane node: ssh -i ~/.ssh/id_rsa ubuntu@
+ * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
+ * read about installing addons at: https://kops.sigs.k8s.io/addons.
+
+[root@helm ~]#
+[root@helm ~]# sh install/helm.sh
+Downloading https://get.helm.sh/helm-v4.1.0-linux-amd64.tar.gz
+Verifying checksum... Done.
+Preparing to install helm into /usr/local/bin
+helm installed into /usr/local/bin/helm
+[root@helm ~]#
+[root@helm ~]# helm repo add cicd https://charts.jenkins.io
+"cicd" has been added to your repositories
+[root@helm ~]# helm repo add monitoring https://grafana.github.io/helm-charts
+"monitoring" has been added to your repositories
+[root@helm ~]# helm repo ls
+NAME            URL
+cicd            https://charts.jenkins.io
+monitoring      https://grafana.github.io/helm-charts
+[root@helm ~]# helm ls
+NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+[root@helm ~]# helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "cicd" chart repository
+...Successfully got an update from the "monitoring" chart repository
+Update Complete. ⎈Happy Helming!⎈
+[root@helm ~]#
+[root@helm ~]# helm repo rm monitoring
+"monitoring" has been removed from your repositories
+[root@helm ~]# helm repo ls
+no repositories to show
+[root@helm ~]#
+[root@helm ~]# helm create srinu
+Creating srinu
+[root@helm ~]# ll
+total 56
+-rw-r--r--. 1 root root   327 Jan 28 09:31 dm.yml
+-rwx------. 1 root root 11929 Jan 28 09:36 get_helm.sh
+drwxr-xr-x. 3 root root 16384 Jan 28 08:48 install
+drwxr-xr-x. 3 root root 16384 Jan 28 09:10 practice-files
+-rw-r--r--. 1 root root   344 Jan 28 09:30 sfs.yml
+drwxr-xr-x. 4 root root    93 Jan 28 10:15 srinu
+-rw-r--r--. 1 root root   156 Jan 28 09:30 svc.yml
+[root@helm ~]# cd srinu/
+[root@helm srinu]# ll
+total 12
+-rw-r--r--. 1 root root 1141 Jan 28 10:15 Chart.yaml
+drwxr-xr-x. 2 root root    6 Jan 28 10:15 charts
+drwxr-xr-x. 3 root root  184 Jan 28 10:15 templates
+-rw-r--r--. 1 root root 5271 Jan 28 10:15 values.yaml
+[root@helm srinu]# ll templates/
+total 32
+-rw-r--r--. 1 root root 2810 Jan 28 10:15 NOTES.txt
+-rw-r--r--. 1 root root 1762 Jan 28 10:15 _helpers.tpl
+-rw-r--r--. 1 root root 2370 Jan 28 10:15 deployment.yaml
+-rw-r--r--. 1 root root  985 Jan 28 10:15 hpa.yaml
+-rw-r--r--. 1 root root  949 Jan 28 10:15 httproute.yaml
+-rw-r--r--. 1 root root 1082 Jan 28 10:15 ingress.yaml
+-rw-r--r--. 1 root root  355 Jan 28 10:15 service.yaml
+-rw-r--r--. 1 root root  385 Jan 28 10:15 serviceaccount.yaml
+drwxr-xr-x. 2 root root   34 Jan 28 10:15 tests
+[root@helm srinu]#
+[root@helm srinu]# vi templates/deployment.yaml
+ 35       containers:
+ 36         - name: {{ .Chart.Name }}
+ 37           {{- with .Values.securityContext }}
+ 38           securityContext:
+ 39             {{- toYaml . | nindent 12 }}
+ 40           {{- end }}
+ 41           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+ 42           imagePullPolicy: {{ .Values.image.pullPolicy }}
+ 43           ports:
+ 44             - name: http
+ 45               containerPort: {{ .Values.service.port }}
+ 46               protocol: TCP
+[root@helm srinu]# vi values.yaml
+  6 replicaCount: 1
+  7
+  8 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+  9 image:
+ 10   repository: srinuas/Paytm
+
+ 53 service:
+ 54   # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+ 55   type: LoadBalancer
+ 56   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+ 57   port: 80
+[root@helm srinu]# vi Chart.yaml
+[root@helm srinu]#
+  1 apiVersion: v2
+  2 name: srinu
+  3 description: A Helm chart for Kubernetes
+  4
+  5 # A chart can be either an 'application' or a 'library' chart.
+  6 #
+  7 # Application charts are a collection of templates that can be packaged into versioned archives
+  8 # to be deployed.
+  9 #
+ 10 # Library charts provide useful utilities or functions for the chart developer. They're included as
+ 11 # a dependency of application charts to inject those utilities and functions into the rendering
+ 12 # pipeline. Library charts do not define any templates and therefore cannot be deployed.
+ 13 type: application
+ 14
+ 15 # This is the chart version. This version number should be incremented each time you make changes
+ 16 # to the chart and its templates, including the app version.
+ 17 # Versions are expected to follow Semantic Versioning (https://semver.org/)
+ 18 version: 0.1.0
+ 19
+ 20 # This is the version number of the application being deployed. This version number should be
+ 21 # incremented each time you make changes to the application. Versions are not expected to
+ 22 # follow Semantic Versioning. They should reflect the version the application is using.
+ 23 # It is recommended to use it with quotes.
+ 24 appVersion: "bus"
+[root@helm srinu]# ll
+total 12
+-rw-r--r--. 1 root root 1138 Jan 28 10:21 Chart.yaml
+drwxr-xr-x. 2 root root    6 Jan 28 10:15 charts
+drwxr-xr-x. 3 root root  184 Jan 28 10:30 templates
+-rw-r--r--. 1 root root 5282 Jan 28 10:24 values.yaml
+[root@helm srinu]# helm install myrelease1 .
+NAME: myrelease1
+LAST DEPLOYED: Wed Jan 28 10:31:54 2026
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+DESCRIPTION: Install complete
+NOTES:
+1. Get the application URL by running these commands:
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch its status by running 'kubectl get --namespace default svc -w myrelease1-srinu'
+  export SERVICE_IP=$(kubectl get svc --namespace default myrelease1-srinu --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+  echo http://$SERVICE_IP:80
+[root@helm srinu]#
+[root@helm srinu]# kubectl get pods
+NAME                                READY   STATUS    RESTARTS   AGE
+myrelease1-srinu-6b494c748f-v9hkh   1/1     Running   0          42s
+[root@helm srinu]# kubectl get svc -o wide
+NAME               TYPE           CLUSTER-IP     EXTERNAL-IP                                                               PORT(S)        AGE   SELECTOR
+kubernetes         ClusterIP      100.64.0.1     <none>                                                                    443/TCP        52m   <none>
+myrelease1-srinu   LoadBalancer   100.70.164.5   a5c36b9d402aa461a8c8e53999e32ad1-1247258856.us-east-2.elb.amazonaws.com   80:31303/TCP   70s   app.kubernetes.io/instance=myrelease1,app.kubernetes.io/name=srinu
+[root@helm srinu]# vi values.yaml
+[root@helm srinu]# helm install myrelease2 .
+NAME: myrelease2
+LAST DEPLOYED: Wed Jan 28 10:35:47 2026
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+DESCRIPTION: Install complete
+NOTES:
+1. Get the application URL by running these commands:
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch its status by running 'kubectl get --namespace default svc -w myrelease2-srinu'
+  export SERVICE_IP=$(kubectl get svc --namespace default myrelease2-srinu --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+  echo http://$SERVICE_IP:80
+[root@helm srinu]# helm release ls
+Error: unknown command "release" for "helm"
+Run 'helm --help' for usage.
+[root@helm srinu]# kubectl get svc -o wide
+NAME               TYPE           CLUSTER-IP     EXTERNAL-IP                                                               PORT(S)        AGE     SELECTOR
+kubernetes         ClusterIP      100.64.0.1     <none>                                                                    443/TCP        57m     <none>
+myrelease1-srinu   LoadBalancer   100.70.164.5   a5c36b9d402aa461a8c8e53999e32ad1-1247258856.us-east-2.elb.amazonaws.com   80:31303/TCP   6m5s    app.kubernetes.io/instance=myrelease1,app.kubernetes.io/name=srinu
+myrelease2-srinu   LoadBalancer   100.67.30.78   aa67692804bc2461dbbf478d659b98b8-1838198238.us-east-2.elb.amazonaws.com   80:31076/TCP   2m12s   app.kubernetes.io/instance=myrelease2,app.kubernetes.io/name=srinu
+[root@helm srinu]# kubectl get pods
+NAME                                READY   STATUS    RESTARTS   AGE
+myrelease1-srinu-6b494c748f-v9hkh   1/1     Running   0          6m41s
+myrelease2-srinu-7846577bdd-4f9z5   1/1     Running   0          2m48s
+myrelease2-srinu-7846577bdd-djs82   1/1     Running   0          2m48s
+myrelease2-srinu-7846577bdd-mf5nm   1/1     Running   0          2m48s
+[root@helm srinu]# helm uninstall myrelease1 myrelease2
+release "myrelease1" uninstalled
+release "myrelease2" uninstalled
+[root@helm srinu]# kubectl get pods
+No resources found in default namespace.
+[root@helm srinu]# ll
+total 12
+-rw-r--r--. 1 root root 1141 Jan 28 10:47 Chart.yaml
+drwxr-xr-x. 2 root root    6 Jan 28 10:47 charts
+drwxr-xr-x. 2 root root   36 Jan 28 11:51 templates
+-rw-r--r--. 1 root root 5271 Jan 28 10:47 values.yaml
+[root@helm srinu]# cat -n templates/dep.yml
+     1  apiVersion: apps/v1
+     2  kind: Deployment
+     3  metadata:
+     4    name: mydep
+     5  spec:
+     6    replicas: 2
+     7    selector:
+     8      matchLabels:
+     9        app: ecom
+    10    template:
+    11      metadata:
+    12        labels:
+    13          app: ecom
+    14      spec:
+    15        containers:
+    16          - name: con1
+    17            image: srinuas/ecom2:httpd
+    18            ports:
+    19              - containerPort: 80
+[root@helm srinu]# cat -n templates/svc.yml
+     1  ---
+     2  apiVersion: v1
+     3  kind: Service
+     4  metadata:
+     5    name: mysvc1
+     6  spec:
+     7    type: LoadBalancer
+     8    selector:
+     9      app: ecom
+    10    ports:
+    11      - port: 80
+    12        targetPort: 80
+[root@helm srinu]# heelm install ammu .
+-bash: heelm: command not found
+[root@helm srinu]# helm install ammu .
+NAME: ammu
+LAST DEPLOYED: Wed Jan 28 12:17:27 2026
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+DESCRIPTION: Install complete
+TEST SUITE: None
+[root@helm srinu]# kubectl get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+mydep-74965f855d-j9pdt   1/1     Running   0          9s
+mydep-74965f855d-tq59d   1/1     Running   0          9s
+[root@helm srinu]# kubectl get svc -o wide
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP                                                              PORT(S)        AGE     SELECTOR
+kubernetes   ClusterIP      100.64.0.1      <none>                                                                   443/TCP        5m24s   <none>
+mysvc1       LoadBalancer   100.68.30.115   acf538a5be2d94c77ba9b59a1b6caffc-219762742.us-east-2.elb.amazonaws.com   80:30875/TCP   21s     app=ecom
+[root@helm srinu]#
+[root@helm srinu]# kubectl get svc
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP                                                              PORT(S)        AGE
+kubernetes   ClusterIP      100.64.0.1      <none>                                                                   443/TCP        9m39s
+mysvc1       LoadBalancer   100.68.30.115   acf538a5be2d94c77ba9b59a1b6caffc-219762742.us-east-2.elb.amazonaws.com   80:30875/TCP   4m36s
+[root@helm srinu]# helm ls
+NAME    NAMESPACE       REVISION        UPDATED                                 STATUS  CHART           APP VERSION
+ammu    default         1               2026-01-28 12:17:27.802099254 +0000 UTC deployedsrinu-0.1.0     1.16.0
+[root@helm srinu]# vi templates/dep.yml
+[root@helm srinu]# cat -n templates/dep.yml
+     1  apiVersion: apps/v1
+     2  kind: Deployment
+     3  metadata:
+     4    name: mydep
+     5  spec:
+     6    replicas: 3
+     7    selector:
+     8      matchLabels:
+     9        app: ecom
+    10    template:
+    11      metadata:
+    12        labels:
+    13          app: ecom
+    14      spec:
+    15        containers:
+    16          - name: con1
+    17            image: srinuas/instagram:v4
+    18            ports:
+    19              - containerPort: 80
+[root@helm srinu]# helm upgrade ammu
+Error: "helm upgrade" requires 2 arguments
+
+Usage:  helm upgrade [RELEASE] [CHART] [flags]
+[root@helm srinu]# helm upgrade ammu .
+Release "ammu" has been upgraded. Happy Helming!
+NAME: ammu
+LAST DEPLOYED: Wed Jan 28 12:24:47 2026
+NAMESPACE: default
+STATUS: deployed
+REVISION: 2
+DESCRIPTION: Upgrade complete
+TEST SUITE: None
+[root@helm srinu]# kubectl get pods
+NAME                     READY   STATUS        RESTARTS   AGE
+mydep-555cb44fb-fz4dn    1/1     Running       0          7s
+mydep-555cb44fb-nsw4k    1/1     Running       0          12s
+mydep-555cb44fb-tvxj9    1/1     Running       0          2s
+mydep-74965f855d-j9pdt   1/1     Terminating   0          7m32s
+mydep-74965f855d-tq59d   0/1     Completed     0          7m32s
+[root@helm srinu]# kubectl get pods
+NAME                    READY   STATUS    RESTARTS   AGE
+mydep-555cb44fb-fz4dn   1/1     Running   0          15s
+mydep-555cb44fb-nsw4k   1/1     Running   0          20s
+mydep-555cb44fb-tvxj9   1/1     Running   0          10s
+[root@helm srinu]# vi templates/dep.yml
+[root@helm srinu]# cat -n templates/dep.yml
+     1  apiVersion: apps/v1
+     2  kind: Deployment
+     3  metadata:
+     4    name: mydep
+     5  spec:
+     6    replicas: 4
+     7    selector:
+     8      matchLabels:
+     9        app: ecom
+    10    template:
+    11      metadata:
+    12        labels:
+    13          app: ecom
+    14      spec:
+    15        containers:
+    16          - name: con1
+    17            image: srinuas/swiggy:instamart
+    18            ports:
+    19              - containerPort: 80
+[root@helm srinu]# helm upgrade ammu .
+Release "ammu" has been upgraded. Happy Helming!
+NAME: ammu
+LAST DEPLOYED: Wed Jan 28 12:27:29 2026
+NAMESPACE: default
+STATUS: deployed
+REVISION: 3
+DESCRIPTION: Upgrade complete
+TEST SUITE: None
+[root@helm srinu]# kubectl get pods
+NAME                    READY   STATUS    RESTARTS   AGE
+mydep-58c6988cc-j5mk7   1/1     Running   0          28s
+mydep-58c6988cc-jcjpl   1/1     Running   0          28s
+mydep-58c6988cc-jkmqw   1/1     Running   0          24s
+mydep-58c6988cc-vf48t   1/1     Running   0          24s
+[root@helm srinu]# helm history ammu
+REVISION        UPDATED                         STATUS          CHART           APP VERSION     DESCRIPTION
+1               Wed Jan 28 12:17:27 2026        superseded      srinu-0.1.0     1.16.0          Install complete
+2               Wed Jan 28 12:24:47 2026        superseded      srinu-0.1.0     1.16.0          Upgrade complete
+3               Wed Jan 28 12:27:29 2026        deployed        srinu-0.1.0     1.16.0          Upgrade complete
+[root@helm srinu]# helm rollback ammu 1
+Rollback was a success! Happy Helming!
+[root@helm srinu]# kubectl get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+mydep-74965f855d-5tcrs   1/1     Running   0          12s
+mydep-74965f855d-7l8xl   1/1     Running   0          13s
+[root@helm srinu]# helm rollback ammu 3
+Rollback was a success! Happy Helming!
+[root@helm srinu]# kubectl get pods
+NAME                    READY   STATUS    RESTARTS   AGE
+mydep-58c6988cc-6bznb   1/1     Running   0          25s
+mydep-58c6988cc-8dqs8   1/1     Running   0          27s
+mydep-58c6988cc-rntqb   1/1     Running   0          25s
+mydep-58c6988cc-wh5n7   1/1     Running   0          27s
+[root@helm srinu]# helm rollback ammu 2
+Rollback was a success! Happy Helming!
+[root@helm srinu]# kubectl get pods
+NAME                    READY   STATUS        RESTARTS   AGE
+mydep-555cb44fb-sqftg   1/1     Running       0          2s
+mydep-555cb44fb-wd7gn   1/1     Running       0          4s
+mydep-555cb44fb-zhfh9   1/1     Running       0          3s
+mydep-58c6988cc-rntqb   1/1     Terminating   0          38s
+[root@helm srinu]# kubectl get pods
+NAME                    READY   STATUS    RESTARTS   AGE
+mydep-555cb44fb-sqftg   1/1     Running   0          7s
+mydep-555cb44fb-wd7gn   1/1     Running   0          9s
+mydep-555cb44fb-zhfh9   1/1     Running   0          8s
+[root@helm srinu]#
+[root@helm srinu]# helm ls
+NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
+ammu    default         6               2026-01-28 12:29:51.352246539 +0000 UTC deployed        srinu-0.1.0     1.16.0  
+[root@helm srinu]# cd ..
+[root@helm helm]# ll
+total 0
+drwxr-xr-x. 4 root root 93 Jan 28 11:00 srinu
+[root@helm helm]# git clone https://github.com/Srinuas/helm.git
+Cloning into 'helm'...
+warning: You appear to have cloned an empty repository.
+[root@helm helm]# ll
+total 0
+drwxr-xr-x. 3 root root 18 Jan 28 12:33 helm
+drwxr-xr-x. 4 root root 93 Jan 28 11:00 srinu
+[root@helm helm]# rm -rf helm/
+[root@helm helm]# git clone https://github.com/Srinuas/helmrepo.git
+Cloning into 'helmrepo'...
+warning: You appear to have cloned an empty repository.
+[root@helm helm]# ll
+total 0
+drwxr-xr-x. 3 root root 18 Jan 28 12:34 helmrepo
+drwxr-xr-x. 4 root root 93 Jan 28 11:00 srinu
+[root@helm helm]# cd helmrepo/
+[root@helm helmrepo]# helm create siri
+Creating siri
+[root@helm helmrepo]# ll
+total 0
+drwxr-xr-x. 4 root root 93 Jan 28 12:39 siri
+[root@helm helmrepo]# cd siri/
+[root@helm siri]# ll
+total 12
+-rw-r--r--. 1 root root 1140 Jan 28 12:39 Chart.yaml
+drwxr-xr-x. 2 root root    6 Jan 28 12:39 charts
+drwxr-xr-x. 3 root root  184 Jan 28 12:39 templates
+-rw-r--r--. 1 root root 5270 Jan 28 12:39 values.yaml
+[root@helm siri]# ll templates/
+total 32
+-rw-r--r--. 1 root root 2806 Jan 28 12:39 NOTES.txt
+-rw-r--r--. 1 root root 1752 Jan 28 12:39 _helpers.tpl
+-rw-r--r--. 1 root root 2365 Jan 28 12:39 deployment.yaml
+-rw-r--r--. 1 root root  982 Jan 28 12:39 hpa.yaml
+-rw-r--r--. 1 root root  947 Jan 28 12:39 httproute.yaml
+-rw-r--r--. 1 root root 1079 Jan 28 12:39 ingress.yaml
+-rw-r--r--. 1 root root  352 Jan 28 12:39 service.yaml
+-rw-r--r--. 1 root root  383 Jan 28 12:39 serviceaccount.yaml
+drwxr-xr-x. 2 root root   34 Jan 28 12:39 tests
+[root@helm siri]# rm -rf templates/*
+[root@helm siri]# ll templates/
+total 0
+[root@helm siri]# pwd
+/root/helm/helmrepo/siri
+[root@helm siri]# ll
+total 12
+-rw-r--r--. 1 root root 1140 Jan 28 12:39 Chart.yaml
+drwxr-xr-x. 2 root root    6 Jan 28 12:39 charts
+drwxr-xr-x. 2 root root   36 Jan 28 12:41 templates
+-rw-r--r--. 1 root root 5270 Jan 28 12:39 values.yaml
+[root@helm siri]# ll templates/
+total 8
+-rw-r--r--. 1 root root 324 Jan 28 12:41 dep.yml
+-rw-r--r--. 1 root root 156 Jan 28 12:41 svc.yml
+[root@helm siri]# vi templates/sfs.yml
+[root@helm siri]# cat -n templates/dep.yml
+     1  apiVersion: apps/v1
+     2  kind: Deployment
+     3  metadata:
+     4    name: mydep
+     5  spec:
+     6    replicas: 4
+     7    selector:
+     8      matchLabels:
+     9        app: ecom
+    10    template:
+    11      metadata:
+    12        labels:
+    13          app: ecom
+    14      spec:
+    15        containers:
+    16          - name: con1
+    17            image: srinuas/swiggy:instamart
+    18            ports:
+    19              - containerPort: 80
+[root@helm siri]# cat -n templates/sfs.yml
+     1  ---
+     2  apiVersion: apps/v1
+     3  kind: StatefulSet
+     4  metadata:
+     5    name: mysfs1
+     6  spec:
+     7    replicas: 2
+     8    selector:
+     9      matchLabels:
+    10        app: ecom
+    11    template:
+    12      metadata:
+    13        name: mytem1
+    14        labels:
+    15          app: ecom
+    16      spec:
+    17        containers:
+    18          - name: con1
+    19            image: srinuas/ecom2:httpd
+    20            ports:
+    21              - containerPort: 80
+[root@helm siri]# cat -n templates/svc.yml
+     1  ---
+     2  apiVersion: v1
+     3  kind: Service
+     4  metadata:
+     5    name: mysvc1
+     6  spec:
+     7    type: LoadBalancer
+     8    selector:
+     9      app: ecom
+    10    ports:
+    11      - port: 80
+    12        targetPort: 80
+[root@helm siri]# ll
+total 12
+-rw-r--r--. 1 root root 1140 Jan 28 12:39 Chart.yaml
+drwxr-xr-x. 2 root root    6 Jan 28 12:39 charts
+drwxr-xr-x. 2 root root   51 Jan 28 12:42 templates
+-rw-r--r--. 1 root root 5270 Jan 28 12:39 values.yaml
+[root@helm siri]# helm lint .
+==> Linting .
+[INFO] Chart.yaml: icon is recommended
+
+1 chart(s) linted, 0 chart(s) failed
+[root@helm siri]# helm package .
+Successfully packaged chart and saved it to: /root/helm/helmrepo/siri/siri-0.1.0.tgz
+[root@helm siri]# pwd
+/root/helm/helmrepo/siri
+[root@helm siri]# cd ..
+[root@helm helmrepo]# helm repo index .
+[root@helm helmrepo]# ll
+total 4
+-rw-r--r--. 1 root root 378 Jan 28 12:45 index.yaml
+drwxr-xr-x. 4 root root 115 Jan 28 12:44 siri
+[root@helm helmrepo]# cat -n index.yaml
+     1  apiVersion: v1
+     2  entries:
+     3    siri:
+     4    - apiVersion: v2
+     5      appVersion: 1.16.0
+     6      created: "2026-01-28T12:45:20.100712972Z"
+     7      description: A Helm chart for Kubernetes
+     8      digest: 134ee09f959f84953c58e12de0e66ae5314f9fbd1341b4a2c6f2897ce095dcfa
+     9      name: siri
+    10      type: application
+    11      urls:
+    12      - siri/siri-0.1.0.tgz
+    13      version: 0.1.0
+    14  generated: "2026-01-28T12:45:20.100303251Z"
+[root@helm helmrepo]# git add *
+[root@helm helmrepo]# ll siri/
+total 16
+-rw-r--r--. 1 root root 1140 Jan 28 12:39 Chart.yaml
+drwxr-xr-x. 2 root root    6 Jan 28 12:39 charts
+-rw-r--r--. 1 root root 2594 Jan 28 12:44 siri-0.1.0.tgz
+drwxr-xr-x. 2 root root   51 Jan 28 12:42 templates
+-rw-r--r--. 1 root root 5270 Jan 28 12:39 values.yaml
+[root@helm helmrepo]# git commit -m 'get ready' .
+[main (root-commit) 89cb6f2] get ready
+ 8 files changed, 274 insertions(+)
+ create mode 100644 index.yaml
+ create mode 100644 siri/.helmignore
+ create mode 100644 siri/Chart.yaml
+ create mode 100644 siri/siri-0.1.0.tgz
+ create mode 100644 siri/templates/dep.yml
+ create mode 100644 siri/templates/sfs.yml
+ create mode 100644 siri/templates/svc.yml
+ create mode 100644 siri/values.yaml
+[root@helm helmrepo]# git push origin main
+Username for 'https://github.com': Srinuas
+Password for 'https://Srinuas@github.com':
+Enumerating objects: 12, done.
+Counting objects: 100% (12/12), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (12/12), done.
+Writing objects: 100% (12/12), 6.26 KiB | 6.26 MiB/s, done.
+Total 12 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), done.
+To https://github.com/Srinuas/helmrepo.git
+ * [new branch]      main -> main
+[root@helm helmrepo]#
+[root@helm helmrepo]# helm ls
+NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART        APP VERSION
+ammu    default         6               2026-01-28 12:29:51.352246539 +0000 UTC deployed        srinu-0.1.0  1.16.0
+[root@helm helmrepo]# cd ..
+[root@helm helm]# ll
+total 0
+drwxr-xr-x. 4 root root 48 Jan 28 12:45 helmrepo
+drwxr-xr-x. 4 root root 93 Jan 28 11:00 srinu
+[root@helm helm]# rm -rf *
+[root@helm helm]# ll
+total 0
+[root@helm helm]# helm repo add app https://srinuas.github.io/helmrepo/
+"app" has been added to your repositories
+[root@helm helm]# helm repo ls
+NAME    URL
+app     https://srinuas.github.io/helmrepo/
+[root@helm helm]# helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "app" chart repository
+Update Complete. ⎈Happy Helming!⎈
+[root@helm helm]# ll
+total 0
+[root@helm helm]# helm install lalitha app/siri
+Error: INSTALLATION FAILED: unable to continue with install: Service "mysvc1" in namespace "default" exists and cannot be imported into the current release: invalid ownership metadata; annotation validation error: key "meta.helm.sh/release-name" must equal "lalitha": current value is "ammu"
+[root@helm helm]# helm ls
+NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART        APP VERSION
+ammu    default         6               2026-01-28 12:29:51.352246539 +0000 UTC deployed        srinu-0.1.0  1.16.0
+[root@helm helm]# helm install lalitha app/ammu
+Error: INSTALLATION FAILED: chart "ammu" matching  not found in app index. (try 'helm repo update'): no chart name found
+[root@helm helm]# helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "app" chart repository
+Update Complete. ⎈Happy Helming!⎈
+[root@helm helm]# helm install lalitha app/ammu
+Error: INSTALLATION FAILED: chart "ammu" matching  not found in app index. (try 'helm repo update'): no chart name found
+[root@helm helm]# helm install lalitha app/siri
+Error: INSTALLATION FAILED: unable to continue with install: Service "mysvc1" in namespace "default" exists and cannot be imported into the current release: invalid ownership metadata; annotation validation error: key "meta.helm.sh/release-name" must equal "lalitha": current value is "ammu"
+[root@helm helm]# helm uninstall ammu
+release "ammu" uninstalled
+[root@helm helm]# helm install lalitha app/siri
+NAME: lalitha
+LAST DEPLOYED: Wed Jan 28 14:31:54 2026
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+DESCRIPTION: Install complete
+TEST SUITE: None
+[root@helm helm]# helm ls
+NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART        APP VERSION
+lalitha default         1               2026-01-28 14:31:54.453353526 +0000 UTC deployed        siri-0.1.0   1.16.0
+[root@helm helm]# kubectl get svc
+NAME         TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)        AGE
+kubernetes   ClusterIP      100.64.0.1       <none>                                                                    443/TCP        140m
+mysvc1       LoadBalancer   100.65.166.158   a80aa4baa212b4b9596b45b4d2f3569b-1908252451.us-east-2.elb.amazonaws.com   80:30510/TCP   30s
+[root@helm helm]# kubectl get pods
+NAME                    READY   STATUS    RESTARTS   AGE
+mydep-58c6988cc-dkscn   1/1     Running   0          2m18s
+mydep-58c6988cc-jd95t   1/1     Running   0          2m18s
+mydep-58c6988cc-kbzq7   1/1     Running   0          2m18s
+mydep-58c6988cc-qptsz   1/1     Running   0          2m18s
+mysfs1-0                1/1     Running   0          2m18s
+mysfs1-1                1/1     Running   0          2m16s
+[root@helm helm]#
+[root@helm helm]# helm repo ls
+NAME    URL
+app     https://srinuas.github.io/helmrepo/
+[root@helm templates]# helm ls
+NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART        APP VERSION
+lalitha default         1               2026-01-28 14:31:54.453353526 +0000 UTC deployed        siri-0.1.0   1.16.0
+[root@helm helm]#
+[root@helm helm]# helm uninstall lalitha
+release "lalitha" uninstalled
+[root@helm helm]# 
+[root@helm helm]# helm repo rm app
+"app" has been removed from your repositories
+[root@helm helm]# 
+[root@helm helm]# helm repo ls
+no repositories to show
+[root@helm helm]# helm ls
+NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+[root@helm helm]#
+[root@helm helm]# helm ls
+NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+[root@helm helm]# kubectl get pods
+No resources found in default namespace.
+[root@helm helm]# kubectl get svc
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   100.64.0.1   <none>        443/TCP   3h36m
+[root@helm helm]#
