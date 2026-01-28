@@ -241,4 +241,434 @@ mydms-tsk59   1/1     Running   0          73m
 mysfs1-0      1/1     Running   0          73m
 mysfs1-1      1/1     Running   0          73m
 [root@instance ~]#
+______________________________________________________________________
+
+Second time practice
+
+[root@helm ~]# cat practice-files/kops_statefulsets_daemonsets
+root@instance ~]# kubectl apply -f .
+statefulset.apps/mysfs1 created
+service/mysvc1 unchanged
+[root@instance ~]# cat stateful.yml
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysfs1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecom
+  template:
+    metadata:
+      name: mytem1
+      labels:
+        app: ecom
+    spec:
+      containers:
+        - name: con1
+          image: srinuas/ecom2:httpd
+          ports:
+            - containerPort: 80
+[root@instance ~]# cat svc.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysvc1
+spec:
+  type: LoadBalancer
+  selector:
+    app: ecom
+  ports:
+    - port: 80
+      targetPort: 80
+[root@instance ~]# cat hpa.yml
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: myhpa1
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: mysfs1
+  minReplicas: 2
+  maxReplicas: 8
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
+[root@instance ~]# cat deam.yml
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: mydms
+spec:
+  selector:
+    matchLabels:
+      app: ecom
+  template:
+    metadata:
+      name: mytem1
+      labels:
+        app: ecom
+    spec:
+      containers:
+        - name: con1
+          image: srinuas/ecom2:httpd
+          ports:
+            - containerPort: 80
+[root@instance ~]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE   VERSION
+i-0a78c0f7f47fc77a5   Ready    node            22m   v1.34.3
+i-0b6428b787ab708b9   Ready    node            22m   v1.34.3
+i-0d892f29d2a5f87bb   Ready    control-plane   24m   v1.34.3
+[root@instance ~]# kubectl get sts
+NAME     READY   AGE
+mysfs1   2/2     43s
+[root@instance ~]#
+[root@instance ~]# kubectl get pods
+NAME       READY   STATUS    RESTARTS   AGE
+mysfs1-0   1/1     Running   0          119s
+mysfs1-1   1/1     Running   0          115s
+[root@instance ~]#
+[root@instance ~]# kubectl get svc -o wide
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP                                                              PORT(S)        AGE   SELECTOR
+kubernetes   ClusterIP      100.64.0.1      <none>                                                                   443/TCP        31m   <none>
+mysvc1       LoadBalancer   100.64.150.28   a5ba2205599c442ae92fe7fc90ec4db6-613133432.us-east-2.elb.amazonaws.com   80:30186/TCP   12m   app=ecom
+[root@instance ~]# kubectl get hpa -o wide
+NAME     REFERENCE            TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+myhpa1   StatefulSet/mysfs1   cpu: 1%/60%   2         8         8          12m
+[root@instance ~]#
+[root@instance ~]# kubectl get ds -o wide
+NAME    DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE     CONTAINERS   IMAGES                SELECTOR
+mydms   2         2         2       2            2           <none>          2m25s   con1         srinuas/ecom2:httpd   app=ecom
+[root@instance ~]#
+[root@instance ~]# kubectl exec -it mysfs1-0 -- bash
+root@mysfs1-0:/usr/local/apache2# apt update -y
+Get:1 http://deb.debian.org/debian trixie InRelease [140 kB]
+Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+Get:4 http://deb.debian.org/debian trixie/main amd64 Packages [9670 kB]
+Get:5 http://deb.debian.org/debian trixie-updates/main amd64 Packages [5412 B]
+Get:6 http://deb.debian.org/debian-security trixie-security/main amd64 Packages [96.1 kB]
+Fetched 10.0 MB in 1s (7578 kB/s)
+8 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Notice: Repository 'http://deb.debian.org/debian trixie InRelease' changed its 'Version' value from '13.2' to '13.3'
+root@mysfs1-0:/usr/local/apache2# apt install stress -y
+Installing:
+  stress
+
+Summary:
+  Upgrading: 0, Installing: 1, Removing: 0, Not Upgrading: 8
+  Download size: 21.9 kB
+  Space needed: 57.3 kB / 15.2 GB available
+
+Get:1 http://deb.debian.org/debian trixie/main amd64 stress amd64 1.0.7-1 [21.9 kB]
+Fetched 21.9 kB in 0s (497 kB/s)
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 79, <STDIN> line 1.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 1.)
+debconf: falling back to frontend: Teletype
+Selecting previously unselected package stress.
+(Reading database ... 5881 files and directories currently installed.)
+Preparing to unpack .../stress_1.0.7-1_amd64.deb ...
+Unpacking stress (1.0.7-1) ...
+Setting up stress (1.0.7-1) ...
+root@mysfs1-0:/usr/local/apache2# stress -c 6 -t 600 -v
+stress: info: [155] dispatching hogs: 6 cpu, 0 io, 0 vm, 0 hdd
+stress: dbug: [155] using backoff sleep of 18000us
+stress: dbug: [155] setting timeout to 600s
+stress: dbug: [155] --> hogcpu worker 6 [156] forked
+stress: dbug: [155] using backoff sleep of 15000us
+stress: dbug: [155] setting timeout to 600s
+stress: dbug: [155] --> hogcpu worker 5 [157] forked
+stress: dbug: [155] using backoff sleep of 12000us
+stress: dbug: [155] setting timeout to 600s
+stress: dbug: [155] --> hogcpu worker 4 [158] forked
+stress: dbug: [155] using backoff sleep of 9000us
+stress: dbug: [155] setting timeout to 600s
+stress: dbug: [155] --> hogcpu worker 3 [159] forked
+stress: dbug: [155] using backoff sleep of 6000us
+stress: dbug: [155] setting timeout to 600s
+stress: dbug: [155] --> hogcpu worker 2 [160] forked
+stress: dbug: [155] using backoff sleep of 3000us
+stress: dbug: [155] setting timeout to 600s
+stress: dbug: [155] --> hogcpu worker 1 [161] forked
+^C
+root@mysfs1-0:/usr/local/apache2#
+___________________________________________
+
+[root@instance ~]# kubectl get hpa -o wide
+NAME     REFERENCE            TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+myhpa1   StatefulSet/mysfs1   cpu: 2%/60%   2         8         8          13m
+[root@instance ~]# kubectl get hpa -o wide
+NAME     REFERENCE            TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+myhpa1   StatefulSet/mysfs1   cpu: 961%/60%   2         8         2          13m
+[root@instance ~]# kubectl get hpa -o wide
+NAME     REFERENCE            TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+myhpa1   StatefulSet/mysfs1   cpu: 961%/60%   2         8         2          13m
+[root@instance ~]# kubectl get hpa -o wide
+NAME     REFERENCE            TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+myhpa1   StatefulSet/mysfs1   cpu: 961%/60%   2         8         2          13m
+[root@instance ~]# kubectl get hpa -o wide
+NAME     REFERENCE            TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+myhpa1   StatefulSet/mysfs1   cpu: 942%/60%   2         8         4          14m
+[root@instance ~]# kubectl get hpa -o wide
+NAME     REFERENCE            TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+myhpa1   StatefulSet/mysfs1   cpu: 459%/60%   2         8         8          14m
+[root@instance ~]# kubectl get hpa -o wide
+NAME     REFERENCE            TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+myhpa1   StatefulSet/mysfs1   cpu: 459%/60%   2         8         8          14m
+[root@instance ~]# kubectl get hpa -o wide
+NAME     REFERENCE            TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+myhpa1   StatefulSet/mysfs1   cpu: 459%/60%   2         8         8          14m
+[root@instance ~]#
+
+______________________________________
+
+[root@instance ~]# kubectl get ds -o wide
+NAME    DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE     CONTAINERS   IMAGES                SELECTOR
+mydms   2         2         2       2            2           <none>          2m25s   con1         srinuas/ecom2:httpd   app=ecom
+[root@instance ~]# kops edit ig --name=srinu.k8s.local nodes-us-east-2a
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: "2026-01-17T12:20:58Z"
+  generation: 2
+  labels:
+    kops.k8s.io/cluster: srinu.k8s.local
+  name: nodes-us-east-2a
+spec:
+  image: ami-0f5fcdfbd140e4ab7
+  machineType: t3.micro
+  maxSize: 3
+  minSize: 3
+  role: Node
+  rootVolumeSize: 20
+  subnets:
+  - us-east-2a
+
+[root@instance ~]# kops update cluster --name srinu.k8s.local --yes --admin
+I0117 12:38:35.461471   29641 executor.go:113] Tasks: 0 done / 126 total; 43 can run
+I0117 12:38:35.859053   29641 executor.go:113] Tasks: 43 done / 126 total; 23 can run
+I0117 12:38:36.145470   29641 executor.go:113] Tasks: 66 done / 126 total; 35 can run
+I0117 12:38:36.341184   29641 executor.go:113] Tasks: 101 done / 126 total; 5 can run
+I0117 12:38:37.410594   29641 executor.go:113] Tasks: 106 done / 126 total; 8 can run
+I0117 12:38:37.645454   29641 executor.go:113] Tasks: 114 done / 126 total; 3 can run
+I0117 12:38:37.878633   29641 executor.go:113] Tasks: 117 done / 126 total; 6 can run
+I0117 12:38:37.993115   29641 executor.go:113] Tasks: 123 done / 126 total; 3 can run
+I0117 12:38:38.093890   29641 executor.go:113] Tasks: 126 done / 126 total; 0 can run
+I0117 12:38:38.094430   29641 update_cluster.go:419] Exporting kubeconfig for cluster
+kOps has set your kubectl context to srinu.k8s.local
+
+Cluster changes have been applied to the cloud.
+
+
+Changes may require instances to restart: kops rolling-update cluster
+
+[root@instance ~]#
+[root@instance ~]# kubectl get ds
+NAME    DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+mydms   2         2         2       2            2           <none>          72m
+[root@instance ~]#
+[root@instance ~]# kubectl get pods
+NAME          READY   STATUS    RESTARTS   AGE
+mydms-nc2sb   1/1     Running   0          73m
+mydms-tsk59   1/1     Running   0          73m
+mysfs1-0      1/1     Running   0          73m
+mysfs1-1      1/1     Running   0          73m
+[root@instance ~]#
+[root@instance ~]# kubectl get ds
+NAME    DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+mydms   2         2         2       2            2           <none>          72m
+[root@instance ~]#
+[root@instance ~]# kubectl get pods
+NAME          READY   STATUS    RESTARTS   AGE
+mydms-nc2sb   1/1     Running   0          73m
+mydms-tsk59   1/1     Running   0          73m
+mysfs1-0      1/1     Running   0          73m
+mysfs1-1      1/1     Running   0          73m
+[root@instance ~]#
+
+[root@helm ~]# ll
+total 36
+-rw-r--r--. 1 root root   220 Jan 27 18:23 daem.yml
+drwxr-xr-x. 3 root root 16384 Jan 27 17:33 install
+drwxr-xr-x. 3 root root 16384 Jan 27 17:33 practice-files
+[root@helm ~]# vi daem.yml
+[root@helm ~]# cp daem.yml sfs.yml
+[root@helm ~]# cat sfs.yml
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysfs1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecom
+  template:
+    metadata:
+      name: mytem1
+      labels:
+        app: ecom
+    spec:
+      containers:
+        - name: con1
+          image: srinuas/ecom2:httpd
+          ports:
+            - containerPort: 80
+[root@helm ~]# vi daem.yml
+[root@helm ~]# cat daem.yml
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: mydms
+spec:
+  selector:
+    matchLabels:
+      app: ecom
+  template:
+    metadata:
+      name: mytem1
+      labels:
+        app: ecom
+    spec:
+      containers:
+        - name: con1
+          image: srinuas/ecom2:httpd
+          ports:
+            - containerPort: 80
+[root@helm ~]# vi svc.yml
+[root@helm ~]# cat svc.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysvc1
+spec:
+  type: LoadBalancer
+  selector:
+    app: ecom
+  ports:
+    - port: 80
+      targetPort: 80
+[root@helm ~]# kubectl apply -f .
+daemonset.apps/mydms created
+statefulset.apps/mysfs1 created
+service/mysvc1 created
+[root@helm ~]# kubectl get daemonset
+NAME    DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+mydms   3         3         3       3            3           <none>          35s
+[root@helm ~]# kubectl get statefulset
+NAME     READY   AGE
+mysfs1   2/2     49s
+[root@helm ~]# kubectl get service
+NAME         TYPE           CLUSTER-IP     EXTERNAL-IP                                                              PORT(S)        AGE
+kubernetes   ClusterIP      100.64.0.1     <none>                                                                   443/TCP        25m
+mysvc1       LoadBalancer   100.66.57.23   a9a31ce6cabed40f0971a74ef1fec8be-834686889.us-east-2.elb.amazonaws.com   80:32234/TCP   59s
+[root@helm ~]# kubectl get pods
+NAME          READY   STATUS    RESTARTS   AGE
+mydms-dfzb4   1/1     Running   0          100s
+mydms-jp9zb   1/1     Running   0          100s
+mydms-rtp96   1/1     Running   0          100s
+mysfs1-0      1/1     Running   0          100s
+mysfs1-1      1/1     Running   0          96s
+[root@helm ~]#
+[root@helm ~]# kops edit ig --name=srinu.k8s.local nodes-us-east-2a
+[root@helm ~]# kops update cluster --name srinu.k8s.local --yes --admin
+I0127 18:35:45.027877   28637 executor.go:113] Tasks: 0 done / 135 total; 43 can run
+I0127 18:35:45.387560   28637 executor.go:113] Tasks: 43 done / 135 total; 24 can run
+I0127 18:35:45.668372   28637 executor.go:113] Tasks: 67 done / 135 total; 36 can run
+I0127 18:35:45.877318   28637 executor.go:113] Tasks: 103 done / 135 total; 6 can run
+I0127 18:35:46.752276   28637 executor.go:113] Tasks: 109 done / 135 total; 10 can run
+I0127 18:35:46.962185   28637 executor.go:113] Tasks: 119 done / 135 total; 4 can run
+I0127 18:35:47.123831   28637 executor.go:113] Tasks: 123 done / 135 total; 8 can run
+I0127 18:35:47.250669   28637 executor.go:113] Tasks: 131 done / 135 total; 4 can run
+I0127 18:35:47.352013   28637 executor.go:113] Tasks: 135 done / 135 total; 0 can run
+I0127 18:35:47.352431   28637 update_cluster.go:419] Exporting kubeconfig for cluster
+kOps has set your kubectl context to srinu.k8s.local
+
+Cluster changes have been applied to the cloud.
+
+
+Changes may require instances to restart: kops rolling-update cluster
+
+[root@helm ~]# kubectl get pods
+NAME          READY   STATUS    RESTARTS   AGE
+mydms-dfzb4   1/1     Running   0          4m23s
+mydms-jp9zb   1/1     Running   0          4m23s
+mydms-rtp96   1/1     Running   0          4m23s
+mysfs1-0      1/1     Running   0          4m23s
+mysfs1-1      1/1     Running   0          4m19s
+[root@helm ~]# kubectl get pods -w
+NAME          READY   STATUS    RESTARTS   AGE
+mydms-dfzb4   1/1     Running   0          6m31s
+mydms-jp9zb   1/1     Running   0          6m31s
+mydms-rtp96   1/1     Running   0          6m31s
+mysfs1-0      1/1     Running   0          6m31s
+mysfs1-1      1/1     Running   0          6m27s
+mydms-hxdtx   0/1     Pending   0          0s
+mydms-hxdtx   0/1     Pending   0          0s
+mydms-hxdtx   0/1     ContainerCreating   0          0s
+mydms-hxdtx   1/1     Running             0          9s
+^C[root@helm ~]# kubectl get pods
+NAME          READY   STATUS    RESTARTS   AGE
+mydms-dfzb4   1/1     Running   0          7m27s
+mydms-hxdtx   1/1     Running   0          32s
+mydms-jp9zb   1/1     Running   0          7m27s
+mydms-rtp96   1/1     Running   0          7m27s
+mysfs1-0      1/1     Running   0          7m27s
+mysfs1-1      1/1     Running   0          7m23s
+[root@helm ~]#
+[root@helm ~]# kops edit ig --name=srinu.k8s.local nodes-us-east-2a
+  5 apiVersion: kops.k8s.io/v1alpha2
+  6 kind: InstanceGroup
+  7 metadata:
+  8   creationTimestamp: "2026-01-27T17:54:59Z"
+  9   generation: 2
+ 10   labels:
+ 11     kops.k8s.io/cluster: srinu.k8s.local
+ 12   name: nodes-us-east-2a
+ 13 spec:
+ 14   image: ami-0f5fcdfbd140e4ab7
+ 15   machineType: t3.micro
+ 16   maxSize: 6
+ 17   minSize: 6
+ 18   role: Node
+ 19   rootVolumeSize: 20
+ 20   subnets:
+ 21   - us-east-2a
+[root@helm ~]# kops update cluster --name srinu.k8s.local --yes --admin
+I0127 18:46:15.988671   28972 executor.go:113] Tasks: 0 done / 135 total; 43 can run
+I0127 18:46:16.273668   28972 executor.go:113] Tasks: 43 done / 135 total; 24 can run
+I0127 18:46:16.541399   28972 executor.go:113] Tasks: 67 done / 135 total; 36 can run
+I0127 18:46:16.743986   28972 executor.go:113] Tasks: 103 done / 135 total; 6 can run
+I0127 18:46:17.686161   28972 executor.go:113] Tasks: 109 done / 135 total; 10 can run
+I0127 18:46:17.886129   28972 executor.go:113] Tasks: 119 done / 135 total; 4 can run
+I0127 18:46:18.018629   28972 executor.go:113] Tasks: 123 done / 135 total; 8 can run
+I0127 18:46:18.129054   28972 executor.go:113] Tasks: 131 done / 135 total; 4 can run
+I0127 18:46:18.234692   28972 executor.go:113] Tasks: 135 done / 135 total; 0 can run
+I0127 18:46:18.235060   28972 update_cluster.go:419] Exporting kubeconfig for cluster
+kOps has set your kubectl context to srinu.k8s.local
+
+Cluster changes have been applied to the cloud.
+
+
+Changes may require instances to restart: kops rolling-update cluster
+
+[root@helm ~]#
 
