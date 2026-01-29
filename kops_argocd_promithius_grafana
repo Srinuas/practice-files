@@ -1,0 +1,613 @@
+[root@Argocd ~]# cd /home/ec2-user/
+[root@Argocd ec2-user]# ll
+total 32
+drwxr-xr-x. 3 root root 16384 Jan 29 11:05 install
+drwxr-xr-x. 3 root root 16384 Jan 29 11:05 practice-files
+[root@Argocd ec2-user]#
+[root@Argocd ec2-user]# ll
+total 0
+[root@Argocd ec2-user]# git clone https://github.com/Srinuas/install.git && git clone https://github.com/Srinuas/practice-files.git
+Cloning into 'install'...
+remote: Enumerating objects: 77, done.
+remote: Counting objects: 100% (77/77), done.
+remote: Compressing objects: 100% (74/74), done.
+remote: Total 77 (delta 35), reused 20 (delta 3), pack-reused 0 (from 0)
+Receiving objects: 100% (77/77), 23.20 KiB | 23.20 MiB/s, done.
+Resolving deltas: 100% (35/35), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 58, done.
+remote: Counting objects: 100% (58/58), done.
+remote: Compressing objects: 100% (51/51), done.
+remote: Total 58 (delta 20), reused 29 (delta 7), pack-reused 0 (from 0)
+Receiving objects: 100% (58/58), 53.00 KiB | 3.79 MiB/s, done.
+Resolving deltas: 100% (20/20), done.
+[root@Argocd ec2-user]# ll
+total 32
+drwxr-xr-x. 3 root root 16384 Jan 29 11:12 install
+drwxr-xr-x. 3 root root 16384 Jan 29 11:12 practice-files
+[root@Argocd ec2-user]# cd
+[root@Argocd ~]# ll
+total 0
+[root@Argocd ~]# pwd
+/root
+[root@Argocd ~]# sh /home/ec2-user/install/kubectl.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   138  100   138    0     0   3136      0 --:--:-- --:--:-- --:--:--  3209
+100 55.8M  100 55.8M    0     0   194M      0 --:--:-- --:--:-- --:--:--  380M
+[root@Argocd ~]# sh /home/ec2-user/install/kops.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  263M  100  263M    0     0   397M      0 --:--:-- --:--:-- --:--:--  397M
+[root@Argocd ~]#
+[root@Argocd ~]# export KOPS_STATE_STORE=s3://srinu.as
+kops create cluster --name srinu.k8s.local --zones us-east-2a,us-east-2b,us-east-2c --master-size m7i-flex.large --master-count 1 --master-volume-size 25 --node-size c7i-flex.large --node-count 3 --node-volume-size 20 --image ami-0f5fcdfbd140e4ab7
+kops update cluster --name srinu.k8s.local --yes --admin
+Flag --master-size has been deprecated, use --control-plane-size instead
+Flag --master-count has been deprecated, use --control-plane-count instead
+Flag --master-volume-size has been deprecated, use --control-plane-volume-size instead
+W0129 11:32:25.741250   28067 new_cluster.go:1407] Gossip is deprecated, using None DNS instead
+I0129 11:32:25.741320   28067 new_cluster.go:1426] Cloud Provider ID: "aws"
+I0129 11:32:25.896851   28067 subnets.go:224] Assigned CIDR 172.20.0.0/18 to subnet us-east-2a
+I0129 11:32:25.896877   28067 subnets.go:224] Assigned CIDR 172.20.64.0/18 to subnet us-east-2b
+I0129 11:32:25.896880   28067 subnets.go:224] Assigned CIDR 172.20.128.0/18 to subnet us-east-2c
+Previewing changes that will be made:
+
+
+I0129 11:36:45.211598   28072 executor.go:171] Continuing to run 1 task(s)
+I0129 11:36:55.212324   28072 executor.go:113] Tasks: 102 done / 135 total; 1 can run
+I0129 11:36:55.784452   28072 network_load_balancer.go:539] Waiting for load balancer "api-srinu-k8s-local-si3119" to be created...
+I0129 11:39:24.145910   28072 executor.go:113] Tasks: 103 done / 135 total; 6 can run
+I0129 11:39:25.024352   28072 executor.go:113] Tasks: 109 done / 135 total; 10 can run
+I0129 11:39:25.923857   28072 executor.go:113] Tasks: 119 done / 135 total; 4 can run
+I0129 11:39:26.993218   28072 executor.go:113] Tasks: 123 done / 135 total; 8 can run
+I0129 11:39:27.231824   28072 executor.go:113] Tasks: 131 done / 135 total; 4 can run
+I0129 11:39:27.267609   28072 executor.go:113] Tasks: 135 done / 135 total; 0 can run
+I0129 11:39:27.267667   28072 update_cluster.go:419] Exporting kubeconfig for cluster
+kOps has set your kubectl context to srinu.k8s.local
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster --wait 10m
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to a control-plane node: ssh -i ~/.ssh/id_rsa ubuntu@
+ * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
+ * read about installing addons at: https://kops.sigs.k8s.io/addons.
+
+[root@Argocd ~]#
+[root@Argocd ~]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE     VERSION
+i-05315cf63237e4e51   Ready    node            87s     v1.34.3
+i-053d711588164d255   Ready    node            108s    v1.34.3
+i-0894b6a6f2cb95df9   Ready    node            105s    v1.34.3
+i-0c51a80961bea3a82   Ready    control-plane   3m21s   v1.34.3
+[root@Argocd ~]#
+[root@Argocd ~]# kubectl create namespace argocd
+namespace/argocd created
+[root@Argocd ~]#
+[root@Argocd ~]# kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+customresourcedefinition.apiextensions.k8s.io/applications.argoproj.io created
+customresourcedefinition.apiextensions.k8s.io/applicationsets.argoproj.io created
+customresourcedefinition.apiextensions.k8s.io/appprojects.argoproj.io created
+serviceaccount/argocd-application-controller created
+serviceaccount/argocd-applicationset-controller created
+serviceaccount/argocd-dex-server created
+serviceaccount/argocd-notifications-controller created
+serviceaccount/argocd-redis created
+serviceaccount/argocd-repo-server created
+serviceaccount/argocd-server created
+role.rbac.authorization.k8s.io/argocd-application-controller created
+role.rbac.authorization.k8s.io/argocd-applicationset-controller created
+role.rbac.authorization.k8s.io/argocd-dex-server created
+role.rbac.authorization.k8s.io/argocd-notifications-controller created
+role.rbac.authorization.k8s.io/argocd-redis created
+role.rbac.authorization.k8s.io/argocd-server created
+clusterrole.rbac.authorization.k8s.io/argocd-application-controller created
+clusterrole.rbac.authorization.k8s.io/argocd-applicationset-controller created
+clusterrole.rbac.authorization.k8s.io/argocd-server created
+rolebinding.rbac.authorization.k8s.io/argocd-application-controller created
+rolebinding.rbac.authorization.k8s.io/argocd-applicationset-controller created
+rolebinding.rbac.authorization.k8s.io/argocd-dex-server created
+rolebinding.rbac.authorization.k8s.io/argocd-notifications-controller created
+rolebinding.rbac.authorization.k8s.io/argocd-redis created
+rolebinding.rbac.authorization.k8s.io/argocd-server created
+clusterrolebinding.rbac.authorization.k8s.io/argocd-application-controller created
+clusterrolebinding.rbac.authorization.k8s.io/argocd-applicationset-controller created
+clusterrolebinding.rbac.authorization.k8s.io/argocd-server created
+configmap/argocd-cm created
+configmap/argocd-cmd-params-cm created
+configmap/argocd-gpg-keys-cm created
+configmap/argocd-notifications-cm created
+configmap/argocd-rbac-cm created
+configmap/argocd-ssh-known-hosts-cm created
+configmap/argocd-tls-certs-cm created
+secret/argocd-notifications-secret created
+secret/argocd-secret created
+service/argocd-applicationset-controller created
+service/argocd-dex-server created
+service/argocd-metrics created
+service/argocd-notifications-controller-metrics created
+service/argocd-redis created
+service/argocd-repo-server created
+service/argocd-server created
+service/argocd-server-metrics created
+deployment.apps/argocd-applicationset-controller created
+deployment.apps/argocd-dex-server created
+deployment.apps/argocd-notifications-controller created
+deployment.apps/argocd-redis created
+deployment.apps/argocd-repo-server created
+deployment.apps/argocd-server created
+statefulset.apps/argocd-application-controller created
+networkpolicy.networking.k8s.io/argocd-application-controller-network-policy created
+networkpolicy.networking.k8s.io/argocd-applicationset-controller-network-policy created
+networkpolicy.networking.k8s.io/argocd-dex-server-network-policy created
+networkpolicy.networking.k8s.io/argocd-notifications-controller-network-policy created
+networkpolicy.networking.k8s.io/argocd-redis-network-policy created
+networkpolicy.networking.k8s.io/argocd-repo-server-network-policy created
+networkpolicy.networking.k8s.io/argocd-server-network-policy created
+[root@Argocd ~]#
+[root@Argocd ~]# kubectl get all -n argocd
+NAME                                                   READY   STATUS    RESTARTS      AGE
+pod/argocd-application-controller-0                    1/1     Running   0             86s
+pod/argocd-applicationset-controller-967c7df85-kzc68   1/1     Running   0             86s
+pod/argocd-dex-server-7655cd44b9-9b67t                 1/1     Running   2 (70s ago)   86s
+pod/argocd-notifications-controller-dc89756cd-x7nw5    1/1     Running   0             86s
+pod/argocd-redis-5b98c94768-nsp59                      1/1     Running   0             86s
+pod/argocd-repo-server-7f8c748c4c-dtfjz                1/1     Running   0             86s
+pod/argocd-server-74b7b9c7cc-99cmj                     1/1     Running   0             86s
+
+NAME                                              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+service/argocd-applicationset-controller          ClusterIP   100.67.105.237   <none>        7000/TCP,8080/TCP            86s
+service/argocd-dex-server                         ClusterIP   100.71.239.65    <none>        5556/TCP,5557/TCP,5558/TCP   86s
+service/argocd-metrics                            ClusterIP   100.67.78.208    <none>        8082/TCP                     86s
+service/argocd-notifications-controller-metrics   ClusterIP   100.64.228.2     <none>        9001/TCP                     86s
+service/argocd-redis                              ClusterIP   100.68.63.212    <none>        6379/TCP                     86s
+service/argocd-repo-server                        ClusterIP   100.65.29.174    <none>        8081/TCP,8084/TCP            86s
+service/argocd-server                             ClusterIP   100.66.175.72    <none>        80/TCP,443/TCP               86s
+service/argocd-server-metrics                     ClusterIP   100.65.65.250    <none>        8083/TCP                     86s
+
+NAME                                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/argocd-applicationset-controller   1/1     1            1           86s
+deployment.apps/argocd-dex-server                  1/1     1            1           86s
+deployment.apps/argocd-notifications-controller    1/1     1            1           86s
+deployment.apps/argocd-redis                       1/1     1            1           86s
+deployment.apps/argocd-repo-server                 1/1     1            1           86s
+deployment.apps/argocd-server                      1/1     1            1           86s
+
+NAME                                                         DESIRED   CURRENT   READY   AGE
+replicaset.apps/argocd-applicationset-controller-967c7df85   1         1         1       86s
+replicaset.apps/argocd-dex-server-7655cd44b9                 1         1         1       86s
+replicaset.apps/argocd-notifications-controller-dc89756cd    1         1         1       86s
+replicaset.apps/argocd-redis-5b98c94768                      1         1         1       86s
+replicaset.apps/argocd-repo-server-7f8c748c4c                1         1         1       86s
+replicaset.apps/argocd-server-74b7b9c7cc                     1         1         1       86s
+
+NAME                                             READY   AGE
+statefulset.apps/argocd-application-controller   1/1     86s
+[root@Argocd ~]#
+[root@Argocd ~]# kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+service/argocd-server patched
+[root@Argocd ~]# kubectl get all -n argocd
+NAME                                                   READY   STATUS    RESTARTS        AGE
+pod/argocd-application-controller-0                    1/1     Running   0               2m27s
+pod/argocd-applicationset-controller-967c7df85-kzc68   1/1     Running   0               2m27s
+pod/argocd-dex-server-7655cd44b9-9b67t                 1/1     Running   2 (2m11s ago)   2m27s
+pod/argocd-notifications-controller-dc89756cd-x7nw5    1/1     Running   0               2m27s
+pod/argocd-redis-5b98c94768-nsp59                      1/1     Running   0               2m27s
+pod/argocd-repo-server-7f8c748c4c-dtfjz                1/1     Running   0               2m27s
+pod/argocd-server-74b7b9c7cc-99cmj                     1/1     Running   0               2m27s
+
+NAME                                              TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)                      AGE
+service/argocd-applicationset-controller          ClusterIP      100.67.105.237   <none>                                                                    7000/TCP,8080/TCP            2m27s
+service/argocd-dex-server                         ClusterIP      100.71.239.65    <none>                                                                    5556/TCP,5557/TCP,5558/TCP   2m27s
+service/argocd-metrics                            ClusterIP      100.67.78.208    <none>                                                                    8082/TCP                     2m27s
+service/argocd-notifications-controller-metrics   ClusterIP      100.64.228.2     <none>                                                                    9001/TCP                     2m27s
+service/argocd-redis                              ClusterIP      100.68.63.212    <none>                                                                    6379/TCP                     2m27s
+service/argocd-repo-server                        ClusterIP      100.65.29.174    <none>                                                                    8081/TCP,8084/TCP            2m27s
+service/argocd-server                             LoadBalancer   100.66.175.72    a51aaf024df1e4c6ca9c7777ee370369-1440334897.us-east-2.elb.amazonaws.com   80:31874/TCP,443:31769/TCP   2m27s
+service/argocd-server-metrics                     ClusterIP      100.65.65.250    <none>                                                                    8083/TCP                     2m27s
+
+NAME                                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/argocd-applicationset-controller   1/1     1            1           2m27s
+deployment.apps/argocd-dex-server                  1/1     1            1           2m27s
+deployment.apps/argocd-notifications-controller    1/1     1            1           2m27s
+deployment.apps/argocd-redis                       1/1     1            1           2m27s
+deployment.apps/argocd-repo-server                 1/1     1            1           2m27s
+deployment.apps/argocd-server                      1/1     1            1           2m27s
+
+NAME                                                         DESIRED   CURRENT   READY   AGE
+replicaset.apps/argocd-applicationset-controller-967c7df85   1         1         1       2m27s
+replicaset.apps/argocd-dex-server-7655cd44b9                 1         1         1       2m27s
+replicaset.apps/argocd-notifications-controller-dc89756cd    1         1         1       2m27s
+replicaset.apps/argocd-redis-5b98c94768                      1         1         1       2m27s
+replicaset.apps/argocd-repo-server-7f8c748c4c                1         1         1       2m27s
+replicaset.apps/argocd-server-74b7b9c7cc                     1         1         1       2m27s
+
+NAME                                             READY   AGE
+statefulset.apps/argocd-application-controller   1/1     2m27s
+[root@Argocd ~]#
+[root@Argocd ~]# argocd admin initial-password -n argocd
+-bash: argocd: command not found
+[root@Argocd ~]# curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+rm argocd-linux-amd64
+rm: remove regular file 'argocd-linux-amd64'? y
+[root@Argocd ~]# argocd admin initial-password -n argocd
+c1iNcF7mRRcpeGaL
+
+ This password must be only used for first time login. We strongly recommend you update the password using `argocd account update-password`.
+[root@Argocd ~]#
+[root@Argocd ec2-user]# git clone https://github.com/Srinuas/argocd1
+Cloning into 'argocd1'...
+warning: You appear to have cloned an empty repository.
+[root@Argocd ec2-user]# cp -r argocd/* argocd1/
+[root@Argocd ec2-user]# cd argocd1/
+[root@Argocd argocd1]# git add *
+[root@Argocd argocd1]# git commit -m 'all files are ready' .
+[main (root-commit) 36767aa] all files are ready
+ 3 files changed, 31 insertions(+)
+ create mode 100644 README.md
+ create mode 100644 deployment.yml
+ create mode 100644 svc.yml
+[root@Argocd argocd1]# ll
+total 12
+-rw-r--r--. 1 root root   8 Jan 29 12:10 README.md
+-rw-r--r--. 1 root root 312 Jan 29 12:10 deployment.yml
+-rw-r--r--. 1 root root 155 Jan 29 12:10 svc.yml
+[root@Argocd argocd1]# vi deployment.yml
+[root@Argocd argocd1]# git commit -m 'all files are ready' .
+[main 45b1f75] all files are ready
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[root@Argocd argocd1]# git push origin main
+Username for 'https://github.com': Srinuas
+Password for 'https://Srinuas@github.com':
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 359 bytes | 359.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/Srinuas/argocd1
+   36767aa..45b1f75  main -> main
+[root@Argocd argocd1]# ll
+total 12
+-rw-r--r--. 1 root root   8 Jan 29 12:10 README.md
+-rw-r--r--. 1 root root 316 Jan 29 12:16 deployment.yml
+-rw-r--r--. 1 root root 158 Jan 29 12:17 svc.yml
+[root@Argocd argocd1]# cat deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: cont-1
+        image: srinuas/ecom2:httpd
+        ports:
+        - containerPort: 80
+[root@Argocd argocd1]# vi deployment.yml
+[root@Argocd argocd1]# cat deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: cont-1
+        image: srinuas/instagram:v4
+        ports:
+        - containerPort: 80
+[root@Argocd argocd1]#
+[root@Argocd argocd1]# vi deployment.yml
+[root@Argocd argocd1]# cat deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: cont-1
+        image: srinuas/swiggy:instamart
+        ports:
+        - containerPort: 80
+[root@Argocd argocd1]#
+[root@Argocd argocd1]# git commit -m 'image updated' deployment.yml
+[main ec03f64] image updated
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[root@Argocd argocd1]# 
+[root@Argocd argocd1]# git push origin main
+Username for 'https://github.com': Srinuas
+Password for 'https://Srinuas@github.com':
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 351 bytes | 351.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/Srinuas/argocd1
+   a500ba5..ec03f64  main -> main
+[root@Argocd argocd1]#
+[root@Argocd argocd1]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+my-app-598bcbd78d-2gthb   1/1     Running   0          54s
+my-app-598bcbd78d-4vbr8   1/1     Running   0          52s
+my-app-598bcbd78d-9mv9x   1/1     Running   0          50s
+[root@Argocd argocd1]# kubectl delete pod my-app-598bcbd78d-2gthb
+pod "my-app-598bcbd78d-2gthb" deleted from default namespace
+[root@Argocd argocd1]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+my-app-598bcbd78d-4vbr8   1/1     Running   0          2m2s
+my-app-598bcbd78d-9mv9x   1/1     Running   0          2m
+my-app-598bcbd78d-x9dpx   1/1     Running   0          28s
+[root@Argocd argocd1]# 
+[root@Argocd argocd1]# kubectl rollout history deployment my-app
+deployment.apps/my-app
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+3         <none>
+
+[root@Argocd argocd1]#
+[root@Argocd argocd1]# kubectl rollout history deployment my-app
+deployment.apps/my-app
+REVISION  CHANGE-CAUSE
+2         <none>
+3         <none>
+4         <none>
+
+[root@Argocd argocd1]# kubectl rollout history deployment my-app
+deployment.apps/my-app
+REVISION  CHANGE-CAUSE
+3         <none>
+4         <none>
+5         <none>
+
+[root@Argocd argocd1]#
+[root@Argocd argocd1]# kubectl rollout history deployment my-app
+deployment.apps/my-app
+REVISION  CHANGE-CAUSE
+4         <none>
+5         <none>
+6         <none>
+
+[root@Argocd argocd1]#
+__________________________________________
+
+****** Promithius and Grafana *****
+__________________________________________
+
+[root@Argocd argocd1]# kubectl create ns prometheus
+namespace/prometheus created
+[root@Argocd argocd1]# kubectl create ns grafana
+namespace/grafana created
+[root@Argocd argocd1]# curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+Downloading https://get.helm.sh/helm-v3.20.0-linux-amd64.tar.gz
+Verifying checksum... Done.
+Preparing to install helm into /usr/local/bin
+helm installed into /usr/local/bin/helm
+[root@Argocd argocd1]# helm version
+version.BuildInfo{Version:"v3.20.0", GitCommit:"b2e4314fa0f229a1de7b4c981273f61d69ee5a59", GitTreeState:"clean", GoVersion:"go1.25.6"}
+[root@Argocd argocd1]# kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+serviceaccount/metrics-server created
+clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+service/metrics-server created
+deployment.apps/metrics-server created
+apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
+[root@Argocd argocd1]#
+[root@Argocd argocd1]# kubectl get pods -n kube-system
+NAME                                            READY   STATUS    RESTARTS      AGE
+aws-cloud-controller-manager-fmdts              1/1     Running   0             87m
+aws-node-termination-handler-75f4d9878f-m44sp   1/1     Running   0             87m
+cilium-k6fnr                                    1/1     Running   0             86m
+cilium-lgcrr                                    1/1     Running   0             86m
+cilium-mtqdr                                    1/1     Running   0             87m
+cilium-operator-5689787cd5-sfp8l                1/1     Running   0             87m
+cilium-s7kh7                                    1/1     Running   0             86m
+coredns-68988c567-4lkv4                         1/1     Running   0             87m
+coredns-68988c567-582lj                         1/1     Running   0             85m
+coredns-autoscaler-75965c4fc6-x748z             1/1     Running   0             87m
+ebs-csi-controller-5564fdd88d-62qvk             5/5     Running   0             87m
+ebs-csi-node-cqrms                              3/3     Running   0             86m
+ebs-csi-node-hsj78                              3/3     Running   0             86m
+ebs-csi-node-jhm6p                              3/3     Running   0             87m
+ebs-csi-node-tqng4                              3/3     Running   0             86m
+etcd-manager-events-i-0c51a80961bea3a82         1/1     Running   0             87m
+etcd-manager-main-i-0c51a80961bea3a82           1/1     Running   0             87m
+kops-controller-m22z4                           1/1     Running   0             87m
+kube-apiserver-i-0c51a80961bea3a82              2/2     Running   1 (88m ago)   87m
+kube-controller-manager-i-0c51a80961bea3a82     1/1     Running   2 (88m ago)   87m
+kube-scheduler-i-0c51a80961bea3a82              1/1     Running   0             87m
+metrics-server-75b5d87c9d-plzbs                 1/1     Running   0             65s
+[root@Argocd argocd1]# kubectl get deployment metrics-server -n kube-system
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+metrics-server   1/1     1            1           116s
+[root@Argocd argocd1]#
+[root@Argocd argocd1]# helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+"prometheus-community" has been added to your repositories
+[root@Argocd argocd1]# helm repo add grafana https://grafana.github.io/helm-charts
+"grafana" has been added to your repositories
+[root@Argocd argocd1]# helm repo ls
+NAME                    URL
+prometheus-community    https://prometheus-community.github.io/helm-charts
+grafana                 https://grafana.github.io/helm-charts
+[root@Argocd argocd1]# helm install prometheus prometheus-community/prometheus --namespace prometheus --set
+alertmanager.persistentVolume.storageClass="gp2" --set server.persistentVolume.storageClass="gp2"
+Error: flag needs an argument: --set
+-bash: alertmanager.persistentVolume.storageClass=gp2: command not found
+[root@Argocd argocd1]# helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "grafana" chart repository
+...Successfully got an update from the "prometheus-community" chart repository
+Update Complete. ⎈Happy Helming!⎈
+[root@Argocd argocd1]# helm install prometheus prometheus-community/prometheus --namespace prometheus --set alertmanager.persistentVolume.storageClass="gp2" --set server.persistentVolume.storageClass="gp2"
+NAME: prometheus
+LAST DEPLOYED: Thu Jan 29 13:15:58 2026
+NAMESPACE: prometheus
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+The Prometheus server can be accessed via port 80 on the following DNS name from within your cluster:
+prometheus-server.prometheus.svc.cluster.local
+
+
+Get the Prometheus server URL by running these commands in the same shell:
+  export POD_NAME=$(kubectl get pods --namespace prometheus -l "app.kubernetes.io/name=prometheus,app.kubernetes.io/instance=prometheus" -o jsonpath="{.items[0].metadata.name}")
+  kubectl --namespace prometheus port-forward $POD_NAME 9090
+
+
+The Prometheus alertmanager can be accessed via port 9093 on the following DNS name from within your cluster:
+prometheus-alertmanager.prometheus.svc.cluster.local
+
+
+Get the Alertmanager URL by running these commands in the same shell:
+  export POD_NAME=$(kubectl get pods --namespace prometheus -l "app.kubernetes.io/name=alertmanager,app.kubernetes.io/instance=prometheus" -o jsonpath="{.items[0].metadata.name}")
+  kubectl --namespace prometheus port-forward $POD_NAME 9093
+#################################################################################
+######   WARNING: Pod Security Policy has been disabled by default since    #####
+######            it deprecated after k8s 1.25+. use                        #####
+######            (index .Values "prometheus-node-exporter" "rbac"          #####
+###### .          "pspEnabled") with (index .Values                         #####
+######            "prometheus-node-exporter" "rbac" "pspAnnotations")       #####
+######            in case you still need it.                                #####
+#################################################################################
+
+
+The Prometheus PushGateway can be accessed via port 9091 on the following DNS name from within your cluster:
+prometheus-prometheus-pushgateway.prometheus.svc.cluster.local
+
+
+Get the PushGateway URL by running these commands in the same shell:
+  export POD_NAME=$(kubectl get pods --namespace prometheus -l "app=prometheus-pushgateway,component=pushgateway" -o jsonpath="{.items[0].metadata.name}")
+  kubectl --namespace prometheus port-forward $POD_NAME 9091
+
+For more information on running Prometheus, visit:
+https://prometheus.io/
+[root@Argocd argocd1]# kubectl get pods -n prometheus
+NAME                                                 READY   STATUS    RESTARTS   AGE
+prometheus-alertmanager-0                            1/1     Running   0          26s
+prometheus-kube-state-metrics-8459ccf44c-qjwkg       1/1     Running   0          26s
+prometheus-prometheus-node-exporter-g7tjz            1/1     Running   0          26s
+prometheus-prometheus-node-exporter-k4dgv            1/1     Running   0          26s
+prometheus-prometheus-node-exporter-kbx8m            1/1     Running   0          26s
+prometheus-prometheus-node-exporter-pk7tt            1/1     Running   0          26s
+prometheus-prometheus-pushgateway-68757884b8-n8wsg   1/1     Running   0          26s
+prometheus-server-ff54d8bb8-x8vqh                    1/2     Running   0          26s
+[root@Argocd argocd1]# kubectl get all -n prometheus
+NAME                                                     READY   STATUS    RESTARTS   AGE
+pod/prometheus-alertmanager-0                            1/1     Running   0          37s
+pod/prometheus-kube-state-metrics-8459ccf44c-qjwkg       1/1     Running   0          37s
+pod/prometheus-prometheus-node-exporter-g7tjz            1/1     Running   0          37s
+pod/prometheus-prometheus-node-exporter-k4dgv            1/1     Running   0          37s
+pod/prometheus-prometheus-node-exporter-kbx8m            1/1     Running   0          37s
+pod/prometheus-prometheus-node-exporter-pk7tt            1/1     Running   0          37s
+pod/prometheus-prometheus-pushgateway-68757884b8-n8wsg   1/1     Running   0          37s
+pod/prometheus-server-ff54d8bb8-x8vqh                    1/2     Running   0          37s
+
+NAME                                          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/prometheus-alertmanager               ClusterIP   100.64.119.192   <none>        9093/TCP   37s
+service/prometheus-alertmanager-headless      ClusterIP   None             <none>        9093/TCP   37s
+service/prometheus-kube-state-metrics         ClusterIP   100.65.246.243   <none>        8080/TCP   37s
+service/prometheus-prometheus-node-exporter   ClusterIP   100.70.149.133   <none>        9100/TCP   37s
+service/prometheus-prometheus-pushgateway     ClusterIP   100.69.13.75     <none>        9091/TCP   37s
+service/prometheus-server                     ClusterIP   100.68.119.26    <none>        80/TCP     37s
+
+NAME                                                 DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+daemonset.apps/prometheus-prometheus-node-exporter   4         4         4       4            4           kubernetes.io/os=linux   37s
+
+NAME                                                READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/prometheus-kube-state-metrics       1/1     1            1           37s
+deployment.apps/prometheus-prometheus-pushgateway   1/1     1            1           37s
+deployment.apps/prometheus-server                   0/1     1            0           37s
+
+NAME                                                           DESIRED   CURRENT   READY   AGE
+replicaset.apps/prometheus-kube-state-metrics-8459ccf44c       1         1         1       37s
+replicaset.apps/prometheus-prometheus-pushgateway-68757884b8   1         1         1       37s
+replicaset.apps/prometheus-server-ff54d8bb8                    1         1         0       37s
+
+NAME                                       READY   AGE
+statefulset.apps/prometheus-alertmanager   1/1     37s
+_____________________________________________
+
+******** Grafana ********
+_____________________________________________
+
+[root@Argocd argocd1]# helm install grafana grafana/grafana --namespace grafana --set persistence.storageClassName="gp2" --set persistence.enabled=true --set adminPassword='EKS!sAWSome' --set  service.type=LoadBalancer
+NAME: grafana
+LAST DEPLOYED: Thu Jan 29 13:17:25 2026
+NAMESPACE: grafana
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get your 'admin' user password by running:
+
+   kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+
+2. The Grafana server can be accessed via port 80 on the following DNS name from within your cluster:
+
+   grafana.grafana.svc.cluster.local
+
+   Get the Grafana URL to visit by running these commands in the same shell:
+   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        You can watch the status of by running 'kubectl get svc --namespace grafana -w grafana'
+     export SERVICE_IP=$(kubectl get svc --namespace grafana grafana -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+     http://$SERVICE_IP:80
+
+3. Login with the password from step 1 and the username: admin
+[root@Argocd argocd1]# kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+EKS!sAWSome
+[root@Argocd argocd1]# kubectl get pods -n grafana
+NAME                      READY   STATUS    RESTARTS   AGE
+grafana-586c6f9d5-8rnt8   1/1     Running   0          47s
+[root@Argocd argocd1]# kubectl get service -n grafana
+NAME      TYPE           CLUSTER-IP      EXTERNAL-IP                                                              PORT(S)        AGE
+grafana   LoadBalancer   100.64.141.46   af3e1ea5c38e444c5a00127ba39c9865-510536886.us-east-2.elb.amazonaws.com   80:32606/TCP   54s
+[root@Argocd argocd1]#
+
+____________________________
+
+Grafana ports:
+6417 - Kubernetes Cluster (Prometheus) - Cluster related 
+315 - Kubernetes cluster monitoring (via Prometheus) - Networking related
+1860 - Node Exporter Full - CPU usage related
+10180 - Linux Hosts Metrics | Base
+14731 - 1 Linux Stats with Node Exporter 
+
