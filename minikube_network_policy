@@ -1,0 +1,728 @@
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@18.217.15.126
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+Last login: Fri Jan 30 11:32:22 2026 from 167.103.54.91
+[ec2-user@ip-172-31-6-162 ~]$ sudo -i
+[root@ip-172-31-6-162 ~]#
+logout
+[ec2-user@ip-172-31-6-162 ~]$ sudo -i
+[root@ip-172-31-6-162 ~]# hostnamectl set-hostname Netpol
+[root@ip-172-31-6-162 ~]#
+logout
+[ec2-user@ip-172-31-6-162 ~]$ sudo -i
+[root@Netpol ~]# yum install git -y && cd /home/ec2-user/ && git clone https://github.com/Srinuas/install.git && git clone https://github.com/Srinuas/practice-files.git && sh install/gitconfig.sh
+Amazon Linux 2023 Kernel Livepatch repository                                 284 kB/s |  30 kB     00:00
+Last metadata expiration check: 0:00:01 ago on Fri Jan 30 11:35:44 2026.
+Dependencies resolved.
+==============================================================================================================
+ Package                    Architecture     Version                              Repository             Size
+==============================================================================================================
+Installing:
+ git                        x86_64           2.50.1-1.amzn2023.0.1                amazonlinux            53 k
+Installing dependencies:
+ git-core                   x86_64           2.50.1-1.amzn2023.0.1                amazonlinux           4.9 M
+ git-core-doc               noarch           2.50.1-1.amzn2023.0.1                amazonlinux           2.8 M
+ perl-Error                 noarch           1:0.17029-5.amzn2023.0.2             amazonlinux            41 k
+ perl-File-Find             noarch           1.37-477.amzn2023.0.7                amazonlinux            25 k
+ perl-Git                   noarch           2.50.1-1.amzn2023.0.1                amazonlinux            41 k
+ perl-TermReadKey           x86_64           2.38-9.amzn2023.0.2                  amazonlinux            36 k
+ perl-lib                   x86_64           0.65-477.amzn2023.0.7                amazonlinux            15 k
+
+Transaction Summary
+==============================================================================================================
+Install  8 Packages
+
+Total download size: 7.9 M
+Installed size: 41 M
+Downloading Packages:
+(1/8): git-2.50.1-1.amzn2023.0.1.x86_64.rpm                                   1.6 MB/s |  53 kB     00:00
+(2/8): git-core-doc-2.50.1-1.amzn2023.0.1.noarch.rpm                           52 MB/s | 2.8 MB     00:00
+(3/8): perl-Error-0.17029-5.amzn2023.0.2.noarch.rpm                           1.6 MB/s |  41 kB     00:00
+(4/8): git-core-2.50.1-1.amzn2023.0.1.x86_64.rpm                               57 MB/s | 4.9 MB     00:00
+(5/8): perl-File-Find-1.37-477.amzn2023.0.7.noarch.rpm                        764 kB/s |  25 kB     00:00
+(6/8): perl-Git-2.50.1-1.amzn2023.0.1.noarch.rpm                              1.2 MB/s |  41 kB     00:00
+(7/8): perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64.rpm                        1.6 MB/s |  36 kB     00:00
+(8/8): perl-lib-0.65-477.amzn2023.0.7.x86_64.rpm                              635 kB/s |  15 kB     00:00
+--------------------------------------------------------------------------------------------------------------
+Total                                                                          54 MB/s | 7.9 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                      1/1
+  Installing       : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                1/8
+  Installing       : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            2/8
+  Installing       : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                3/8
+  Installing       : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          4/8
+  Installing       : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Installing       : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           6/8
+  Installing       : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                7/8
+  Installing       : git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Running scriptlet: git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Verifying        : git-2.50.1-1.amzn2023.0.1.x86_64                                                     1/8
+  Verifying        : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                2/8
+  Verifying        : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            3/8
+  Verifying        : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           4/8
+  Verifying        : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Verifying        : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                6/8
+  Verifying        : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          7/8
+  Verifying        : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                8/8
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64                       git-core-2.50.1-1.amzn2023.0.1.x86_64
+  git-core-doc-2.50.1-1.amzn2023.0.1.noarch              perl-Error-1:0.17029-5.amzn2023.0.2.noarch
+  perl-File-Find-1.37-477.amzn2023.0.7.noarch            perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64            perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 77, done.
+remote: Counting objects: 100% (77/77), done.
+remote: Compressing objects: 100% (74/74), done.
+remote: Total 77 (delta 35), reused 20 (delta 3), pack-reused 0 (from 0)
+Receiving objects: 100% (77/77), 23.20 KiB | 11.60 MiB/s, done.
+Resolving deltas: 100% (35/35), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 61, done.
+remote: Counting objects: 100% (61/61), done.
+remote: Compressing objects: 100% (54/54), done.
+remote: Total 61 (delta 21), reused 31 (delta 7), pack-reused 0 (from 0)
+Receiving objects: 100% (61/61), 59.96 KiB | 4.61 MiB/s, done.
+Resolving deltas: 100% (21/21), done.
+[root@Netpol ec2-user]# ll
+total 32
+drwxr-xr-x. 3 root root 16384 Jan 30 11:35 install
+drwxr-xr-x. 3 root root 16384 Jan 30 11:35 practice-files
+[root@Netpol ec2-user]# sh install/kubectl.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   138  100   138    0     0   2801      0 --:--:-- --:--:-- --:--:--  2816
+100 55.8M  100 55.8M    0     0   183M      0 --:--:-- --:--:-- --:--:--  183M
+[root@Netpol ec2-user]#
+[root@Netpol ec2-user]# sh install/docker.sh
+Last metadata expiration check: 0:07:06 ago on Fri Jan 30 11:35:44 2026.
+Dependencies resolved.
+==============================================================================================================
+ Package                         Architecture    Version                           Repository            Size
+==============================================================================================================
+Installing:
+Complete!
+● docker.service - Docker Application Container Engine
+     Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; preset: disabled)
+     Active: active (running) since Fri 2026-01-30 11:43:14 UTC; 29ms ago
+TriggeredBy: ● docker.socket
+
+[root@Netpol ~]# minikube start --cni=calico --force
+😄  minikube v1.38.0 on Amazon 2023.10.20260120
+❗  minikube skips various validations when --force is supplied; this may lead to unexpected behavior
+✨  Automatically selected the docker driver. Other choices: ssh, none
+🛑  The "docker" driver should not be used with root privileges. If you wish to continue as root, use --force.
+💡  If you are running minikube within a VM, consider using --driver=none:
+🔎  Verifying Kubernetes components...
+ 💾  Downloading Kubernetes v1.35.0 preload ...
+    > preloaded-images-k8s-v18-v1...:  271.45 MiB / 271.45 MiB  100.00% 199.12
+    > gcr.io/k8s-minikube/kicbase...:  514.15 MiB / 514.16 MiB  100.00% 109.43
+🔥  Creating docker container (CPUs=2, Memory=3072MB) ...
+🐳  Preparing Kubernetes v1.35.0 on Docker 29.2.0 ...
+🔗  Configuring Calico (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: default-storageclass, storage-provisioner
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+[root@Netpol ~]#
+[root@Netpol ~]# kubectl get nodes
+NAME       STATUS   ROLES           AGE   VERSION
+minikube   Ready    control-plane   31m   v1.35.0
+[root@Netpol ~]#
+[root@Netpol ~]# kubectl get pods -o wide
+No resources found in default namespace.
+[root@Netpol ~]# 
+[root@Netpol ~]# vi pod.yml
+[root@Netpol ~]# cat pod.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod1
+  labels:
+    app: srinu
+spec:
+  containers:
+    - name: con
+      image: nginx
+      ports:
+        - containerPort: 80
+[root@Netpol ~]# kubectl create -f pod.yml
+pod/pod1 created
+[root@Netpol ~]# vi pod.yml
+[root@Netpol ~]# cat pod.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod2
+  labels:
+    app: siri
+spec:
+  containers:
+    - name: con
+      image: nginx
+      ports:
+        - containerPort: 80
+[root@Netpol ~]# kubectl create -f pod.yml
+pod/pod2 created
+[root@Netpol ~]# vi pod.yml
+[root@Netpol ~]# cat pod.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod3
+  labels:
+    app: ammu
+spec:
+  containers:
+    - name: con
+      image: nginx
+      ports:
+        - containerPort: 80
+[root@Netpol ~]# kubectl create -f pod.yml
+pod/pod3 created
+[root@Netpol ~]# kubectl get pods -o wide
+NAME   READY   STATUS    RESTARTS   AGE   IP              NODE       NOMINATED NODE   READINESS GATES
+pod1   1/1     Running   0          54s   10.244.120.80   minikube   <none>           <none>
+pod2   1/1     Running   0          28s   10.244.120.81   minikube   <none>           <none>
+pod3   1/1     Running   0          6s    10.244.120.82   minikube   <none>           <none>
+[root@Netpol ~]#
+_______________________________________________________________________________________
+
+********* All pods communicating with each other **************
+_______________________________________________________________________________________
+[root@Netpol ~]# kubectl exec -it pod1 -- bash
+root@pod1:/# apt update -y
+Get:1 http://deb.debian.org/debian trixie InRelease [140 kB]
+Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+Get:4 http://deb.debian.org/debian trixie/main amd64 Packages [9670 kB]
+Get:5 http://deb.debian.org/debian trixie-updates/main amd64 Packages [5412 B]
+Get:6 http://deb.debian.org/debian-security trixie-security/main amd64 Packages [98.2 kB]
+Fetched 10.0 MB in 1s (11.7 MB/s)
+3 packages can be upgraded. Run 'apt list --upgradable' to see them.
+root@pod1:/# apt install iputils-ping -y
+Installing:
+  iputils-ping
+
+Installing dependencies:
+  linux-sysctl-defaults
+
+Summary:
+  Upgrading: 0, Installing: 2, Removing: 0, Not Upgrading: 3
+  Download size: 56.9 kB
+  Space needed: 211 kB / 19.3 GB available
+
+Get:1 http://deb.debian.org/debian trixie/main amd64 iputils-ping amd64 3:20240905-3 [51.2 kB]
+Get:2 http://deb.debian.org/debian trixie/main amd64 linux-sysctl-defaults all 4.12 [5624 B]
+Fetched 56.9 kB in 0s (1150 kB/s)
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 79, <STDIN> line 2.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 2.)
+debconf: falling back to frontend: Teletype
+Selecting previously unselected package iputils-ping.
+(Reading database ... 6706 files and directories currently installed.)
+Preparing to unpack .../iputils-ping_3%3a20240905-3_amd64.deb ...
+Unpacking iputils-ping (3:20240905-3) ...
+Selecting previously unselected package linux-sysctl-defaults.
+Preparing to unpack .../linux-sysctl-defaults_4.12_all.deb ...
+Unpacking linux-sysctl-defaults (4.12) ...
+Setting up linux-sysctl-defaults (4.12) ...
+Setting up iputils-ping (3:20240905-3) ...
+root@pod1:/#
+root@pod1:/# ping 10.244.120.81
+PING 10.244.120.81 (10.244.120.81) 56(84) bytes of data.
+64 bytes from 10.244.120.81: icmp_seq=1 ttl=126 time=0.113 ms
+64 bytes from 10.244.120.81: icmp_seq=2 ttl=126 time=0.074 ms
+64 bytes from 10.244.120.81: icmp_seq=3 ttl=126 time=0.054 ms
+64 bytes from 10.244.120.81: icmp_seq=4 ttl=126 time=0.070 ms
+64 bytes from 10.244.120.81: icmp_seq=5 ttl=126 time=0.047 ms
+64 bytes from 10.244.120.81: icmp_seq=6 ttl=126 time=0.062 ms
+64 bytes from 10.244.120.81: icmp_seq=7 ttl=126 time=0.034 ms
+64 bytes from 10.244.120.81: icmp_seq=8 ttl=126 time=0.062 ms
+64 bytes from 10.244.120.81: icmp_seq=9 ttl=126 time=0.051 ms
+^C
+--- 10.244.120.81 ping statistics ---
+9 packets transmitted, 9 received, 0% packet loss, time 8305ms
+rtt min/avg/max/mdev = 0.034/0.063/0.113/0.021 ms
+root@pod1:/#
+root@pod1:/# ping 10.244.120.82
+PING 10.244.120.82 (10.244.120.82) 56(84) bytes of data.
+64 bytes from 10.244.120.82: icmp_seq=1 ttl=126 time=0.093 ms
+64 bytes from 10.244.120.82: icmp_seq=2 ttl=126 time=0.059 ms
+64 bytes from 10.244.120.82: icmp_seq=3 ttl=126 time=0.059 ms
+^C
+--- 10.244.120.82 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2112ms
+rtt min/avg/max/mdev = 0.059/0.070/0.093/0.016 ms
+root@pod1:/#
+root@pod1:/#
+exit
+[root@Netpol ~]# kubectl exec -it pod2 -- bash
+root@pod2:/# apt update -y && apt install iputils-ping -y
+Get:1 http://deb.debian.org/debian trixie InRelease [140 kB]
+Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+Get:4 http://deb.debian.org/debian trixie/main amd64 Packages [9670 kB]
+Get:5 http://deb.debian.org/debian trixie-updates/main amd64 Packages [5412 B]
+Get:6 http://deb.debian.org/debian-security trixie-security/main amd64 Packages [98.2 kB]
+Fetched 10.0 MB in 1s (12.3 MB/s)
+3 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Installing:
+  iputils-ping
+
+Installing dependencies:
+  linux-sysctl-defaults
+
+Summary:
+  Upgrading: 0, Installing: 2, Removing: 0, Not Upgrading: 3
+  Download size: 56.9 kB
+  Space needed: 211 kB / 19.3 GB available
+
+Get:1 http://deb.debian.org/debian trixie/main amd64 iputils-ping amd64 3:20240905-3 [51.2 kB]
+Get:2 http://deb.debian.org/debian trixie/main amd64 linux-sysctl-defaults all 4.12 [5624 B]
+Fetched 56.9 kB in 0s (1312 kB/s)
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 79, <STDIN> line 2.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 2.)
+debconf: falling back to frontend: Teletype
+Selecting previously unselected package iputils-ping.
+(Reading database ... 6706 files and directories currently installed.)
+Preparing to unpack .../iputils-ping_3%3a20240905-3_amd64.deb ...
+Unpacking iputils-ping (3:20240905-3) ...
+Selecting previously unselected package linux-sysctl-defaults.
+Preparing to unpack .../linux-sysctl-defaults_4.12_all.deb ...
+Unpacking linux-sysctl-defaults (4.12) ...
+Setting up linux-sysctl-defaults (4.12) ...
+Setting up iputils-ping (3:20240905-3) ...
+root@pod2:/# ping 10.244.120.80
+PING 10.244.120.80 (10.244.120.80) 56(84) bytes of data.
+64 bytes from 10.244.120.80: icmp_seq=1 ttl=126 time=0.100 ms
+64 bytes from 10.244.120.80: icmp_seq=2 ttl=126 time=0.092 ms
+64 bytes from 10.244.120.80: icmp_seq=3 ttl=126 time=0.055 ms
+^C
+--- 10.244.120.80 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2072ms
+rtt min/avg/max/mdev = 0.055/0.082/0.100/0.019 ms
+root@pod2:/# ping 10.244.120.82
+PING 10.244.120.82 (10.244.120.82) 56(84) bytes of data.
+64 bytes from 10.244.120.82: icmp_seq=1 ttl=126 time=0.096 ms
+64 bytes from 10.244.120.82: icmp_seq=2 ttl=126 time=0.052 ms
+64 bytes from 10.244.120.82: icmp_seq=3 ttl=126 time=0.058 ms
+^C
+--- 10.244.120.82 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2112ms
+rtt min/avg/max/mdev = 0.052/0.068/0.096/0.019 ms
+root@pod2:/#
+exit
+[root@Netpol ~]# kubectl exec -it pod3 -- bash
+root@pod3:/# apt update -y && apt install iputils-ping -y
+Get:1 http://deb.debian.org/debian trixie InRelease [140 kB]
+Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+Get:4 http://deb.debian.org/debian trixie/main amd64 Packages [9670 kB]
+Get:5 http://deb.debian.org/debian trixie-updates/main amd64 Packages [5412 B]
+Get:6 http://deb.debian.org/debian-security trixie-security/main amd64 Packages [98.2 kB]
+Fetched 10.0 MB in 1s (12.3 MB/s)
+3 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Installing:
+  iputils-ping
+
+Installing dependencies:
+  linux-sysctl-defaults
+
+Summary:
+  Upgrading: 0, Installing: 2, Removing: 0, Not Upgrading: 3
+  Download size: 56.9 kB
+  Space needed: 211 kB / 19.3 GB available
+
+Get:1 http://deb.debian.org/debian trixie/main amd64 iputils-ping amd64 3:20240905-3 [51.2 kB]
+Get:2 http://deb.debian.org/debian trixie/main amd64 linux-sysctl-defaults all 4.12 [5624 B]
+Fetched 56.9 kB in 0s (1272 kB/s)
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 79, <STDIN> line 2.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 2.)
+debconf: falling back to frontend: Teletype
+Selecting previously unselected package iputils-ping.
+(Reading database ... 6706 files and directories currently installed.)
+Preparing to unpack .../iputils-ping_3%3a20240905-3_amd64.deb ...
+Unpacking iputils-ping (3:20240905-3) ...
+Selecting previously unselected package linux-sysctl-defaults.
+Preparing to unpack .../linux-sysctl-defaults_4.12_all.deb ...
+Unpacking linux-sysctl-defaults (4.12) ...
+Setting up linux-sysctl-defaults (4.12) ...
+Setting up iputils-ping (3:20240905-3) ...
+root@pod3:/# ping 10.244.120.80
+PING 10.244.120.80 (10.244.120.80) 56(84) bytes of data.
+64 bytes from 10.244.120.80: icmp_seq=1 ttl=126 time=0.082 ms
+64 bytes from 10.244.120.80: icmp_seq=2 ttl=126 time=0.072 ms
+64 bytes from 10.244.120.80: icmp_seq=3 ttl=126 time=0.046 ms
+^C
+--- 10.244.120.80 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2111ms
+rtt min/avg/max/mdev = 0.046/0.066/0.082/0.015 ms
+root@pod3:/# ping 10.244.120.81
+PING 10.244.120.81 (10.244.120.81) 56(84) bytes of data.
+64 bytes from 10.244.120.81: icmp_seq=1 ttl=126 time=0.081 ms
+64 bytes from 10.244.120.81: icmp_seq=2 ttl=126 time=0.053 ms
+64 bytes from 10.244.120.81: icmp_seq=3 ttl=126 time=0.056 ms
+^C
+--- 10.244.120.81 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2068ms
+rtt min/avg/max/mdev = 0.053/0.063/0.081/0.012 ms
+root@pod3:/#
+exit
+[root@Netpol ~]#
+[root@Netpol ~]# kubectl api-resources | grep -i netpol
+networkpolicies                     netpol       networking.k8s.io/v1                true         NetworkPolicy
+[root@Netpol ~]#
+_______________________________________________________________________________________
+
+********* No pods communicating to each other **************
+_______________________________________________________________________________________
+[root@Netpol ~]# vi denyall_ips.yml
+[root@Netpol ~]# cat denyall_ips.yml
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: all-ips-block
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+[root@Netpol ~]# kubectl create -f denyall_ips.yml
+networkpolicy.networking.k8s.io/all-ips-block created
+[root@Netpol ~]#
+[root@Netpol ~]# kubectl get netpol
+NAME            POD-SELECTOR   AGE
+all-ips-block   <none>         4m24s
+[root@Netpol ~]#
+[root@Netpol ~]# kubectl exec -it pod1 -- bash
+root@pod1:/# ping 10.244.120.81
+PING 10.244.120.81 (10.244.120.81) 56(84) bytes of data.
+^C
+--- 10.244.120.81 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2057ms
+
+root@pod1:/# ping 10.244.120.82
+PING 10.244.120.82 (10.244.120.82) 56(84) bytes of data.
+^C
+--- 10.244.120.82 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2093ms
+
+root@pod1:/#
+exit
+command terminated with exit code 1
+[root@Netpol ~]# kubectl exec -it pod2 -- bash
+root@pod2:/# ping 10.244.120.80
+PING 10.244.120.80 (10.244.120.80) 56(84) bytes of data.
+^C
+--- 10.244.120.80 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2088ms
+
+root@pod2:/# ping 10.244.120.82
+PING 10.244.120.82 (10.244.120.82) 56(84) bytes of data.
+^C
+--- 10.244.120.82 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2057ms
+
+root@pod2:/#
+exit
+command terminated with exit code 1
+[root@Netpol ~]# kubectl exec -it pod3 -- bash
+root@pod3:/# ping 10.244.120.81
+PING 10.244.120.81 (10.244.120.81) 56(84) bytes of data.
+^C
+--- 10.244.120.81 ping statistics ---
+8 packets transmitted, 0 received, 100% packet loss, time 7242ms
+
+root@pod3:/# ping 10.244.120.82
+PING 10.244.120.82 (10.244.120.82) 56(84) bytes of data.
+64 bytes from 10.244.120.82: icmp_seq=1 ttl=127 time=0.019 ms
+64 bytes from 10.244.120.82: icmp_seq=2 ttl=127 time=0.018 ms
+64 bytes from 10.244.120.82: icmp_seq=3 ttl=127 time=0.026 ms
+^C
+--- 10.244.120.82 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2062ms
+rtt min/avg/max/mdev = 0.018/0.021/0.026/0.003 ms
+root@pod3:/# ping 10.244.120.80
+PING 10.244.120.80 (10.244.120.80) 56(84) bytes of data.
+^C
+--- 10.244.120.80 ping statistics ---
+4 packets transmitted, 0 received, 100% packet loss, time 3141ms
+
+root@pod3:/#
+exit
+command terminated with exit code 1
+[root@Netpol ~]# kubectl exec -it pod1 -- bash
+root@pod1:/#
+[root@Netpol ~]# kubectl get pods -o wide
+NAME   READY   STATUS    RESTARTS   AGE   IP              NODE       NOMINATED NODE   READINESS GATES
+pod1   1/1     Running   0          30m   10.244.120.80   minikube   <none>           <none>
+pod2   1/1     Running   0          30m   10.244.120.81   minikube   <none>           <none>
+pod3   1/1     Running   0          30m   10.244.120.82   minikube   <none>           <none>
+[root@Netpol ~]# kubectl get netpol
+NAME            POD-SELECTOR   AGE
+all-ips-block   <none>         4m24s
+[root@Netpol ~]# kubectl get pods -o wide --show-labels
+NAME   READY   STATUS    RESTARTS   AGE   IP              NODE       NOMINATED NODE   READINESS GATES   LABELS
+pod1   1/1     Running   0          42m   10.244.120.80   minikube   <none>           <none>            app=srinu
+pod2   1/1     Running   0          42m   10.244.120.81   minikube   <none>           <none>            app=siri
+pod3   1/1     Running   0          42m   10.244.120.82   minikube   <none>           <none>            app=ammu
+[root@Netpol ~]# 
+[root@Netpol ~]# cp denyall_ips.yml nw-siri-srinu.yml
+[root@Netpol ~]# mv nw-siri-srinu.yml allow-siri-srinu-ingress.yml
+[root@Netpol ~]# vi allow-siri-srinu-ingress.yml
+[root@Netpol ~]# mv nw-srinu-siri.yml allow-srinu-siri-egress.yml
+[root@Netpol ~]# kubectl get netpol
+NAME            POD-SELECTOR   AGE
+all-ips-block   <none>         61m
+nw-siri-srinu   app=srinu      42m
+nw-srinu-siri   app=srinu      31m
+[root@Netpol ~]# kubectl delete netpol --all
+networkpolicy.networking.k8s.io "all-ips-block" deleted from default namespace
+networkpolicy.networking.k8s.io "nw-siri-srinu" deleted from default namespace
+networkpolicy.networking.k8s.io "nw-srinu-siri" deleted from default namespace
+[root@Netpol ~]# ll
+total 16
+-rw-r--r--. 1 root root 270 Jan 30 13:54 allow-siri-srinu-ingress.yml
+-rw-r--r--. 1 root root 266 Jan 30 13:24 allow-srinu-siri-egress.yml
+-rw-r--r--. 1 root root 155 Jan 30 12:53 denyall_ips.yml
+-rw-r--r--. 1 root root 172 Jan 30 12:24 pod.yml
+[root@Netpol ~]# kubectl create -f denyall_ips.yml
+networkpolicy.networking.k8s.io/all-ips-block created
+_______________________________________________________________________________________
+
+********* Pod2 only communicating with Pod1, but pod1 not communicating to pod2 **************
+_______________________________________________________________________________________
+[root@Netpol ~]# kubectl get netpol
+NAME            POD-SELECTOR   AGE
+all-ips-block   <none>         25s
+[root@Netpol ~]# vi allow-siri-srinu-ingress.yml
+[root@Netpol ~]# cat allow-siri-srinu-ingress.yml
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nw-siri-srinu
+spec:
+  podSelector:
+    matchLabels:
+      app: srinu
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: siri
+[root@Netpol ~]# kubectl create -f allow-siri-srinu-ingress.yml
+networkpolicy.networking.k8s.io/nw-siri-srinu created
+[root@Netpol ~]# vi allow-srinu-siri-egress.yml
+[root@Netpol ~]# cat allow-srinu-siri-egress.yml
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nw-srinu-siri
+spec:
+  podSelector:
+    matchLabels:
+      app: siri
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: srinu
+[root@Netpol ~]#
+[root@Netpol ~]# kubectl create -f allow-srinu-siri-egress.yml
+networkpolicy.networking.k8s.io/nw-srinu-siri created
+[root@Netpol ~]#
+[root@Netpol ~]# kubectl get netpol
+NAME            POD-SELECTOR   AGE
+all-ips-block   <none>         12m
+nw-siri-srinu   app=srinu      11m
+nw-srinu-siri   app=siri       8m33s
+[root@Netpol ~]#
+[root@Netpol ~]# 
+root@pod1:/# ping 10.244.120.81
+PING 10.244.120.81 (10.244.120.81) 56(84) bytes of data.
+^C
+--- 10.244.120.81 ping statistics ---
+4 packets transmitted, 0 received, 100% packet loss, time 3109ms
+
+root@pod1:/#
+exit
+command terminated with exit code 1
+[root@Netpol ~]# kubectl exec -it pod2 -- bash
+root@pod2:/# ping 10.244.120.80
+PING 10.244.120.80 (10.244.120.80) 56(84) bytes of data.
+64 bytes from 10.244.120.80: icmp_seq=1 ttl=126 time=0.095 ms
+64 bytes from 10.244.120.80: icmp_seq=2 ttl=126 time=0.053 ms
+64 bytes from 10.244.120.80: icmp_seq=3 ttl=126 time=0.055 ms
+^C
+--- 10.244.120.80 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2114ms
+rtt min/avg/max/mdev = 0.053/0.067/0.095/0.019 ms
+root@pod2:/#
+_______________________________________________________________________________________
+
+********* Pod3 only communicating with Pod1, but pod1 not communicating to pod3 **************
+_______________________________________________________________________________________
+
+[root@Netpol ~]# ll
+total 24
+-rw-r--r--. 1 root root 265 Jan 30 18:36 allow-ammu-srinu-ingress.yml
+-rw-r--r--. 1 root root 270 Jan 30 13:57 allow-siri-srinu-ingress.yml
+-rw-r--r--. 1 root root 264 Jan 30 18:46 allow-srinu-ammu-egress.yml
+-rw-r--r--. 1 root root 266 Jan 30 14:00 allow-srinu-siri-egress.yml
+-rw-r--r--. 1 root root 155 Jan 30 12:53 denyall_ips.yml
+-rw-r--r--. 1 root root 172 Jan 30 12:24 pod.yml
+[root@Netpol ~]# kubectl get netpol
+NAME            POD-SELECTOR   AGE
+all-ips-block   <none>         4h50m
+nw-siri-srinu   app=srinu      4h49m
+nw-srinu-siri   app=siri       4h46m
+[root@Netpol ~]# cat allow-ammu-srinu-ingress.yml
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ammu-srinu
+spec:
+  podSelector:
+    matchLabels:
+      app: srinu
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: ammu
+[root@Netpol ~]# cat allow-srinu-ammu-egress.yml
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ammu <- srinu
+spec:
+  podSelector:
+    matchLabels:
+      app: ammu
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: srinu
+[root@Netpol ~]# kubectl exec -it pod3 -- bash
+root@pod3:/# ping 10.244.120.80
+PING 10.244.120.80 (10.244.120.80) 56(84) bytes of data.
+^C
+--- 10.244.120.80 ping statistics ---
+4 packets transmitted, 0 received, 100% packet loss, time 3156ms
+
+root@pod3:/#
+exit
+command terminated with exit code 1
+[root@Netpol ~]#
+[root@Netpol ~]# kubectl exec -it pod1 -- bash
+root@pod1:/# ping 10.244.120.82
+PING 10.244.120.82 (10.244.120.82) 56(84) bytes of data.
+^C
+--- 10.244.120.82 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2116ms
+
+root@pod1:/#
+exit
+command terminated with exit code 1
+[root@Netpol ~]#
+[root@Netpol ~]# kubectl create -f allow-ammu-srinu-ingress.yml
+networkpolicy.networking.k8s.io/ammu-srinu created
+[root@Netpol ~]# kubectl get netpol
+NAME            POD-SELECTOR   AGE
+all-ips-block   <none>         4h56m
+ammu-srinu      app=srinu      14s
+nw-siri-srinu   app=srinu      4h54m
+nw-srinu-siri   app=siri       4h52m
+[root@Netpol ~]# kubectl exec -it pod3 -- bash
+root@pod3:/# ping 10.244.120.80
+PING 10.244.120.80 (10.244.120.80) 56(84) bytes of data.
+^C
+--- 10.244.120.80 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2090ms
+
+root@pod3:/#
+exit
+command terminated with exit code 1
+[root@Netpol ~]# kubectl create -f allow-srinu-ammu-egress.yml
+The NetworkPolicy "ammu <- srinu" is invalid: metadata.name: Invalid value: "ammu <- srinu": a lowercase RFC 1123 subdomain must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character (e.g. 'example.com', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')
+[root@Netpol ~]# vi allow-srinu-ammu-egress.yml
+[root@Netpol ~]# cat allow-srinu-ammu-egress.yml
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: srinu-ammu
+spec:
+  podSelector:
+    matchLabels:
+      app: ammu
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: srinu
+[root@Netpol ~]# kubectl create -f allow-srinu-ammu-egress.yml
+networkpolicy.networking.k8s.io/srinu-ammu created
+[root@Netpol ~]# kubectl get netpol
+NAME            POD-SELECTOR   AGE
+all-ips-block   <none>         4h58m
+ammu-srinu      app=srinu      2m38s
+nw-siri-srinu   app=srinu      4h57m
+nw-srinu-siri   app=siri       4h54m
+srinu-ammu      app=ammu       8s
+[root@Netpol ~]# kubectl exec -it pod3 -- bash
+root@pod3:/# ping 10.244.120.80
+PING 10.244.120.80 (10.244.120.80) 56(84) bytes of data.
+64 bytes from 10.244.120.80: icmp_seq=1 ttl=126 time=0.122 ms
+64 bytes from 10.244.120.80: icmp_seq=2 ttl=126 time=0.067 ms
+64 bytes from 10.244.120.80: icmp_seq=3 ttl=126 time=0.039 ms
+^C
+--- 10.244.120.80 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2066ms
+rtt min/avg/max/mdev = 0.039/0.076/0.122/0.034 ms
+root@pod3:/#
+exit
+command terminated with exit code 1
+[root@Netpol ~]#
