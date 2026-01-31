@@ -1,0 +1,515 @@
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@3.22.51.40
+The authenticity of host '3.22.51.40 (3.22.51.40)' can't be established.
+ED25519 key fingerprint is SHA256:bfA4v/hddpy3TTGWzcw20JcKgwMAGFq5F53OapvDDaE.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])?
+Please type 'yes', 'no' or the fingerprint: yes
+Warning: Permanently added '3.22.51.40' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-4-38 ~]$ hostnamectl set-hostname dep_strat
+Could not set pretty hostname: Access denied
+[ec2-user@ip-172-31-4-38 ~]$ sudo -i
+[root@ip-172-31-4-38 ~]# hostnamectl set-hostname dep_strat
+[root@ip-172-31-4-38 ~]#
+logout
+[ec2-user@ip-172-31-4-38 ~]$ sudo -i
+[root@depstrat ~]# yum install git -y && mkdir /srinu && cd /srinu && git clone https://github.com/Srinuas/install.git && git clone https://github.com/Srinuas/practice-files.git && sh install/gitconfig.sh
+Amazon Linux 2023 Kernel Livepatch repository
+
+[root@depstrat srinu]# ll
+total 32
+drwxr-xr-x. 3 root root 16384 Jan 31 08:23 install
+drwxr-xr-x. 3 root root 16384 Jan 31 08:23 practice-files
+[root@depstrat srinu]# sh install/kubectl.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   138  100   138    0     0   3078      0 --:--:-- --:--:-- --:--:--  3136
+100 55.8M  100 55.8M    0     0   188M      0 --:--:-- --:--:-- --:--:--  188M
+[root@depstrat srinu]# export KOPS_STATE_STORE=s3://srinu.as
+kops create cluster --name srinu.k8s.local --zones us-east-2a,us-east-2b,us-east-2c --master-size m7i-flex.large --master-count 1 --master-volume-size 25 --node-size c7i-flex.large --node-count 2 --node-volume-size 20 --image ami-0f5fcdfbd140e4ab7
+kops update cluster --name srinu.k8s.local --yes --admin
+-bash: kops: command not found
+-bash: kops: command not found
+[root@depstrat srinu]# sh install/kops.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  263M  100  263M    0     0   222M      0  0:00:01  0:00:01 --:--:--  233M
+[root@depstrat srinu]# export KOPS_STATE_STORE=s3://srinu.as
+kops create cluster --name srinu.k8s.local --zones us-east-2a,us-east-2b,us-east-2c --master-size m7i-flex.large --master-count 1 --master-volume-size 25 --node-size c7i-flex.large --node-count 2 --node-volume-size 20 --image ami-0f5fcdfbd140e4ab7
+kops update cluster --name srinu.k8s.local --yes --admin
+Suggestions:
+ * list clusters with: kops get cluster
+ * edit this cluster with: kops edit cluster srinu.k8s.local
+ * edit your node instance group: kops edit ig --name=srinu.k8s.local nodes-us-east-2a
+ * edit your control-plane instance group: kops edit ig --name=srinu.k8s.local control-plane-us-east-2a
+
+Finally configure your cluster with: kops update cluster --name srinu.k8s.local --yes --admin
+
+I0131 08:39:25.510266   27763 executor.go:113] Tasks: 0 done / 135 total; 43 can run
+W0131 08:39:25.548007   27763 vfs_keystorereader.go:163] CA private key was not found
+I0131 08:39:25.556685   27763 keypair.go:226] Issuing new certificate: "etcd-peers-ca-main"
+I0131 08:39:25.559063   27763 keypair.go:226] Issuing new certificate: "etcd-peers-ca-events"
+I0131 08:39:25.571418   27763 keypair.go:226] Issuing new certificate: "apiserver-aggregator-ca"
+I0131 08:39:25.571665   27763 keypair.go:226] Issuing new certificate: "etcd-manager-ca-events"
+I0131 08:39:25.591037   27763 keypair.go:226] Issuing new certificate: "etcd-manager-ca-main"
+I0131 08:39:25.591037   27763 keypair.go:226] Issuing new certificate: "etcd-clients-ca"
+W0131 08:39:25.611160   27763 vfs_keystorereader.go:163] CA private key was not found
+I0131 08:39:25.642561   27763 keypair.go:226] Issuing new certificate: "service-account"
+I0131 08:39:25.659839   27763 keypair.go:226] Issuing new certificate: "kubernetes-ca"
+I0131 08:39:26.761824   27763 executor.go:113] Tasks: 43 done / 135 total; 24 can run
+I0131 08:39:30.542343   27763 executor.go:113] Tasks: 67 done / 135 total; 36 can run
+I0131 08:39:31.281890   27763 network_load_balancer.go:539] Waiting for load balancer "api-srinu-k8s-local-si3119" to be created...
+I0131 08:42:16.716542   27763 executor.go:113] Tasks: 103 done / 135 total; 6 can run
+I0131 08:42:17.640265   27763 executor.go:113] Tasks: 109 done / 135 total; 10 can run
+I0131 08:42:18.693454   27763 executor.go:113] Tasks: 119 done / 135 total; 4 can run
+I0131 08:42:19.688190   27763 executor.go:113] Tasks: 123 done / 135 total; 8 can run
+I0131 08:42:19.880890   27763 executor.go:113] Tasks: 131 done / 135 total; 4 can run
+I0131 08:42:19.919258   27763 executor.go:113] Tasks: 135 done / 135 total; 0 can run
+I0131 08:42:19.919504   27763 update_cluster.go:419] Exporting kubeconfig for cluster
+kOps has set your kubectl context to srinu.k8s.local
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster --wait 10m
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to a control-plane node: ssh -i ~/.ssh/id_rsa ubuntu@
+ * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
+ * read about installing addons at: https://kops.sigs.k8s.io/addons.
+
+[root@depstrat ~]# kubectl get nodes
+E0131 08:44:02.510317   27933 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: Get \"https://api-srinu-k8s-local-si3119-6297ed4a92c96eab.elb.us-east-2.amazonaws.com/api?timeout=32s\": net/http: TLS handshake timeout"
+E0131 08:44:15.129536   27933 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: Get \"https://api-srinu-k8s-local-si3119-6297ed4a92c96eab.elb.us-east-2.amazonaws.com/api?timeout=32s\": net/http: TLS handshake timeout - error from a previous attempt: read tcp 172.31.4.38:38082->3.21.119.148:443: read: connection reset by peer"
+No resources found
+[root@depstrat ~]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE   VERSION
+i-0ea10bb45c01c7849   Ready    control-plane   64s   v1.34.3
+[root@depstrat ~]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE     VERSION
+i-09a2ad36d757a0916   Ready    node            9m11s   v1.34.3
+i-0ea10bb45c01c7849   Ready    control-plane   10m     v1.34.3
+i-0ebb48bc0c0bc2cc1   Ready    node            9m14s   v1.34.3
+
+_______________________________________________
+
+********** Recreate strategy ************
+_______________________________________________
+
+[root@depstrat ~]# vi dep.yml
+[root@depstrat ~]#
+[root@depstrat ~]# cat dep.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recreate
+  labels:
+    app: srinu
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: srinu
+  template:
+    metadata:
+      labels:
+        app: srinu
+    spec:
+      containers:
+        - name: con
+          image: srinuas/ecom2:httpd
+          ports:
+            - containerPort: 80
+[root@depstrat ~]# cat svc.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: srinu
+  labels:
+    app: srinu
+spec:
+  type: LoadBalancer
+  selector:
+    app: srinu
+  ports:
+    - name: myport
+      port: 80
+      targetPort: 80
+      nodePort: 31111
+[root@depstrat ~]# kubectl create -f dep.yml
+deployment.apps/recreate created
+[root@depstrat ~]# kubectl create -f svc.yml
+service/srinu created
+[root@depstrat ~]# kubectl get deploy
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+recreate   2/2     2            2           26s
+[root@depstrat ~]# kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+recreate-7c4f6768bb-dl42k   1/1     Running   0          36s
+recreate-7c4f6768bb-hh59l   1/1     Running   0          36s
+[root@depstrat ~]# kubectl get svc
+NAME         TYPE           CLUSTER-IP       EXTERNAL-IP                                                              PORT(S)        AGE
+kubernetes   ClusterIP      100.64.0.1       <none>                                                                   443/TCP        56m
+srinu        LoadBalancer   100.66.121.180   a9056b316e32c43d4b2001e954b02f49-427124688.us-east-2.elb.amazonaws.com   80:31111/TCP   33s
+[root@depstrat ~]#
+[root@depstrat ~]# kubectl delete deploy recreate
+deployment.apps "recreate" deleted from default namespace
+
+[root@depstrat ~]# vi dep.yml
+[root@depstrat ~]# cat dep.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recreate
+  labels:
+    app: srinu
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: srinu
+  template:
+    metadata:
+      labels:
+        app: srinu
+    spec:
+      containers:
+        - name: con
+          image: srinuas/instagram:v4
+          ports:
+            - containerPort: 80
+[root@depstrat ~]# kubectl create -f dep.yml
+deployment.apps/recreate created
+[root@depstrat ~]#
+[root@depstrat ~]# kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+recreate-7476bb8784-8stgk   1/1     Running   0          67s
+recreate-7476bb8784-gzm6c   1/1     Running   0          67s
+[root@depstrat ~]#
+[root@depstrat ~]# vi dep.yml
+[root@depstrat ~]# cat dep.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recreate
+  labels:
+    app: srinu
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: srinu
+  template:
+    metadata:
+      labels:
+        app: srinu
+    spec:
+      containers:
+        - name: con
+          image: srinuas/swiggy:instamart
+          ports:
+            - containerPort: 80
+[root@depstrat ~]# kubectl apply -f dep.yml
+Warning: resource deployments/recreate is missing the kubectl.kubernetes.io/last-applied-configuration annotation which is required by kubectl apply. kubectl apply should only be used on resources created declaratively by either kubectl create --save-config or kubectl apply. The missing annotation will be patched automatically.
+deployment.apps/recreate configured
+[root@depstrat ~]# kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+recreate-5bf85695f7-7p8pk   1/1     Running   0          15s
+recreate-5bf85695f7-9dxhk   1/1     Running   0          12s
+[root@depstrat ~]#
+_______________________________________________
+
+********** Rolling Update strategy ************
+_______________________________________________
+[root@depstrat ~]# cp dep.yml dep_roll.yml
+[root@depstrat ~]# vi dep_roll.yml
+[root@depstrat ~]# kubectl delete deploy recreate
+deployment.apps "recreate" deleted from default namespace
+[root@depstrat ~]# cat dep_roll.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: srinu-deploy
+  labels:
+    app: srinu
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: srinu
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 2
+  template:
+    metadata:
+      labels:
+        app: srinu
+    spec:
+      containers:
+        - name: srinu
+          image: srinuas/ecom2:httpd
+          ports:
+            -  containerPort: 80
+[root@depstrat ~]# kubectl apply -f dep_roll.yml
+deployment.apps/srinu-deploy created
+[root@depstrat ~]#
+[root@depstrat ~]# kubectl get pods -w
+NAME                            READY   STATUS    RESTARTS   AGE
+srinu-deploy-6b884b6bd5-27x9x   0/1     Pending   0          0s
+srinu-deploy-6b884b6bd5-zxrnq   0/1     Pending   0          0s
+srinu-deploy-6b884b6bd5-xqkvp   0/1     Pending   0          0s
+srinu-deploy-6b884b6bd5-27x9x   0/1     Pending   0          0s
+srinu-deploy-6b884b6bd5-zxrnq   0/1     Pending   0          0s
+srinu-deploy-6b884b6bd5-xqkvp   0/1     Pending   0          0s
+srinu-deploy-6b884b6bd5-27x9x   0/1     ContainerCreating   0          0s
+srinu-deploy-6b884b6bd5-zxrnq   0/1     ContainerCreating   0          0s
+srinu-deploy-6b884b6bd5-xqkvp   0/1     ContainerCreating   0          0s
+srinu-deploy-6b884b6bd5-xqkvp   1/1     Running             0          1s
+srinu-deploy-6b884b6bd5-27x9x   1/1     Running             0          1s
+srinu-deploy-6b884b6bd5-zxrnq   1/1     Running             0          1s
+^C[root@depstrat ~]#
+[root@depstrat ~]# vi dep_roll.yml
+[root@depstrat ~]# cat dep_roll.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: srinu-deploy
+  labels:
+    app: srinu
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: srinu
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 2
+  template:
+    metadata:
+      labels:
+        app: srinu
+    spec:
+      containers:
+        - name: srinu
+          image: srinuas/instagram:v4
+          ports:
+            -  containerPort: 80
+[root@depstrat ~]# kubectl apply -f dep_roll.yml
+deployment.apps/srinu-deploy configured
+[root@depstrat ~]#
+^C[root@depstrat ~]# kubectl get pods -w
+NAME                            READY   STATUS    RESTARTS   AGE
+srinu-deploy-6b884b6bd5-27x9x   1/1     Running   0          3m34s
+srinu-deploy-6b884b6bd5-xqkvp   1/1     Running   0          3m34s
+srinu-deploy-6b884b6bd5-zxrnq   1/1     Running   0          3m34s
+srinu-deploy-5dcfcd9dd5-rp6sl   0/1     Pending   0          0s
+srinu-deploy-5dcfcd9dd5-rp6sl   0/1     Pending   0          0s
+srinu-deploy-5dcfcd9dd5-2thrk   0/1     Pending   0          0s
+srinu-deploy-5dcfcd9dd5-nmrgg   0/1     Pending   0          0s
+srinu-deploy-6b884b6bd5-xqkvp   1/1     Terminating   0          3m39s
+srinu-deploy-5dcfcd9dd5-2thrk   0/1     Pending       0          0s
+srinu-deploy-6b884b6bd5-27x9x   1/1     Terminating   0          3m39s
+srinu-deploy-5dcfcd9dd5-nmrgg   0/1     Pending       0          0s
+srinu-deploy-5dcfcd9dd5-rp6sl   0/1     ContainerCreating   0          0s
+srinu-deploy-6b884b6bd5-xqkvp   1/1     Terminating         0          3m39s
+srinu-deploy-5dcfcd9dd5-nmrgg   0/1     ContainerCreating   0          0s
+srinu-deploy-5dcfcd9dd5-2thrk   0/1     ContainerCreating   0          0s
+srinu-deploy-6b884b6bd5-27x9x   1/1     Terminating         0          3m39s
+srinu-deploy-5dcfcd9dd5-2thrk   1/1     Running             0          1s
+srinu-deploy-6b884b6bd5-zxrnq   1/1     Terminating         0          3m40s
+srinu-deploy-6b884b6bd5-zxrnq   1/1     Terminating         0          3m41s
+srinu-deploy-6b884b6bd5-xqkvp   0/1     Completed           0          3m41s
+srinu-deploy-6b884b6bd5-27x9x   0/1     Completed           0          3m41s
+srinu-deploy-5dcfcd9dd5-nmrgg   1/1     Running             0          2s
+srinu-deploy-5dcfcd9dd5-rp6sl   1/1     Running             0          2s
+srinu-deploy-6b884b6bd5-27x9x   0/1     Completed           0          3m41s
+srinu-deploy-6b884b6bd5-27x9x   0/1     Completed           0          3m41s
+srinu-deploy-6b884b6bd5-xqkvp   0/1     Completed           0          3m41s
+srinu-deploy-6b884b6bd5-xqkvp   0/1     Completed           0          3m41s
+srinu-deploy-6b884b6bd5-zxrnq   0/1     Completed           0          3m42s
+srinu-deploy-6b884b6bd5-zxrnq   0/1     Completed           0          3m42s
+srinu-deploy-6b884b6bd5-zxrnq   0/1     Completed           0          3m42s
+^C[root@depstrat ~]#
+[root@depstrat ~]# kubectl get pods
+NAME                            READY   STATUS    RESTARTS   AGE
+srinu-deploy-5dcfcd9dd5-2thrk   1/1     Running   0          2m32s
+srinu-deploy-5dcfcd9dd5-nmrgg   1/1     Running   0          2m32s
+srinu-deploy-5dcfcd9dd5-rp6sl   1/1     Running   0          2m32s
+[root@depstrat ~]#
+____________________________________
+
+********* blue green deployment strategy **********
+_______________________________________
+
+[root@depstrat ~]# mkdir blue
+[root@depstrat ~]# cp dep.yml svc.yml blue/
+[root@depstrat ~]# cd blue/
+[root@depstrat blue]# ll
+total 8
+-rw-r--r--. 1 root root 358 Jan 31 10:37 dep.yml
+-rw-r--r--. 1 root root 222 Jan 31 10:37 svc.yml
+[root@depstrat blue]# cp dep.yml blue.yml
+[root@depstrat blue]# mv dep.yml green.yml
+[root@depstrat blue]# ll
+total 12
+-rw-r--r--. 1 root root 358 Jan 31 10:37 blue.yml
+-rw-r--r--. 1 root root 358 Jan 31 10:37 green.yml
+-rw-r--r--. 1 root root 222 Jan 31 10:37 svc.yml
+[root@depstrat blue]#
+[root@depstrat blue]#
+[root@depstrat blue]# ll
+total 12
+-rw-r--r--. 1 root root 357 Jan 31 10:48 blue.yml
+-rw-r--r--. 1 root root 351 Jan 31 10:47 green.yml
+-rw-r--r--. 1 root root 227 Jan 31 11:41 svc.yml
+[root@depstrat blue]# kubectl get deploy --show-labels
+No resources found in default namespace.
+[root@depstrat blue]# kubectl get rs --show-labels
+No resources found in default namespace.
+[root@depstrat blue]# kubectl get svc --show-labels
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE    LABELS
+kubernetes   ClusterIP   100.64.0.1   <none>        443/TCP   3h2m   component=apiserver,provider=kubernetes
+[root@depstrat blue]# kubectl get pods --show-labels
+No resources found in default namespace.
+[root@depstrat blue]# ll
+total 12
+-rw-r--r--. 1 root root 357 Jan 31 10:48 blue.yml
+-rw-r--r--. 1 root root 351 Jan 31 10:47 green.yml
+-rw-r--r--. 1 root root 227 Jan 31 11:41 svc.yml
+[root@depstrat blue]# vi svc.yml
+[root@depstrat blue]# cat svc.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bluegreen
+  labels:
+    app: mysvc
+spec:
+  type: LoadBalancer
+  selector:
+    app: insta
+  ports:
+    - name: myport
+      port: 80
+      targetPort: 80
+      nodePort: 31112
+[root@depstrat blue]# cat blue.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue
+  labels:
+    app: swiggy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: swiggy
+  template:
+    metadata:
+      labels:
+        app: swiggy
+    spec:
+      containers:
+        - name: con
+          image: srinuas/swiggy:instamart
+          ports:
+            - containerPort: 80
+[root@depstrat blue]# cat green.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: green
+  labels:
+    app: insta
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: insta
+  template:
+    metadata:
+      labels:
+        app: insta
+    spec:
+      containers:
+        - name: con
+          image: srinuas/instagram:v4
+          ports:
+            - containerPort: 80
+[root@depstrat blue]# kubectl create -f .
+deployment.apps/blue created
+deployment.apps/green created
+service/bluegreen created
+[root@depstrat blue]# kubectl get deploy --show-labels
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE   LABELS
+blue    2/2     2            2           9s    app=swiggy
+green   2/2     2            2           9s    app=insta
+[root@depstrat blue]# kubectl get rs --show-labels
+NAME               DESIRED   CURRENT   READY   AGE   LABELS
+blue-5c9fb7bb74    2         2         2       19s   app=swiggy,pod-template-hash=5c9fb7bb74
+green-6fb569f78b   2         2         2       19s   app=insta,pod-template-hash=6fb569f78b
+[root@depstrat blue]# kubectl get pods --show-labels
+NAME                     READY   STATUS    RESTARTS   AGE   LABELS
+blue-5c9fb7bb74-qt2vr    1/1     Running   0          31s   app=swiggy,pod-template-hash=5c9fb7bb74
+blue-5c9fb7bb74-w79rh    1/1     Running   0          31s   app=swiggy,pod-template-hash=5c9fb7bb74
+green-6fb569f78b-bpb7l   1/1     Running   0          31s   app=insta,pod-template-hash=6fb569f78b
+green-6fb569f78b-gx4dz   1/1     Running   0          31s   app=insta,pod-template-hash=6fb569f78b
+[root@depstrat blue]# kubectl get svc --show-labels
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP                                                               PORT(S)        AGE    LABELS
+bluegreen    LoadBalancer   100.71.246.88   add9516c5d81c4e8b8c106329ea81712-1031650217.us-east-2.elb.amazonaws.com   80:31112/TCP   43s    app=mysvc
+kubernetes   ClusterIP      100.64.0.1      <none>                                                                    443/TCP        3h7m   component=apiserver,provider=kubernetes
+[root@depstrat blue]#
+[root@depstrat blue]# ll
+total 12
+-rw-r--r--. 1 root root 357 Jan 31 10:48 blue.yml
+-rw-r--r--. 1 root root 351 Jan 31 10:47 green.yml
+-rw-r--r--. 1 root root 226 Jan 31 11:50 svc.yml
+[root@depstrat blue]# vi svc.yml
+[root@depstrat blue]# cat svc.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bluegreen
+  labels:
+    app: mysvc
+spec:
+  type: LoadBalancer
+  selector:
+    app: swiggy
+  ports:
+    - name: myport
+      port: 80
+      targetPort: 80
+      nodePort: 31112
+[root@depstrat blue]# kubectl apply -f svc.yml
+Warning: resource services/bluegreen is missing the kubectl.kubernetes.io/last-applied-configuration annotation which is required by kubectl apply. kubectl apply should only be used on resources created declaratively by either kubectl create --save-config or kubectl apply. The missing annotation will be patched automatically.
+service/bluegreen configured
+[root@depstrat blue]# kubectl get svc --show-labels
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP                                                               PORT(S)        AGE     LABELS
+bluegreen    LoadBalancer   100.71.246.88   add9516c5d81c4e8b8c106329ea81712-1031650217.us-east-2.elb.amazonaws.com   80:31112/TCP   4m51s   app=mysvc
+kubernetes   ClusterIP      100.64.0.1      <none>                                                                    443/TCP        3h11m   component=apiserver,provider=kubernetes
+[root@depstrat blue]#
