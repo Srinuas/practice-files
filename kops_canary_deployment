@@ -1,0 +1,669 @@
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@18.225.57.173
+The authenticity of host '18.225.57.173 (18.225.57.173)' can't be established.
+ED25519 key fingerprint is SHA256:NIWRmepBbvjlD6yTcuOzzHWfgTatgHeHcP4X61WdlXw.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '18.225.57.173' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-2-67 ~]$ sudo -i
+ame chostnamectl set-hostname c[root@ip-172-31-2-67 ~]# hostnamectl set-hostname canary
+[root@ip-172-31-2-67 ~]# exit
+logout
+[ec2-user@ip-172-31-2-67 ~]$ sudo -i
+[root@canary ~]# yum install git -y && mkdir /srinu && cd /srinu && git clone https://github.com/Srinuas/install.git && git clone https://github.com/Srinuas/practice-files.git && sh install/gitconfig.sh
+Amazon Linux 2023 Kernel Livepatch repository                                 278 kB/s |  30 kB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                    Architecture     Version                              Repository             Size
+==============================================================================================================
+Installing:
+ git                        x86_64           2.50.1-1.amzn2023.0.1                amazonlinux            53 k
+Installing dependencies:
+ git-core                   x86_64           2.50.1-1.amzn2023.0.1                amazonlinux           4.9 M
+ git-core-doc               noarch           2.50.1-1.amzn2023.0.1                amazonlinux           2.8 M
+ perl-Error                 noarch           1:0.17029-5.amzn2023.0.2             amazonlinux            41 k
+ perl-File-Find             noarch           1.37-477.amzn2023.0.7                amazonlinux            25 k
+ perl-Git                   noarch           2.50.1-1.amzn2023.0.1                amazonlinux            41 k
+ perl-TermReadKey           x86_64           2.38-9.amzn2023.0.2                  amazonlinux            36 k
+ perl-lib                   x86_64           0.65-477.amzn2023.0.7                amazonlinux            15 k
+
+Transaction Summary
+==============================================================================================================
+Install  8 Packages
+
+Total download size: 7.9 M
+Installed size: 41 M
+Downloading Packages:
+(1/8): git-2.50.1-1.amzn2023.0.1.x86_64.rpm                                   1.4 MB/s |  53 kB     00:00
+(2/8): git-core-doc-2.50.1-1.amzn2023.0.1.noarch.rpm                           55 MB/s | 2.8 MB     00:00
+(3/8): perl-Error-0.17029-5.amzn2023.0.2.noarch.rpm                           1.6 MB/s |  41 kB     00:00
+(4/8): git-core-2.50.1-1.amzn2023.0.1.x86_64.rpm                               66 MB/s | 4.9 MB     00:00
+(5/8): perl-File-Find-1.37-477.amzn2023.0.7.noarch.rpm                        951 kB/s |  25 kB     00:00
+(6/8): perl-Git-2.50.1-1.amzn2023.0.1.noarch.rpm                              1.4 MB/s |  41 kB     00:00
+(7/8): perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64.rpm                        1.5 MB/s |  36 kB     00:00
+(8/8): perl-lib-0.65-477.amzn2023.0.7.x86_64.rpm                              500 kB/s |  15 kB     00:00
+--------------------------------------------------------------------------------------------------------------
+Total                                                                          56 MB/s | 7.9 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                      1/1
+  Installing       : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                1/8
+  Installing       : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            2/8
+  Installing       : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                3/8
+  Installing       : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          4/8
+  Installing       : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Installing       : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           6/8
+  Installing       : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                7/8
+  Installing       : git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Running scriptlet: git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Verifying        : git-2.50.1-1.amzn2023.0.1.x86_64                                                     1/8
+  Verifying        : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                2/8
+  Verifying        : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            3/8
+  Verifying        : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           4/8
+  Verifying        : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Verifying        : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                6/8
+  Verifying        : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          7/8
+  Verifying        : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                8/8
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64                       git-core-2.50.1-1.amzn2023.0.1.x86_64
+  git-core-doc-2.50.1-1.amzn2023.0.1.noarch              perl-Error-1:0.17029-5.amzn2023.0.2.noarch
+  perl-File-Find-1.37-477.amzn2023.0.7.noarch            perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64            perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 86, done.
+remote: Counting objects: 100% (86/86), done.
+remote: Compressing objects: 100% (82/82), done.
+remote: Total 86 (delta 40), reused 22 (delta 4), pack-reused 0 (from 0)
+Receiving objects: 100% (86/86), 26.68 KiB | 2.96 MiB/s, done.
+Resolving deltas: 100% (40/40), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 67, done.
+remote: Counting objects: 100% (67/67), done.
+remote: Compressing objects: 100% (59/59), done.
+remote: Total 67 (delta 24), reused 36 (delta 8), pack-reused 0 (from 0)
+Receiving objects: 100% (67/67), 69.84 KiB | 4.36 MiB/s, done.
+Resolving deltas: 100% (24/24), done.
+[root@canary srinu]#
+[root@canary srinu]# ll
+total 32
+drwxr-xr-x. 3 root root 16384 Feb  4 07:43 install
+drwxr-xr-x. 3 root root 16384 Feb  4 07:43 practice-files
+[root@canary srinu]# sh install/kubectl.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   138  100   138    0     0   3020      0 --:--:-- --:--:-- --:--:--  3066
+100 55.8M  100 55.8M    0     0   183M      0 --:--:-- --:--:-- --:--:--  183M
+[root@canary srinu]# sh install/kops.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  263M  100  263M    0     0   136M      0  0:00:01  0:00:01 --:--:--  147M
+[root@canary srinu]# vi install/k8s_cluster_setup.sh
+[root@canary srinu]# cat install/k8s_cluster_setup.sh
+export KOPS_STATE_STORE=s3://srinu.as
+kops create cluster --name srinu.k8s.local --zones us-east-2a,us-east-2b,us-east-2c --master-size c7i-flex.large --master-count 1 --master-volume-size 25 --node-size c7i-flex.large --node-count 2 --node-volume-size 20 --image ami-0f5fcdfbd140e4ab7
+kops update cluster --name srinu.k8s.local --yes --admin
+
+[root@canary srinu]# sh install/k8s_cluster_setup.sh
+Flag --master-size has been deprecated, use --control-plane-size instead
+Flag --master-count has been deprecated, use --control-plane-count instead
+Flag --master-volume-size has been deprecated, use --control-plane-volume-size instead
+W0204 07:46:10.992970   26843 new_cluster.go:1407] Gossip is deprecated, using None DNS instead
+I0204 07:46:10.993050   26843 new_cluster.go:1426] Cloud Provider ID: "aws"
+I0204 07:46:11.165720   26843 subnets.go:224] Assigned CIDR 172.20.0.0/18 to subnet us-east-2a
+I0204 07:46:11.165746   26843 subnets.go:224] Assigned CIDR 172.20.64.0/18 to subnet us-east-2b
+I0204 07:46:11.165751   26843 subnets.go:224] Assigned CIDR 172.20.128.0/18 to subnet us-east-2c
+Previewing changes that will be made:
+
+I0204 07:46:21.218333   26843 executor.go:113] Tasks: 0 done / 135 total; 43 can run
+W0204 07:46:21.270126   26843 vfs_keystorereader.go:163] CA private key was not found
+I0204 07:46:21.320631   26843 executor.go:113] Tasks: 43 done / 135 total; 24 can run
+I0204 07:46:21.434183   26843 executor.go:113] Tasks: 67 done / 135 total; 36 can run
+I0204 07:46:21.522348   26843 executor.go:113] Tasks: 103 done / 135 total; 6 can run
+I0204 07:46:22.409065   26843 executor.go:113] Tasks: 109 done / 135 total; 10 can run
+I0204 07:46:22.561998   26843 executor.go:113] Tasks: 119 done / 135 total; 4 can run
+I0204 07:46:22.608560   26843 executor.go:113] Tasks: 123 done / 135 total; 8 can run
+I0204 07:46:22.669488   26843 executor.go:113] Tasks: 131 done / 135 total; 4 can run
+I0204 07:46:22.761669   26843 executor.go:113] Tasks: 135 done / 135 total; 0 can run
+Will create resources:
+
+Must specify --yes to apply changes
+
+Cluster configuration has been created.
+
+Suggestions:
+ * list clusters with: kops get cluster
+ * edit this cluster with: kops edit cluster srinu.k8s.local
+ * edit your node instance group: kops edit ig --name=srinu.k8s.local nodes-us-east-2a
+ * edit your control-plane instance group: kops edit ig --name=srinu.k8s.local control-plane-us-east-2a
+
+Finally configure your cluster with: kops update cluster --name srinu.k8s.local --yes --admin
+
+I0204 07:46:31.227202   26896 executor.go:113] Tasks: 0 done / 135 total; 43 can run
+W0204 07:46:31.276968   26896 vfs_keystorereader.go:163] CA private key was not found
+I0204 07:46:31.278975   26896 keypair.go:226] Issuing new certificate: "etcd-manager-ca-main"
+I0204 07:46:31.279753   26896 keypair.go:226] Issuing new certificate: "etcd-peers-ca-events"
+I0204 07:46:31.294095   26896 keypair.go:226] Issuing new certificate: "etcd-manager-ca-events"
+I0204 07:46:31.295459   26896 keypair.go:226] Issuing new certificate: "apiserver-aggregator-ca"
+I0204 07:46:31.315548   26896 keypair.go:226] Issuing new certificate: "etcd-peers-ca-main"
+I0204 07:46:31.335236   26896 keypair.go:226] Issuing new certificate: "service-account"
+W0204 07:46:31.354577   26896 vfs_keystorereader.go:163] CA private key was not found
+I0204 07:46:31.354987   26896 keypair.go:226] Issuing new certificate: "etcd-clients-ca"
+I0204 07:46:31.376867   26896 keypair.go:226] Issuing new certificate: "kubernetes-ca"
+I0204 07:46:32.595767   26896 executor.go:113] Tasks: 43 done / 135 total; 24 can run
+ I0204 07:46:35.975362   26896 executor.go:113] Tasks: 67 done / 135 total; 36 can run
+ W0204 07:46:40.658822   26896 executor.go:141] error running task "NetworkLoadBalancer/api.srinu.k8s.local" (9m55s remaining to succeed): error creating NLB "api-srinu-k8s-local-si3119": operation error Elastic Load Balancing v2: CreateLoadBalancer, https response error StatusCode: 400, RequestID: e4bc6e9e-ec74-4456-b18d-bfc5771948f2, OperationNotPermitted: This AWS account currently does not support creating load balancers. For more information, please contact AWS Support.
+I0204 07:46:40.658867   26896 executor.go:113] Tasks: 102 done / 135 total; 1 can run
+W0204 07:46:40.718045   26896 executor.go:141] error running task "NetworkLoadBalancer/api.srinu.k8s.local" (9m55s remaining to succeed): error creating NLB "api-srinu-k8s-local-si3119": operation error Elastic Load Balancing v2: CreateLoadBalancer, https response error StatusCode: 400, RequestID: 79c3acc3-6fb3-46e7-92d9-84a735ffcb44, OperationNotPermitted: This AWS account currently does not support creating load balancers. For more information, please contact AWS Support.
+I0204 07:46:40.718074   26896 executor.go:171] Continuing to run 1 task(s)
+I0204 07:46:50.720280   26896 executor.go:113] Tasks: 102 done / 135 total; 1 can run
+W0204 07:46:50.780496   26896 executor.go:141] error running task "NetworkLoadBalancer/api.srinu.k8s.local" (9m45s remaining to succeed):
+
+I0204 07:47:20.965500   26896 executor.go:171] Continuing to run 1 task(s)
+I0204 07:47:30.966514   26896 executor.go:113] Tasks: 102 done / 135 total; 1 can run
+I0204 07:47:31.714222   26896 network_load_balancer.go:539] Waiting for load balancer "api-srinu-k8s-local-si3119" to be created...
+I0204 07:50:32.939089   26896 executor.go:113] Tasks: 103 done / 135 total; 6 can run
+I0204 07:50:34.146524   26896 executor.go:113] Tasks: 109 done / 135 total; 10 can run
+I0204 07:50:35.130367   26896 executor.go:113] Tasks: 119 done / 135 total; 4 can run
+I0204 07:50:36.179820   26896 executor.go:113] Tasks: 123 done / 135 total; 8 can run
+I0204 07:50:36.358508   26896 executor.go:113] Tasks: 131 done / 135 total; 4 can run
+I0204 07:50:36.435440   26896 executor.go:113] Tasks: 135 done / 135 total; 0 can run
+I0204 07:50:36.435551   26896 update_cluster.go:419] Exporting kubeconfig for cluster
+kOps has set your kubectl context to srinu.k8s.local
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster --wait 10m
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to a control-plane node: ssh -i ~/.ssh/id_rsa ubuntu@
+ * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
+ * read about installing addons at: https://kops.sigs.k8s.io/addons.
+
+[root@canary srinu]#
+
+[root@canary srinu]# cd
+[root@canary ~]# ll
+total 0
+[root@canary ~]# kubectl get nodes
+NAME                  STATUS     ROLES           AGE    VERSION
+i-044266c6c744f3bcd   Ready      control-plane   110s   v1.34.3
+i-0507ef5b7801cff4d   NotReady   node            5s     v1.34.3
+i-0e732294738a4fca8   NotReady   node            3s     v1.34.3
+[root@canary ~]#
+[root@canary ~]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE     VERSION
+i-044266c6c744f3bcd   Ready    control-plane   2m12s   v1.34.3
+i-0507ef5b7801cff4d   Ready    node            27s     v1.34.3
+i-0e732294738a4fca8   Ready    node            25s     v1.34.3
+[root@canary ~]#
+[root@canary ~]# curl -L https://istio.io/downloadIstio | sh
+cd istio-1.28.1
+export PATH=$PWD/bin:$PATH
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   101  100   101    0     0   2584      0 --:--:-- --:--:-- --:--:--  2589
+100  5124  100  5124    0     0  48891      0 --:--:-- --:--:-- --:--:-- 48891
+
+Downloading istio-1.28.3 from https://github.com/istio/istio/releases/download/1.28.3/istio-1.28.3-linux-amd64.tar.gz ...
+
+Istio 1.28.3 download complete!
+
+The Istio release archive has been downloaded to the istio-1.28.3 directory.
+
+To configure the istioctl client tool for your workstation,
+add the /root/istio-1.28.3/bin directory to your environment path variable with:
+         export PATH="$PATH:/root/istio-1.28.3/bin"
+
+Begin the Istio pre-installation check by running:
+         istioctl x precheck
+
+Try Istio in ambient mode
+        https://istio.io/latest/docs/ambient/getting-started/
+Try Istio in sidecar mode
+        https://istio.io/latest/docs/setup/getting-started/
+Install guides for ambient mode
+        https://istio.io/latest/docs/ambient/install/
+Install guides for sidecar mode
+        https://istio.io/latest/docs/setup/install/
+
+Need more information? Visit https://istio.io/latest/docs/
+-bash: cd: istio-1.28.1: No such file or directory
+[root@canary ~]#
+[root@canary ~]# kubectl label namespace default istio=enabled
+namespace/default labeled
+[root@canary ~]# kubectl get ns --show-labels
+NAME              STATUS   AGE     LABELS
+default           Active   5m22s   istio=enabled,kubernetes.io/metadata.name=default
+kube-node-lease   Active   5m22s   kubernetes.io/metadata.name=kube-node-lease
+kube-public       Active   5m22s   kubernetes.io/metadata.name=kube-public
+kube-system       Active   5m22s   kubernetes.io/metadata.name=kube-system
+[root@canary ~]#
+[root@canary istio-1.28.3]#
+export PATH=$PWD/bin:$PATH
+istioctl install --set profile=demo -y
+        |\
+        | \
+        |  \
+        |   \
+      /||    \
+     / ||     \
+    /  ||      \
+   /   ||       \
+  /    ||        \
+ /     ||         \
+/______||__________\
+____________________
+  \__       _____/
+     \_____/
+
+WARNING: Istio 1.26.0 may be out of support (EOL) already: see https://istio.io/latest/docs/releases/supported-releases/ for supported releases
+✔ Istio core installed ⛵️
+✔ Istiod installed 🧠
+✔ Egress gateways installed 🛫
+✔ Ingress gateways installed 🛬
+✔ Installation complete
+[root@canary istio-1.28.3]#
+[root@canary istio-1.28.3]# cd
+[root@canary ~]# kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+error: the path "samples/bookinfo/platform/kube/bookinfo.yaml" does not exist
+[root@canary ~]# cd -
+/root/istio-1.28.3
+[root@canary istio-1.28.3]# kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+service/details created
+serviceaccount/bookinfo-details created
+deployment.apps/details-v1 created
+service/ratings created
+serviceaccount/bookinfo-ratings created
+deployment.apps/ratings-v1 created
+service/reviews created
+serviceaccount/bookinfo-reviews created
+deployment.apps/reviews-v1 created
+deployment.apps/reviews-v2 created
+deployment.apps/reviews-v3 created
+service/productpage created
+serviceaccount/bookinfo-productpage created
+deployment.apps/productpage-v1 created
+[root@canary istio-1.28.3]# ll
+total 40
+-rw-r--r--.  1 root root 11357 Jan 14 11:55 LICENSE
+-rw-r--r--.  1 root root  7676 Jan 14 11:55 README.md
+drwxr-x---.  2 root root    22 Jan 14 11:55 bin
+-rw-r-----.  1 root root   983 Jan 14 11:55 manifest.yaml
+drwxr-xr-x.  4 root root    36 Jan 14 11:55 manifests
+drwxr-xr-x. 28 root root 16384 Jan 14 11:55 samples
+drwxr-xr-x.  3 root root    57 Jan 14 11:55 tools
+[root@canary istio-1.28.3]# kubectl get pods
+NAME                             READY   STATUS    RESTARTS   AGE
+details-v1-77d6bd5675-v75x4      1/1     Running   0          34s
+productpage-v1-bb87ff47b-247fb   1/1     Running   0          34s
+ratings-v1-8589f64b4c-w7cq5      1/1     Running   0          34s
+reviews-v1-8cf7b9cc5-k5vbs       1/1     Running   0          34s
+reviews-v2-67d565655f-rth48      1/1     Running   0          34s
+reviews-v3-d587fc9d7-8kprd       1/1     Running   0          34s
+[root@canary istio-1.28.3]# cd samples/bookinfo/platform/kube/
+[root@canary kube]# ll
+total 104
+-rw-r--r--. 1 root root  137 Jan 14 11:55 README.md
+-rw-r--r--. 1 root root  914 Jan 14 11:55 bookinfo-certificate.yaml
+-rw-r--r--. 1 root root 1446 Jan 14 11:55 bookinfo-db.yaml
+-rw-r--r--. 1 root root 1530 Jan 14 11:55 bookinfo-details-dualstack.yaml
+-rw-r--r--. 1 root root 1358 Jan 14 11:55 bookinfo-details-v2.yaml
+-rw-r--r--. 1 root root 1468 Jan 14 11:55 bookinfo-details.yaml
+-rw-r--r--. 1 root root 8047 Jan 14 11:55 bookinfo-dualstack.yaml
+-rw-r--r--. 1 root root 1743 Jan 14 11:55 bookinfo-ingress.yaml
+-rw-r--r--. 1 root root 2009 Jan 14 11:55 bookinfo-mysql.yaml
+-rw-r--r--. 1 root root 8342 Jan 14 11:55 bookinfo-psa.yaml
+-rw-r--r--. 1 root root 1050 Jan 14 11:55 bookinfo-ratings-discovery-dualstack.yaml
+-rw-r--r--. 1 root root  988 Jan 14 11:55 bookinfo-ratings-discovery.yaml
+-rw-r--r--. 1 root root 1530 Jan 14 11:55 bookinfo-ratings-dualstack.yaml
+-rw-r--r--. 1 root root 1545 Jan 14 11:55 bookinfo-ratings-v2-mysql-vm.yaml
+-rw-r--r--. 1 root root 1774 Jan 14 11:55 bookinfo-ratings-v2-mysql.yaml
+-rw-r--r--. 1 root root 1876 Jan 14 11:55 bookinfo-ratings-v2.yaml
+-rw-r--r--. 1 root root 1468 Jan 14 11:55 bookinfo-ratings.yaml
+-rw-r--r--. 1 root root 1592 Jan 14 11:55 bookinfo-reviews-v2.yaml
+-rw-r--r--. 1 root root  920 Jan 14 11:55 bookinfo-versions.yaml
+-rw-r--r--. 1 root root 7799 Jan 14 11:55 bookinfo.yaml
+-rwxr-xr-x. 1 root root 2539 Jan 14 11:55 cleanup.sh
+-rw-r--r--. 1 root root 1026 Jan 14 11:55 productpage-nodeport.yaml
+[root@canary kube]# vi bookinfo.yaml
+[root@canary kube]# cd -
+/root/istio-1.28.3
+[root@canary istio-1.28.3]#
+[root@canary istio-1.28.3]# kubectl get svc
+NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+details       ClusterIP   100.71.35.165    <none>        9080/TCP   4m25s
+kubernetes    ClusterIP   100.64.0.1       <none>        443/TCP    67m
+productpage   ClusterIP   100.68.169.242   <none>        9080/TCP   4m25s
+ratings       ClusterIP   100.68.142.188   <none>        9080/TCP   4m25s
+reviews       ClusterIP   100.68.246.248   <none>        9080/TCP   4m25s
+[root@canary istio-1.28.3]# kubectl patch svc productpage -p '{"spec": {"type": "LoadBalancer"}}'
+service/productpage patched
+[root@canary istio-1.28.3]# kubectl get svc
+NAME          TYPE           CLUSTER-IP       EXTERNAL-IP                                                              PORT(S)          AGE
+details       ClusterIP      100.71.35.165    <none>                                                                   9080/TCP         5m26s
+kubernetes    ClusterIP      100.64.0.1       <none>                                                                   443/TCP          68m
+productpage   LoadBalancer   100.68.169.242   ab0806bf99ec34354982bfa9b45afcb2-655927466.us-east-2.elb.amazonaws.com   9080:32057/TCP   5m26s
+ratings       ClusterIP      100.68.142.188   <none>                                                                   9080/TCP         5m26s
+reviews       ClusterIP      100.68.246.248   <none>                                                                   9080/TCP         5m26s
+[root@canary istio-1.28.3]#
+[root@canary istio-1.28.3]# kubectl get pods
+NAME                             READY   STATUS    RESTARTS   AGE
+details-v1-77d6bd5675-v75x4      1/1     Running   0          6m47s
+productpage-v1-bb87ff47b-247fb   1/1     Running   0          6m47s
+ratings-v1-8589f64b4c-w7cq5      1/1     Running   0          6m47s
+reviews-v1-8cf7b9cc5-k5vbs       1/1     Running   0          6m47s
+reviews-v2-67d565655f-rth48      1/1     Running   0          6m47s
+reviews-v3-d587fc9d7-8kprd       1/1     Running   0          6m47s
+[root@canary istio-1.28.3]#
+[root@canary istio-1.28.3]# kubectl get deploy
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+details-v1       1/1     1            1           34m
+productpage-v1   1/1     1            1           34m
+ratings-v1       1/1     1            1           34m
+reviews-v1       1/1     1            1           34m
+reviews-v2       1/1     1            1           34m
+reviews-v3       1/1     1            1           34m
+[root@canary istio-1.28.3]#
+[root@canary istio-1.28.3]# vi target.yml
+[root@canary istio-1.28.3]# cat target.yml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: reviews
+spec:
+  host: reviews
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+    - name: v2
+      labels:
+        version: v2
+    - name: v3
+      labels:
+        version: v3
+[root@canary istio-1.28.3]#
+[root@canary istio-1.28.3]# vi virt_svc.yml
+[root@canary istio-1.28.3]# cat virt_svc.yml
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+    - route:
+        - destination:
+            host: reviews
+            subset: v1
+          weight: 100
+        - destination:
+            host: reviews
+            subset: v3
+          weight: 0
+        - destination:
+            host: reviews
+            subset: v2
+          weight: 0
+[root@canary istio-1.28.3]#
+[root@canary istio-1.28.3]# ll
+total 48
+-rw-r--r--.  1 root root 11357 Jan 14 11:55 LICENSE
+-rw-r--r--.  1 root root  7676 Jan 14 11:55 README.md
+drwxr-x---.  2 root root    22 Jan 14 11:55 bin
+-rw-r-----.  1 root root   983 Jan 14 11:55 manifest.yaml
+drwxr-xr-x.  4 root root    36 Jan 14 11:55 manifests
+drwxr-xr-x. 28 root root 16384 Jan 14 11:55 samples
+-rw-r--r--.  1 root root   268 Feb  4 09:33 target.yml
+drwxr-xr-x.  3 root root    57 Jan 14 11:55 tools
+-rw-r--r--.  1 root root   415 Feb  4 09:36 virt_svc.yml
+[root@canary istio-1.28.3]# kubectl apply -f target.yml virt_svc.yml
+error: Unexpected args: [virt_svc.yml]
+See 'kubectl apply -h' for help and examples
+[root@canary istio-1.28.3]# kubectl apply -f target.yml -f virt_svc.yml
+destinationrule.networking.istio.io/reviews created
+virtualservice.networking.istio.io/reviews created
+[root@canary istio-1.28.3]#
+
+____________________________________________________________________________________________________________
+
+********* Requests motham anni deployments ki velthunnay, so namespace label change cheyyali. **************
+____________________________________________________________________________________________________________
+
+[root@canary istio-1.28.3]# kubectl label namespace default istio-injection=enabled --overwrite
+kubectl rollout restart deployment -n default
+kubectl get pods -n default -o wide
+namespace/default labeled
+deployment.apps/details-v1 restarted
+deployment.apps/productpage-v1 restarted
+deployment.apps/ratings-v1 restarted
+deployment.apps/reviews-v1 restarted
+deployment.apps/reviews-v2 restarted
+deployment.apps/reviews-v3 restarted
+NAME                              READY   STATUS    RESTARTS   AGE   IP             NODE                  NOMINATED NODE   READINESS GATES
+details-v1-77d6bd5675-v75x4       1/1     Running   0          55m   100.96.1.199   i-0507ef5b7801cff4d   <none>           <none>
+details-v1-f7fc447b5-fcvrw        0/2     Pending   0          0s    <none>         i-0507ef5b7801cff4d   <none>           <none>
+productpage-v1-688549bf59-d6wxr   0/2     Pending   0          0s    <none>         i-0e732294738a4fca8   <none>           <none>
+productpage-v1-bb87ff47b-247fb    1/1     Running   0          55m   100.96.1.102   i-0507ef5b7801cff4d   <none>           <none>
+ratings-v1-8589f64b4c-w7cq5       1/1     Running   0          55m   100.96.2.127   i-0e732294738a4fca8   <none>           <none>
+ratings-v1-9c54c6c57-rc5gb        0/2     Pending   0          0s    <none>         i-0507ef5b7801cff4d   <none>           <none>
+reviews-v1-7f6849ff89-2shwh       0/2     Pending   0          0s    <none>         i-0e732294738a4fca8   <none>           <none>
+reviews-v1-8cf7b9cc5-k5vbs        1/1     Running   0          55m   100.96.2.64    i-0e732294738a4fca8   <none>           <none>
+reviews-v2-5bf786b95c-9hjqd       0/2     Pending   0          0s    <none>         i-0507ef5b7801cff4d   <none>           <none>
+reviews-v2-67d565655f-rth48       1/1     Running   0          55m   100.96.1.131   i-0507ef5b7801cff4d   <none>           <none>
+reviews-v3-d587fc9d7-8kprd        1/1     Running   0          55m   100.96.2.81    i-0e732294738a4fca8   <none>           <none>
+[root@canary istio-1.28.3]# kubectl get pods -n default -o wide
+NAME                              READY   STATUS    RESTARTS   AGE   IP             NODE                  NOMINATED NODE   READINESS GATES
+details-v1-f7fc447b5-fcvrw        2/2     Running   0          11s   100.96.1.121   i-0507ef5b7801cff4d   <none>           <none>
+productpage-v1-688549bf59-d6wxr   2/2     Running   0          11s   100.96.2.152   i-0e732294738a4fca8   <none>           <none>
+ratings-v1-9c54c6c57-rc5gb        2/2     Running   0          11s   100.96.1.32    i-0507ef5b7801cff4d   <none>           <none>
+reviews-v1-7f6849ff89-2shwh       2/2     Running   0          11s   100.96.2.23    i-0e732294738a4fca8   <none>           <none>
+reviews-v2-5bf786b95c-9hjqd       2/2     Running   0          11s   100.96.1.236   i-0507ef5b7801cff4d   <none>           <none>
+reviews-v3-7d58989b65-x8jcd       2/2     Running   0          11s   100.96.2.215   i-0e732294738a4fca8   <none>           <none>
+[root@canary istio-1.28.3]#
+
+____________________________________________________________________________________________________________
+
+********* Ippudu request only v1 ki velthunnay. **************
+____________________________________________________________________________________________________________
+
+
+[root@canary istio-1.28.3]# ll
+total 48
+-rw-r--r--.  1 root root 11357 Jan 14 11:55 LICENSE
+-rw-r--r--.  1 root root  7676 Jan 14 11:55 README.md
+drwxr-x---.  2 root root    22 Jan 14 11:55 bin
+-rw-r-----.  1 root root   983 Jan 14 11:55 manifest.yaml
+drwxr-xr-x.  4 root root    36 Jan 14 11:55 manifests
+drwxr-xr-x. 28 root root 16384 Jan 14 11:55 samples
+-rw-r--r--.  1 root root   268 Feb  4 09:33 target.yml
+drwxr-xr-x.  3 root root    57 Jan 14 11:55 tools
+-rw-r--r--.  1 root root   415 Feb  4 09:36 virt_svc.yml
+[root@canary istio-1.28.3]# vi virt_svc.yml
+[root@canary istio-1.28.3]# cat virt_svc.yml
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+    - route:
+        - destination:
+            host: reviews
+            subset: v1
+          weight: 80
+        - destination:
+            host: reviews
+            subset: v3
+          weight: 20
+        - destination:
+            host: reviews
+            subset: v2
+          weight: 0
+[root@canary istio-1.28.3]# kubectl apply -f virt_svc.yml
+virtualservice.networking.istio.io/reviews configured
+[root@canary istio-1.28.3]#
+
+____________________________________________________________________________________________________________
+
+********* Ippudu max requests (80%) v1 ki velthunnay and Min requests (20%) v3 ki velthunnay **************
+____________________________________________________________________________________________________________
+
+Next --->
+
+[root@canary istio-1.28.3]# vi virt_svc.yml
+[root@canary istio-1.28.3]# cat virt_svc.yml
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+    - route:
+        - destination:
+            host: reviews
+            subset: v1
+          weight: 0
+        - destination:
+            host: reviews
+            subset: v3
+          weight: 100
+        - destination:
+            host: reviews
+            subset: v2
+          weight: 0
+[root@canary istio-1.28.3]# kubectl apply -f virt_svc.yml
+virtualservice.networking.istio.io/reviews configured
+[root@canary istio-1.28.3]#
+____________________________________________________________________________________________________________
+
+********* Ippudu requests anni (100%) v3 ki velthunnay **************
+____________________________________________________________________________________________________________
+
+Next --->
+
+[root@canary istio-1.28.3]# vi virt_svc.yml
+[root@canary istio-1.28.3]# cat virt_svc.yml
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+    - route:
+        - destination:
+            host: reviews
+            subset: v1
+          weight: 0
+        - destination:
+            host: reviews
+            subset: v3
+          weight: 20
+        - destination:
+            host: reviews
+            subset: v2
+          weight: 80
+[root@canary istio-1.28.3]# kubectl apply -f virt_svc.yml
+virtualservice.networking.istio.io/reviews configured
+[root@canary istio-1.28.3]#
+____________________________________________________________________________________________________________
+
+********* Ippudu max requests (80%) v2 ki velthunnay and min request (20%) v3 ki velthunnay **************
+____________________________________________________________________________________________________________
+
+Next --->
+
+
+[root@canary istio-1.28.3]# vi virt_svc.yml
+[root@canary istio-1.28.3]# cat virt_svc.yml
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+    - route:
+        - destination:
+            host: reviews
+            subset: v1
+          weight: 0
+        - destination:
+            host: reviews
+            subset: v3
+          weight: 0
+        - destination:
+            host: reviews
+            subset: v2
+          weight: 100
+[root@canary istio-1.28.3]# kubectl apply -f virt_svc.yml
+virtualservice.networking.istio.io/reviews configured
+[root@canary istio-1.28.3]#
+
+____________________________________________________________________________________________________________
+
+********* Ippudu requests anni (100%) v2 ki velthunnay **************
+____________________________________________________________________________________________________________
+
+[root@canary ~]# kops get cluster
+NAME            CLOUD   ZONES
+srinu.k8s.local aws     us-east-2a,us-east-2b,us-east-2c
+[root@canary ~]# export KOPS_STATE_STORE=s3://srinu.as
+kops delete cluster --name srinu.k8s.local --yes
+I0204 10:44:20.223464   32278 delete_cluster.go:143] Looking for cloud resources to delete
+TYPE                    NAME                                                                    ID
+autoscaling-config      control-plane-us-east-2a.masters.srinu.k8s.local                        lt-062fab02f2c60829b
+autoscaling-config      nodes-us-east-2a.srinu.k8s.local                                        lt-08747e44356b2064f
+autoscaling-config      nodes-us-east-2b.srinu.k8s.local                                        lt-00e936a096e97dcc6
+autoscaling-config      nodes-us-east-2c.srinu.k8s.local                                        lt-0185397b884e8276d
+
+
+security-group:sg-0f6e2000cfa1cc5aa     still has dependencies, will retry
+security-group:sg-0ff7830a4ffaf03ad     ok
+Not all resources deleted; waiting before reattempting deletion
+        subnet:subnet-03c59185a4cf2ac76
+        route-table:rtb-0b73bcbe89320b322
+        dhcp-options:dopt-0699751e173e08d05
+        vpc:vpc-050a07be97aaf58bb
+        security-group:sg-0f6e2000cfa1cc5aa
+        volume:vol-071b5241be4e7be3e
+        volume:vol-0fe88bd3d9b608470
+volume:vol-071b5241be4e7be3e    ok
+volume:vol-0fe88bd3d9b608470    ok
+subnet:subnet-03c59185a4cf2ac76 ok
+security-group:sg-0f6e2000cfa1cc5aa     ok
+route-table:rtb-0b73bcbe89320b322       ok
+vpc:vpc-050a07be97aaf58bb       ok
+dhcp-options:dopt-0699751e173e08d05     ok
+Deleted kubectl config for srinu.k8s.local
+
+Deleted cluster: "srinu.k8s.local"
+[root@canary ~]#
+
+
+********************  END OF FILE  ***************************
+
