@@ -1,0 +1,1042 @@
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@18.219.177.86
+The authenticity of host '18.219.177.86 (18.219.177.86)' can't be established.
+ED25519 key fingerprint is SHA256:loqwQ/WG9GdS2IKO3sPTNZDTYfLtOtmvRq4ZFgAtwhY.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '18.219.177.86' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-8-134 ~]$ sudo -i
+hostnamectl set-hostname Ingess
+[root@ip-172-31-8-134 ~]# hostnamectl set-hostname Ingess
+[root@ip-172-31-8-134 ~]# exit
+logout
+[ec2-user@ip-172-31-8-134 ~]$ sudo -i
+y[root@Ingess ~]# yum install git -y && mkdir /srinu && cd /srinu && git clone https://github.com/Srinuas/instll.git && git clone https://github.com/Srinuas/practice-files.git && sh install/gitconfig.sh
+Amazon Linux 2023 Kernel Livepatch repository                                 304 kB/s |  30 kB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                    Architecture     Version                              Repository             Size
+==============================================================================================================
+Installing:
+ git
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 86, done.
+remote: Counting objects: 100% (86/86), done.
+remote: Compressing objects: 100% (82/82), done.
+remote: Total 86 (delta 40), reused 22 (delta 4), pack-reused 0 (from 0)
+Receiving objects: 100% (86/86), 26.68 KiB | 2.22 MiB/s, done.
+Resolving deltas: 100% (40/40), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 70, done.
+remote: Counting objects: 100% (70/70), done.
+remote: Compressing objects: 100% (62/62), done.
+remote: Total 70 (delta 25), reused 38 (delta 8), pack-reused 0 (from 0)
+Receiving objects: 100% (70/70), 77.02 KiB | 2.85 MiB/s, done.
+Resolving deltas: 100% (25/25), done.
+[root@Ingess srinu]# sh install/kops.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  263M  100  263M    0     0   130M      0  0:00:02  0:00:02 --:--:--  153M
+[root@Ingess srinu]# sh install/kubectl.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   138  100   138    0     0   2943      0 --:--:-- --:--:-- --:--:--  3000
+100 55.8M  100 55.8M    0     0   183M      0 --:--:-- --:--:-- --:--:--  324M
+[root@Ingess srinu]# export KOPS_STATE_STORE=s3://srinu.as
+kops create cluster --name srinuas.k8s.local --zones us-east-2a,us-east-2b,us-east-2c --master-size m7i-flex.large --master-count 1 --master-volume-size 25 --node-size c7i-flex.large --node-count 2 --node-volume-size 20 --image ami-0f5fcdfbd140e4ab7
+kops update cluster --name srinuas.k8s.local --yes --admin
+Flag --master-size has been deprecated, use --control-plane-size instead
+Flag --master-count has been deprecated, use --control-plane-count instead
+Flag --master-volume-size has been deprecated, use --control-plane-volume-size instead
+W0205 08:33:59.987407   26818 new_cluster.go:1407] Gossip is deprecated, using None DNS instead
+I0205 08:33:59.987469   26818 new_cluster.go:1426] Cloud Provider ID: "aws"
+I0205 08:34:00.147874   26818 subnets.go:224] Assigned CIDR 172.20.0.0/18 to subnet us-east-2a
+I0205 08:34:00.147897   26818 subnets.go:224] Assigned CIDR 172.20.64.0/18 to subnet us-east-2b
+I0205 08:34:00.147904   26818 subnets.go:224] Assigned CIDR 172.20.128.0/18 to subnet us-east-2c
+Previewing changes that will be made:
+
+I0205 08:34:09.461235   26818 executor.go:113] Tasks: 0 done / 135 total; 43 can run
+W0205 08:34:09.503732   26818 vfs_keystorereader.go:163] CA private key was not found
+I0205 08:34:09.558974   26818 executor.go:113] Tasks: 43 done / 135 total; 24 can run
+I0205 08:34:09.683788   26818 executor.go:113] Tasks: 67 done / 135 total; 36 can run
+I0205 08:34:09.776153   26818 executor.go:113] Tasks: 103 done / 135 total; 6 can run
+I0205 08:34:10.494248   26818 executor.go:113] Tasks: 109 done / 135 total; 10 can run
+I0205 08:34:10.645051   26818 executor.go:113] Tasks: 119 done / 135 total; 4 can run
+I0205 08:34:10.723880   26818 executor.go:113] Tasks: 123 done / 135 total; 8 can run
+I0205 08:34:10.781819   26818 executor.go:113] Tasks: 131 done / 135 total; 4 can run
+I0205 08:34:10.850856   26818 executor.go:113] Tasks: 135 done / 135 total; 0 can run
+Will create resources:
+
+I0205 08:37:06.857997   26823 executor.go:171] Continuing to run 1 task(s)
+I0205 08:37:16.867103   26823 executor.go:113] Tasks: 102 done / 135 total; 1 can run
+W0205 08:37:16.922827   26823 executor.go:141] error running task "NetworkLoadBalancer/api.srinuas.k8s.local" (7m6s remaining to succeed): error creating NLB "api-srinuas-k8s-local-vr1gh2": operation error Elastic Load Balancing v2: CreateLoadBalancer, https response error StatusCode: 400, RequestID: 7fbaffaf-c92e-4080-9a5b-5ee0830593b2, OperationNotPermitted: This AWS account currently does not support creating load balancers. For more information, please contact AWS Support.
+I0205 08:37:16.922858   26823 executor.go:171] Continuing to run 1 task(s)
+I0205 08:37:26.927007   26823 executor.go:113] Tasks: 102 done / 135 total; 1 can run
+I0205 08:37:27.668058   26823 network_load_balancer.go:539] Waiting for load balancer "api-srinuas-k8s-local-vr1gh2" to be created...
+I0205 08:39:56.756578   26823 executor.go:113] Tasks: 103 done / 135 total; 6 can run
+I0205 08:39:57.830884   26823 executor.go:113] Tasks: 109 done / 135 total; 10 can run
+I0205 08:39:58.676692   26823 executor.go:113] Tasks: 119 done / 135 total; 4 can run
+I0205 08:39:59.765054   26823 executor.go:113] Tasks: 123 done / 135 total; 8 can run
+I0205 08:39:59.926919   26823 executor.go:113] Tasks: 131 done / 135 total; 4 can run
+I0205 08:39:59.963237   26823 executor.go:113] Tasks: 135 done / 135 total; 0 can run
+I0205 08:39:59.963322   26823 update_cluster.go:419] Exporting kubeconfig for cluster
+kOps has set your kubectl context to srinuas.k8s.local
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster --wait 10m
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to a control-plane node: ssh -i ~/.ssh/id_rsa ubuntu@
+ * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
+ * read about installing addons at: https://kops.sigs.k8s.io/addons.
+
+[root@Ingess srinu]# 
+[root@Ingess srinu]# kubectl get nodes
+NAME                  STATUS     ROLES           AGE   VERSION
+i-092ceaa2d513c73d1   NotReady   control-plane   25s   v1.34.3
+[root@Ingess srinu]# 
+[root@Ingess ingress]# cp *.yml /srinu/ingress/
+[root@Ingess ingress]# cd ../..
+[root@Ingess dev]# cd ..
+[root@Ingess srinu]# ll
+total 32
+drwxr-xr-x. 3 root root    24 Feb  5 08:48 dev
+drwxr-xr-x. 3 root root    67 Feb  5 08:49 ingress
+drwxr-xr-x. 3 root root 16384 Feb  5 08:37 install
+drwxr-xr-x. 3 root root 16384 Feb  5 08:33 practice-files
+[root@Ingess srinu]# rm -rf dev/
+[root@Ingess srinu]# cd ingress/
+[root@Ingess ingress]# ll
+total 12
+-rw-r--r--. 1 root root 776 Feb  5 08:49 ingress.yml
+-rw-r--r--. 1 root root 494 Feb  5 08:49 one.yml
+-rw-r--r--. 1 root root 495 Feb  5 08:49 two.yml
+[root@Ingess ingress]# 
+[root@Ingess ingress]# kubectl config current-context
+srinuas.k8s.local
+[root@Ingess ingress]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE   VERSION
+i-013f8e69e3ba6dba9   Ready    node            40m   v1.34.3
+i-092ceaa2d513c73d1   Ready    control-plane   42m   v1.34.3
+i-0bddd4486d3a021ae   Ready    node            40m   v1.34.3
+[root@Ingess ingress]#
+[root@Ingess ingress]# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.1/deploy/static/provider/cloud/deploy.yaml
+namespace/ingress-nginx created
+serviceaccount/ingress-nginx created
+serviceaccount/ingress-nginx-admission created
+role.rbac.authorization.k8s.io/ingress-nginx created
+role.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+configmap/ingress-nginx-controller created
+service/ingress-nginx-controller created
+service/ingress-nginx-controller-admission created
+deployment.apps/ingress-nginx-controller created
+job.batch/ingress-nginx-admission-create created
+job.batch/ingress-nginx-admission-patch created
+ingressclass.networking.k8s.io/nginx created
+validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created
+[root@Ingess ingress]#
+[root@Ingess ingress]# kubectl get pods
+No resources found in default namespace.
+[root@Ingess ingress]# kubectl get svc
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   100.64.0.1   <none>        443/TCP   74m
+[root@Ingess ingress]# kubectl get deploy
+No resources found in default namespace.
+[root@Ingess ingress]# kubectl get ing
+No resources found in default namespace.
+[root@Ingess ingress]#
+[root@Ingess ingress]# ll
+total 20
+-rw-r--r--. 1 root root 588 Feb  5 09:47 error.yml
+-rw-r--r--. 1 root root 955 Feb  5 09:49 ingress.yml
+-rw-r--r--. 1 root root 507 Feb  5 09:07 one.yml
+-rw-r--r--. 1 root root 511 Feb  5 09:06 three.yml
+-rw-r--r--. 1 root root 505 Feb  5 09:00 two.yml
+[root@Ingess ingress]# cat ingress.yml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /ecom(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: ecom-svc
+            port:
+              number: 80
+
+      - path: /buggy(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: buggy-svc
+            port:
+              number: 80
+
+      - path: /metro(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: metro-svc
+            port:
+              number: 80
+
+      - path: /(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: error-svc
+            port:
+              number: 80
+[root@Ingess ingress]# cat one.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: one
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: buggy
+  template:
+    metadata:
+      labels:
+        app: buggy
+    spec:
+      containers:
+      - name: cont
+        image: srinuas/buggy:food
+        ports:
+        - containerPort: 80
+        env:
+        - name: TITLE
+          value: "NGINX APP1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: buggy-svc
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: buggy
+[root@Ingess ingress]# cat two.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: two
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecom
+  template:
+    metadata:
+      labels:
+        app: ecom
+    spec:
+      containers:
+      - name: cont
+        image: srinuas/ecom2:httpd
+        ports:
+        - containerPort: 80
+        env:
+        - name: TITLE
+          value: "APACHE APP2"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecom-svc
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: ecom
+[root@Ingess ingress]# cat three.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: three
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: metro
+  template:
+    metadata:
+      labels:
+        app: metro
+    spec:
+      containers:
+      - name: cont
+        image: srinuas/metro:nginx
+        ports:
+        - containerPort: 80
+        env:
+        - name: TITLE
+          value: "APACHE APP3"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metro-svc
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: metro
+[root@Ingess ingress]# cat error.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: error
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: error
+  template:
+    metadata:
+      labels:
+        app: error
+    spec:
+      containers:
+      - name: cont-nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 6666
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: error-svc
+spec:
+  selector:
+    app: error
+  ports:
+    - name: nginx
+      port: 80
+      targetPort: 6666
+[root@Ingess ingress]# 
+[root@Ingess ingress]#
+[root@Ingess ingress]# ll
+total 20
+-rw-r--r--. 1 root root 588 Feb  5 09:47 error.yml
+-rw-r--r--. 1 root root 951 Feb  5 10:03 ingress.yml
+-rw-r--r--. 1 root root 507 Feb  5 10:02 one.yml
+-rw-r--r--. 1 root root 511 Feb  5 09:06 three.yml
+-rw-r--r--. 1 root root 505 Feb  5 09:00 two.yml
+[root@Ingess ingress]# kubectl apply -f .
+deployment.apps/error created
+service/error-svc created
+ingress.networking.k8s.io/k8s-ingress created
+deployment.apps/one created
+service/buggy-svc created
+deployment.apps/three created
+service/metro-svc created
+deployment.apps/two created
+service/ecom-svc created
+[root@Ingess ingress]#
+[root@Ingess ingress]# kubectl get deploy
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+error   1/1     1            1           14m
+one     2/2     2            2           14m
+three   2/2     2            2           14m
+two     2/2     2            2           14m
+[root@Ingess ingress]# 
+[root@Ingess ingress]# kubectl get ing
+NAME          CLASS   HOSTS   ADDRESS                                                                   PORTS   AGE
+k8s-ingress   nginx   *       aba2a4081c5424b95bc2f02cdbc7467c-1081282096.us-east-2.elb.amazonaws.com   80      17m
+[root@Ingess ingress]# kubectl get svc
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+buggy-svc    ClusterIP   100.68.168.161   <none>        80/TCP    17m
+ecom-svc     ClusterIP   100.67.91.94     <none>        80/TCP    17m
+error-svc    ClusterIP   100.70.87.56     <none>        80/TCP    17m
+kubernetes   ClusterIP   100.64.0.1       <none>        443/TCP   100m
+metro-svc    ClusterIP   100.65.86.101    <none>        80/TCP    17m
+[root@Ingess ingress]# kubectl get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+error-59dd9b5dcf-5zzvh   1/1     Running   0          17m
+one-66d656c947-27djb     1/1     Running   0          17m
+one-66d656c947-hr2h2     1/1     Running   0          17m
+three-79d5b649f9-4hppl   1/1     Running   0          17m
+three-79d5b649f9-brxkc   1/1     Running   0          17m
+two-6db8cb6f6b-bx7hc     1/1     Running   0          17m
+two-6db8cb6f6b-dplb2     1/1     Running   0          17m
+[root@Ingess ingress]#
+
+_________________________________________________________________________________
+
+************************  Liveness Pods  **********************************
+_________________________________________________________________________________
+
+
+[root@Ingess ingress]# ll
+total 24
+-rw-r--r--. 1 root root 473 Feb  5 13:32 error.yml
+-rw-r--r--. 1 root root 951 Feb  5 13:02 ingress.yml
+-rw-r--r--. 1 root root 507 Feb  5 10:02 one.yml
+-rw-r--r--. 1 root root 413 Feb  5 14:07 pod.yml
+-rw-r--r--. 1 root root 511 Feb  5 09:06 three.yml
+-rw-r--r--. 1 root root 505 Feb  5 09:00 two.yml
+[root@Ingess ingress]# cat pod.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: live
+spec:
+  containers:
+    - name: con1
+      image: nginx
+      ports:
+        - containerPort: 80
+
+
+      args:
+        - /bin/bash
+        - -c
+        - touch /var/srinu; sleep 1000
+
+      livenessProbe:
+        exec:
+          command:
+            - cat
+            - /var/srinu
+        initialDelaySeconds: 5
+        periodSeconds: 5
+        timeoutSeconds: 20
+[root@Ingess ingress]#
+[root@Ingess ingress]# kubectl describe pod live
+Name:             live
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             i-0bddd4486d3a021ae/172.20.21.144
+Start Time:       Thu, 05 Feb 2026 14:28:06 +0000
+Labels:           <none>
+Annotations:      kubernetes.io/limit-ranger: LimitRanger plugin set: cpu request for container con1
+Status:           Running
+IP:               100.96.1.240
+IPs:
+  IP:  100.96.1.240
+Containers:
+  con1:
+    Container ID:  containerd://aff5b47afb1980d1eafd535ff915a362a46849f327a6b97375979a59f6b09282
+    Image:         nginx
+    Image ID:      docker.io/library/nginx@sha256:b17697e86d0c02378716277d09f45b946f8709aaa12c708e30fdd4736f536af1
+    Port:          80/TCP
+    Host Port:     0/TCP
+    Args:
+      /bin/bash
+      -c
+      touch /var/srinu; sleep 1000
+    State:          Running
+      Started:      Thu, 05 Feb 2026 14:28:07 +0000
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        100m
+    Liveness:     exec [cat /var/srinu] delay=5s timeout=20s period=5s #success=1 #failure=3
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-mcvzw (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-mcvzw:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  4s    default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal  Pulling    4s    kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal  Pulled     3s    kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 196ms (196ms including waiting). Image size: 62939286 bytes.
+  Normal  Created    3s    kubelet            spec.containers{con1}: Created container: con1
+  Normal  Started    3s    kubelet            spec.containers{con1}: Started container con1
+[root@Ingess ingress]#
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  7s    default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal  Pulling    7s    kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal  Pulled     7s    kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal  Created    6s    kubelet            spec.containers{con1}: Created container: con1
+  Normal  Started    6s    kubelet            spec.containers{con1}: Started container con1
+[root@Ingess ingress]#
+________________________________
+
+**********************************************************************************************
+**********************************************************************************************
+
+[root@Ingess buggy]# kubectl exec -it live -- bash
+root@live:/# ls /var/
+backups  cache  lib  local  lock  log  mail  opt  run  spool  srinu  tmp
+root@live:/# rm -rf /var/srinu
+root@live:/# ls /var/
+backups  cache  lib  local  lock  log  mail  opt  run  spool  tmp
+root@live:/#
+
+**********************************************************************************************
+**********************************************************************************************
+_________________________________
+
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  17s   default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal  Pulling    17s   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal  Pulled     17s   kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal  Created    16s   kubelet            spec.containers{con1}: Created container: con1
+  Normal  Started    16s   kubelet            spec.containers{con1}: Started container con1
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  22s   default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal  Pulling    22s   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal  Pulled     22s   kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal  Created    21s   kubelet            spec.containers{con1}: Created container: con1
+  Normal  Started    21s   kubelet            spec.containers{con1}: Started container con1
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  24s   default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal  Pulling    24s   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal  Pulled     24s   kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal  Created    23s   kubelet            spec.containers{con1}: Created container: con1
+  Normal  Started    23s   kubelet            spec.containers{con1}: Started container con1
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age   From               Message
+  ----     ------     ----  ----               -------
+  Normal   Scheduled  26s   default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    26s   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     26s   kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    25s   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    25s   kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  1s    kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age   From               Message
+  ----     ------     ----  ----               -------
+  Normal   Scheduled  27s   default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    27s   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     27s   kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    26s   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    26s   kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  2s    kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age   From               Message
+  ----     ------     ----  ----               -------
+  Normal   Scheduled  28s   default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    28s   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     28s   kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    27s   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    27s   kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  3s    kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age               From               Message
+  ----     ------     ----              ----               -------
+  Normal   Scheduled  36s               default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    36s               kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     36s               kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    35s               kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    35s               kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  1s (x3 over 11s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    1s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age               From               Message
+  ----     ------     ----              ----               -------
+  Normal   Scheduled  42s               default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    42s               kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     42s               kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    41s               kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    41s               kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  7s (x3 over 17s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    7s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  49s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    49s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     49s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    48s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    48s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  14s (x3 over 24s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    14s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  53s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    53s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     53s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    52s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    52s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  18s (x3 over 28s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    18s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  55s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    55s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     55s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    54s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    54s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  20s (x3 over 30s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    20s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  56s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    56s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     56s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    55s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    55s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  21s (x3 over 31s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    21s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  57s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    57s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     57s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    56s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    56s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  22s (x3 over 32s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    22s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  58s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    58s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     58s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    57s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    57s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  23s (x3 over 33s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    23s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  58s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    58s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     58s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    57s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    57s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  23s (x3 over 33s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    23s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  59s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    59s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     59s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    58s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    58s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  24s (x3 over 34s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    24s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  60s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    60s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     60s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    59s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    59s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  25s (x3 over 35s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    25s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  60s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    60s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     60s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    59s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    59s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  25s (x3 over 35s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    25s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  61s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    61s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     61s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    60s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    60s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  26s (x3 over 36s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    26s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  62s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    62s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     62s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    61s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    61s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  27s (x3 over 37s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    27s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  63s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    63s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     63s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    62s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    62s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  28s (x3 over 38s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    28s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  63s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    63s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     63s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    62s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    62s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  28s (x3 over 38s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    28s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  64s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    64s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     64s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    63s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    63s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  29s (x3 over 39s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    29s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  65s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulling    65s                kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Pulled     65s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Created    64s                kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    64s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  30s (x3 over 40s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    30s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  65s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     65s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Normal   Started    64s                kubelet            spec.containers{con1}: Started container con1
+  Warning  Unhealthy  30s (x3 over 40s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    30s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    0s (x2 over 65s)   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    0s (x2 over 64s)   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Pulled     0s                 kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  66s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     66s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  31s (x3 over 41s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    31s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    1s (x2 over 66s)   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    1s (x2 over 65s)   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    1s (x2 over 65s)   kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     1s                 kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  67s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     67s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  32s (x3 over 42s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    32s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    2s (x2 over 67s)   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    2s (x2 over 66s)   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    2s (x2 over 66s)   kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     2s                 kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  68s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     68s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  33s (x3 over 43s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    33s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    3s (x2 over 68s)   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    3s (x2 over 67s)   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    3s (x2 over 67s)   kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     3s                 kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  69s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     69s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  34s (x3 over 44s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    34s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    4s (x2 over 69s)   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    4s (x2 over 68s)   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    4s (x2 over 68s)   kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     4s                 kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  70s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     70s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  35s (x3 over 45s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    35s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    5s (x2 over 70s)   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    5s (x2 over 69s)   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    5s (x2 over 69s)   kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     5s                 kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  70s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     70s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  35s (x3 over 45s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    35s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    5s (x2 over 70s)   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    5s (x2 over 69s)   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    5s (x2 over 69s)   kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     5s                 kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  71s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     71s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  36s (x3 over 46s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    36s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    6s (x2 over 71s)   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    6s (x2 over 70s)   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    6s (x2 over 70s)   kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     6s                 kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  72s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     72s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  37s (x3 over 47s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    37s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    7s (x2 over 72s)   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    7s (x2 over 71s)   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    7s (x2 over 71s)   kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     7s                 kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  73s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     73s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  38s (x3 over 48s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    38s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    8s (x2 over 73s)   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    8s (x2 over 72s)   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    8s (x2 over 72s)   kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     8s                 kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  74s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     74s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  39s (x3 over 49s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    39s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    9s (x2 over 74s)   kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    9s (x2 over 73s)   kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    9s (x2 over 73s)   kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     9s                 kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  75s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     75s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  40s (x3 over 50s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    40s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    10s (x2 over 75s)  kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    10s (x2 over 74s)  kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    10s (x2 over 74s)  kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     10s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  76s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     76s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  41s (x3 over 51s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    41s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    11s (x2 over 76s)  kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    11s (x2 over 75s)  kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    11s (x2 over 75s)  kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     11s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  77s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     77s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  42s (x3 over 52s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    42s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    12s (x2 over 77s)  kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    12s (x2 over 76s)  kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    12s (x2 over 76s)  kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     12s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  78s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     78s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  43s (x3 over 53s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    43s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    13s (x2 over 78s)  kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    13s (x2 over 77s)  kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    13s (x2 over 77s)  kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     13s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  79s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     79s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  44s (x3 over 54s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    44s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    14s (x2 over 79s)  kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    14s (x2 over 78s)  kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    14s (x2 over 78s)  kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     14s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  80s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     80s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  45s (x3 over 55s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    45s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    15s (x2 over 80s)  kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    15s (x2 over 79s)  kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    15s (x2 over 79s)  kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     15s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+^[[AEvents:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  83s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     83s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  48s (x3 over 58s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    48s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    18s (x2 over 83s)  kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    18s (x2 over 82s)  kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    18s (x2 over 82s)  kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     18s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  83s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     83s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  48s (x3 over 58s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    48s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    18s (x2 over 83s)  kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    18s (x2 over 82s)  kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    18s (x2 over 82s)  kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     18s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]# kubectl describe pod live | sed -n '/Events:/,$p'
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  86s                default-scheduler  Successfully assigned default/live to i-0bddd4486d3a021ae
+  Normal   Pulled     86s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 201ms (201ms including waiting). Image size: 62939286 bytes.
+  Warning  Unhealthy  51s (x3 over 61s)  kubelet            spec.containers{con1}: Liveness probe failed: cat: /var/srinu: No such file or directory
+  Normal   Killing    51s                kubelet            spec.containers{con1}: Container con1 failed liveness probe, will be restarted
+  Normal   Pulling    21s (x2 over 86s)  kubelet            spec.containers{con1}: Pulling image "nginx"
+  Normal   Created    21s (x2 over 85s)  kubelet            spec.containers{con1}: Created container: con1
+  Normal   Started    21s (x2 over 85s)  kubelet            spec.containers{con1}: Started container con1
+  Normal   Pulled     21s                kubelet            spec.containers{con1}: Successfully pulled image "nginx" in 197ms (197ms including waiting). Image size: 62939286 bytes.
+[root@Ingess ingress]#
+[root@Ingess ingress]#  export KOPS_STATE_STORE=s3://srinu.as
+[root@Ingess ingress]#[root@Ingess ingress]# kops delete cluster --name srinuas.k8s.local --yes
+I0205 15:05:24.779868   44021 delete_cluster.go:143] Looking for cloud resources to delete
+TYPE                    NAME                                                                    ID
+autoscaling-config      control-plane-us-east-2a.masters.srinuas.k8s.local                      lt-047a55e78252e375d
+autoscaling-config      nodes-us-east-2a.srinuas.k8s.local                                      lt-089ff8b64be4ac55d
+security-group:sg-02d3fb9df9ef3c5c7     ok
+route-table:rtb-08c6e52fcc689e974       ok
+vpc:vpc-08dbb0b0960e70b48       ok
+dhcp-options:dopt-003506dd4c25270df     ok
+Deleted kubectl config for srinuas.k8s.local
+
+Deleted cluster: "srinuas.k8s.local"
+[root@Ingess ingress]#
+
