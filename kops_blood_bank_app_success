@@ -1,0 +1,897 @@
+k8s php code blood bank application deployment
+
+=============================================================================
+
+=====================		Jenkins set up		=====================
+
+=============================================================================
+
+PS C:\Users\srini> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\srini\Downloads\mykey.pem" ec2-user@3.145.79.50
+The authenticity of host '3.145.79.50 (3.145.79.50)' can't be established.
+ED25519 key fingerprint is SHA256:4Vx2z/pHNVwJjZFf0im5v7u0J0HCBcsjESv3yx2fumc.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '3.145.79.50' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-11-255 ~]$ sudo -i
+[root@ip-172-31-11-255 ~]# hostnamectl set-hostname jenkins
+[root@ip-172-31-11-255 ~]# exit
+logout
+[ec2-user@ip-172-31-11-255 ~]$ sudo -i
+[root@jenkins ~]# yum install git -y && git clone https://github.com/Srinuas/install.git
+Amazon Linux 2023 Kernel Livepatch repository                                                        296 kB/s |  31 kB     00:00
+Dependencies resolved.
+=====================================================================================================================================
+ Package                          Architecture           Version                                   Repository                   Size
+=====================================================================================================================================
+Installing:
+ git
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64            git-core-2.50.1-1.amzn2023.0.1.x86_64       git-core-doc-2.50.1-1.amzn2023.0.1.noarch
+  perl-Error-1:0.17029-5.amzn2023.0.2.noarch  perl-File-Find-1.37-477.amzn2023.0.7.noarch perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64 perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+[root@jenkins ~]# mkdir /srinu
+[root@jenkins ~]# cd /srinu
+[root@jenkins srinu]# git clone https://github.com/Srinuas/install.git && git clone https://github.com/Srinuas/practice-files.git
+Cloning into 'install'...
+remote: Enumerating objects: 92, done.
+remote: Counting objects: 100% (92/92), done.
+remote: Compressing objects: 100% (87/87), done.
+remote: Total 92 (delta 44), reused 23 (delta 5), pack-reused 0 (from 0)
+Receiving objects: 100% (92/92), 27.78 KiB | 27.78 MiB/s, done.
+Resolving deltas: 100% (44/44), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 76, done.
+remote: Counting objects: 100% (76/76), done.
+remote: Compressing objects: 100% (67/67), done.
+remote: Total 76 (delta 28), reused 42 (delta 9), pack-reused 0 (from 0)
+Receiving objects: 100% (76/76), 92.31 KiB | 4.20 MiB/s, done.
+Resolving deltas: 100% (28/28), done.
+[root@jenkins srinu]# 
+[root@jenkins srinu]# sh install/jenkins.sh
+----------------------------------------------------------------
+Starting Jenkins Installation...
+----------------------------------------------------------------
+[Step 1] Updating System...
+Last metadata expiration check: 0:06:01 ago on Thu Feb 12 07:21:53 2026.
+Dependencies resolved.
+Nothing to do.
+Complete!
+[Step 2] Installing Java 21 (Amazon Corretto)...
+Last metadata expiration check: 0:06:01 ago on Thu Feb 12 07:21:53 2026.
+Dependencies resolved.
+=====================================================================================================================================
+ Package                                      Architecture       Version                               Repository               Size
+=====================================================================================================================================
+Installing:
+ java-21-amazon-corretto
+Complete!
+Java found at: /usr/lib/jvm/java-21-amazon-corretto.x86_64
+[Step 3] Adding Jenkins Repository...
+--2026-02-12 07:28:01--  https://pkg.jenkins.io/rpm-stable/jenkins.repo
+Resolving pkg.jenkins.io (pkg.jenkins.io)... 146.75.78.133, 2a04:4e42:83::645
+Connecting to pkg.jenkins.io (pkg.jenkins.io)|146.75.78.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 267 [application/octet-stream]
+Saving to: ‘/etc/yum.repos.d/jenkins.repo’
+
+/etc/yum.repos.d/jenkins.repo     100%[==========================================================>]     267  --.-KB/s    in 0s
+
+2026-02-12 07:28:01 (20.7 MB/s) - ‘/etc/yum.repos.d/jenkins.repo’ saved [267/267]
+
+[Step 4] Installing Jenkins...
+Jenkins-stable                                                                                       7.6 kB/s | 833  B     00:00
+Jenkins-stable                                                                                        41 kB/s | 1.6 kB     00:00
+Importing GPG key 0x14ABFC68:
+ Userid     : "Jenkins Project <jenkinsci-board@googlegroups.com>"
+ Fingerprint: 5E38 6EAD B55F 0150 4CAE 8BCF 7198 F4B7 14AB FC68
+ From       : https://pkg.jenkins.io/rpm-stable/repodata/repomd.xml.key
+Jenkins-stable                                                                                       9.7 kB/s | 1.4 kB     00:00
+Dependencies resolved.
+=====================================================================================================================================
+ Package                        Architecture                  Version                           Repository                      Size
+=====================================================================================================================================
+Installing:
+ jenkins
+Complete!
+Java found at: /usr/lib/jvm/java-21-amazon-corretto.x86_64
+[Step 3] Adding Jenkins Repository...
+--2026-02-12 07:28:01--  https://pkg.jenkins.io/rpm-stable/jenkins.repo
+Resolving pkg.jenkins.io (pkg.jenkins.io)... 146.75.78.133, 2a04:4e42:83::645
+Connecting to pkg.jenkins.io (pkg.jenkins.io)|146.75.78.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 267 [application/octet-stream]
+Saving to: ‘/etc/yum.repos.d/jenkins.repo’
+
+/etc/yum.repos.d/jenkins.repo     100%[==========================================================>]     267  --.-KB/s    in 0s
+
+2026-02-12 07:28:01 (20.7 MB/s) - ‘/etc/yum.repos.d/jenkins.repo’ saved [267/267]
+
+[Step 4] Installing Jenkins...
+Jenkins-stable                                                                                       7.6 kB/s | 833  B     00:00
+Jenkins-stable                                                                                        41 kB/s | 1.6 kB     00:00
+Importing GPG key 0x14ABFC68:
+ Userid     : "Jenkins Project <jenkinsci-board@googlegroups.com>"
+ Fingerprint: 5E38 6EAD B55F 0150 4CAE 8BCF 7198 F4B7 14AB FC68
+ From       : https://pkg.jenkins.io/rpm-stable/repodata/repomd.xml.key
+Jenkins-stable                                                                                       9.7 kB/s | 1.4 kB     00:00
+Dependencies resolved.
+=====================================================================================================================================
+ Package                        Architecture                  Version                           Repository                      Size
+=====================================================================================================================================
+Installing:
+ jenkins
+
+Installed:
+  jenkins-2.541.1-1.noarch
+
+Complete!
+[Step 5] Configuring Jenkins Java Path...
+[Service]
+Environment="JAVA_HOME=/usr/lib/jvm/java-21-amazon-corretto.x86_64"
+[Step 6] Starting Jenkins Service...
+Created symlink /etc/systemd/system/multi-user.target.wants/jenkins.service → /usr/lib/systemd/system/jenkins.service.
+----------------------------------------------------------------
+Installation Complete!
+● jenkins.service - Jenkins Continuous Integration Server
+     Loaded: loaded (/usr/lib/systemd/system/jenkins.service; enabled; preset: disabled)
+    Drop-In: /etc/systemd/system/jenkins.service.d
+             └─override.conf
+     Active: active (running) since Thu 2026-02-12 07:28:12 UTC; 28ms ago
+   Main PID: 27422 (java)
+      Tasks: 46 (limit: 4550)
+     Memory: 597.7M
+        CPU: 10.675s
+
+Feb 12 07:28:12 jenkins systemd[1]: Started jenkins.service - Jenkins Continuous Integration Server.
+Hint: Some lines were ellipsized, use -l to show in full.
+----------------------------------------------------------------
+Waiting for Jenkins to generate the admin password (10 seconds)...
+----------------------------------------------------------------
+YOUR INITIAL ADMIN PASSWORD IS:
+----------------------------------------------------------------
+6ece070ea3fa49ebb057c22579002ce1
+----------------------------------------------------------------
+[root@jenkins srinu]#
+
+=============================================================================
+
+=====================		Docker install		=====================
+
+=============================================================================
+
+[root@jenkins srinu]# sh install/docker.sh
+Last metadata expiration check: 0:17:23 ago on Thu Feb 12 07:28:02 2026.
+Dependencies resolved.
+=====================================================================================================================================
+ Package                               Architecture          Version                                Repository                  Size
+=====================================================================================================================================
+Installing:
+ docker
+Complete!
+● docker.service - Docker Application Container Engine
+     Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; preset: disabled)
+     Active: active (running) since Thu 2026-02-12 07:45:47 UTC; 27ms ago
+TriggeredBy: ● docker.socket
+       Docs: https://docs.docker.com
+    Process: 30337 ExecStartPre=/bin/mkdir -p /run/docker (code=exited, status=0/SUCCESS)
+    Process: 30338 ExecStartPre=/usr/libexec/docker/docker-setup-runtimes.sh (code=exited, status=0/SUCCESS)
+   Main PID: 30339 (dockerd)
+      Tasks: 9
+[root@jenkins srinu]# docker run -itd --name sonar -p 333:9000 sonarqube:lts-community
+Unable to find image 'sonarqube:lts-community' locally
+lts-community: Pulling from library/sonarqube
+60d98d907669: Pull complete
+e24a8b9e652f: Pull complete
+f3929ce9ef98: Pull complete
+1df735f481ad: Pull complete
+5d5a1fad7028: Pull complete
+eb27e3a98da1: Pull complete
+c7ad1fe61e07: Pull complete
+4f4fb700ef54: Pull complete
+Digest: sha256:f709975ab31d2d08f5a3ae2dc73a31ee011afc8cf28845082c17c55d45df9df5
+Status: Downloaded newer image for sonarqube:lts-community
+ab058659f6b07f21d6c23ba12c4bb6a0a15d3332b3f3eaf60d2984e48c3a57be
+[root@jenkins srinu]# docker images
+REPOSITORY   TAG             IMAGE ID       CREATED        SIZE
+sonarqube    lts-community   b2698b16c2b2   5 months ago   604MB
+[root@jenkins srinu]# docker ps
+CONTAINER ID   IMAGE                     COMMAND                  CREATED          STATUS         PORTS                                     NAMES
+ab058659f6b0   sonarqube:lts-community   "/opt/sonarqube/dock…"   12 seconds ago   Up 9 seconds   0.0.0.0:333->9000/tcp, :::333->9000/tcp   sonar
+[root@jenkins srinu]#
+[root@jenkins srinu]# sh install/trivy.sh
+aquasecurity/trivy info checking GitHub for tag 'v0.68.2'
+aquasecurity/trivy info found version: 0.68.2 for v0.68.2/Linux/64bit
+aquasecurity/trivy info installed /usr/local/bin/trivy
+[root@jenkins srinu]#
+[root@jenkins srinu]# chmod 777 /var/run/docker.sock
+[root@jenkins srinu]#
+[root@jenkins srinu]# docker images
+REPOSITORY   TAG             IMAGE ID       CREATED         SIZE
+apimg        latest          7901b76ff922   4 minutes ago   422MB
+dbimg        latest          e6c244a7d35c   4 minutes ago   432MB
+sonarqube    lts-community   b2698b16c2b2   5 months ago    604MB
+[root@jenkins srinu]# docker images
+REPOSITORY         TAG             IMAGE ID       CREATED          SIZE
+apimg              latest          7901b76ff922   10 minutes ago   422MB
+srinuas/bloodapp   apimg           7901b76ff922   10 minutes ago   422MB
+srinuas/bloodapp   dbimg           e6c244a7d35c   10 minutes ago   432MB
+dbimg              latest          e6c244a7d35c   10 minutes ago   432MB
+sonarqube          lts-community   b2698b16c2b2   5 months ago     604MB
+[root@jenkins srinu]# docker login
+Log in with your Docker ID or email address to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com/ to create one.
+You can log in with your password or a Personal Access Token (PAT). Using a limited-scope PAT grants better security and is required for organizations using SSO. Learn more at https://docs.docker.com/go/access-tokens/
+
+Username: srinuas
+Password:
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[root@jenkins srinu]#
+[root@jenkins ~]# docker images
+REPOSITORY         TAG             IMAGE ID       CREATED          SIZE
+apimg              latest          bcc5c0618685   32 minutes ago   422MB
+srinuas/bloodapp   apimg           78c0d2dfa3db   51 minutes ago   422MB
+srinuas/bloodapp   dbimg           fbed8205def5   3 hours ago      432MB
+dbimg              latest          fbed8205def5   3 hours ago      432MB
+sonarqube          lts-community   b2698b16c2b2   5 months ago     604MB
+[root@jenkins ~]# docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+[root@jenkins ~]# ll /srinu/
+total 32
+drwxr-xr-x. 3 root root 16384 Feb 12 07:23 install
+drwxr-xr-x. 3 root root 16384 Feb 12 07:23 practice-files
+[root@jenkins ~]# chmod 777 /var/run/docker.sock
+[root@jenkins ~]# docker volume ls
+DRIVER    VOLUME NAME
+local     mysql-data
+[root@jenkins ~]# cd /srinu/
+[root@jenkins srinu]# docker ps
+CONTAINER ID   IMAGE                    COMMAND                  CREATED          STATUS                    PORTS                                                  NAMES
+e054bc01e6ba   srinuas/bloodapp:apimg   "docker-php-entrypoi…"   7 minutes ago    Up 7 minutes              0.0.0.0:444->80/tcp, :::444->80/tcp                    blood
+3b9321590173   srinuas/bloodapp:dbimg   "/entrypoint.sh mysq…"   13 minutes ago   Up 13 minutes (healthy)   0.0.0.0:3306->3306/tcp, :::3306->3306/tcp, 33060/tcp   mysqldb
+[root@jenkins srinu]# docker volume ls
+DRIVER    VOLUME NAME
+local     mysql-data
+[root@jenkins srinu]# ll
+total 32
+drwxr-xr-x. 3 root root 16384 Feb 12 07:23 install
+drwxr-xr-x. 3 root root 16384 Feb 12 07:23 practice-files
+[root@jenkins srinu]# docker inspect volume mysql-data
+[
+    {
+        "CreatedAt": "2026-02-12T09:45:53Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/mysql-data/_data",
+        "Name": "mysql-data",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+Error: No such object: volume
+[root@jenkins srinu]# 
+
+=============================================================================
+
+=====================		Jenkins Pipeline	=====================
+
+=============================================================================
+
+
+pipeline {
+    agent any
+    environment {
+        scannerHome = tool 'snr'
+    }
+    stages {
+        stage ('code') {
+            steps {
+                git branch: 'main1', url: 'https://github.com/Srinuas/bloodbankapp.git'
+            }
+        }
+        stage('cqa') {
+            steps {
+                script {
+                    withSonarQubeEnv('snr') {
+                        echo 'snr done'
+                        //sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=myproj -Dsonar.projectName='myproj'"
+                    }
+                }
+            }
+        }
+        stage('quality') {
+            steps {
+                echo 'quality done'
+                //waitForQualityGate abortPipeline: false, credentialsId: 'sonar-secret'
+            }
+        }
+        stage('image') {
+            steps {
+                echo 'build done'
+                //sh 'docker build -t dbimg code/database'
+                sh 'docker build -t apimg code'
+            }
+        }
+        stage('scan') {
+            steps {
+                echo 'scan done'
+                //sh 'trivy image dbimg'
+                //sh 'trivy image apimg'
+            }
+        }
+        stage('tags') {
+            steps {
+                echo 'tags done'
+                //sh 'docker tag dbimg srinuas/bloodapp:dbimg'
+                sh 'docker tag apimg srinuas/bloodapp:apimg'
+            }
+        }
+        stage('registry') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-cred') {
+                        //sh 'docker push srinuas/bloodapp:dbimg'
+                        sh 'docker push srinuas/bloodapp:apimg'
+                        sh 'docker rm -f mysqldb'
+                        sh 'docker rm -f blood'
+                    }
+                }
+            }
+        }
+        stage('deploy') {
+            steps {
+                //sh 'docker volume create mysql-data'
+                //sh 'docker run -d --name mysqldb -v mysql-data:/srinu/mysql -p 3306:3306 srinuas/bloodapp:dbimg'
+                sh 'docker run -itd --name blood -p 444:80 --link mysqldb:mysqlcon srinuas/bloodapp:apimg'
+            }
+        }
+    }
+    post {
+        always {
+            mail to: 'srinivasvanapalli0499@gmail.com',
+                 subject: "Pipeline status - ${currentBuild.currentResult}",
+                 body: """Your pipeline name: ${JOB_NAME}
+                          Build #${BUILD_NUMBER}
+                          Status: ${currentBuild.currentResult}
+                          Build URL: ${BUILD_URL}
+                          Console Output: ${BUILD_URL}console"""
+        }
+    }
+}
+
+=============================================================================
+
+=====================		Kops server		=====================
+
+=============================================================================
+
+
+
+
+S C:\Users\srini> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=30 -i "C:\Users\srini\Downloads\mykey.pem" ec2-user@3.12.147.153
+The authenticity of host '3.12.147.153 (3.12.147.153)' can't be established.
+ED25519 key fingerprint is SHA256:5bRGAtVHGSX4ZRROFqLvZ7Ht/r/9lFiTZIloQAnn4ns.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '3.12.147.153' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-8-223 ~]$ sudo -i
+h[root@ip-172-31-8-223 ~]# hostnamectl set-hostname k8s
+[root@ip-172-31-8-223 ~]# exit
+logout
+[ec2-user@ip-172-31-8-223 ~]$ sudo -i
+[root@k8s ~]# mkdir /srinu && cd /srinu && yum install git -y  && git clone https://github.com/Srinuas/install.git
+Amazon Linux 2023 Kernel Livepatch repository                                                        317 kB/s |  31 kB     00:00
+Dependencies resolved.
+=====================================================================================================================================
+ Package                          Architecture           Version                                   Repository                   Size
+=====================================================================================================================================
+Installing:
+ git
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64            git-core-2.50.1-1.amzn2023.0.1.x86_64       git-core-doc-2.50.1-1.amzn2023.0.1.noarch
+  perl-Error-1:0.17029-5.amzn2023.0.2.noarch  perl-File-Find-1.37-477.amzn2023.0.7.noarch perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64 perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 95, done.
+remote: Counting objects: 100% (95/95), done.
+remote: Compressing objects: 100% (90/90), done.
+remote: Total 95 (delta 46), reused 23 (delta 5), pack-reused 0 (from 0)
+Receiving objects: 100% (95/95), 28.69 KiB | 2.39 MiB/s, done.
+Resolving deltas: 100% (46/46), done.
+[root@k8s srinu]# ll
+total 16
+drwxr-xr-x. 3 root root 16384 Feb 12 13:38 install
+[root@k8s srinu]# yum install java-21-amazon-corretto -y
+Last metadata expiration check: 0:00:29 ago on Thu Feb 12 13:38:31 2026.
+Dependencies resolved.
+=====================================================================================================================================
+ Package                                      Architecture       Version                               Repository               Size
+=====================================================================================================================================
+Installing:
+ java-21-amazon-corretto
+Installed:
+  alsa-lib-1.2.7.2-1.amzn2023.0.2.x86_64                                cairo-1.18.0-4.amzn2023.0.3.x86_64
+  dejavu-sans-fonts-2.37-16.amzn2023.0.2.noarch                         dejavu-sans-mono-fonts-2.37-16.amzn2023.0.2.noarch
+  dejavu-serif-fonts-2.37-16.amzn2023.0.2.noarch                        fontconfig-2.13.94-2.amzn2023.0.2.x86_64
+  fonts-filesystem-1:2.0.5-12.amzn2023.0.2.noarch                       freetype-2.13.2-5.amzn2023.0.1.x86_64
+  giflib-5.2.1-9.amzn2023.0.2.x86_64                                    google-noto-fonts-common-20240401-1.amzn2023.0.2.noarch
+  google-noto-sans-vf-fonts-20240401-1.amzn2023.0.2.noarch              graphite2-1.3.14-7.amzn2023.0.2.x86_64
+  harfbuzz-7.0.0-2.amzn2023.0.2.x86_64                                  java-21-amazon-corretto-1:21.0.10+7-1.amzn2023.1.x86_64
+  java-21-amazon-corretto-headless-1:21.0.10+7-1.amzn2023.1.x86_64      javapackages-filesystem-6.0.0-7.amzn2023.0.6.noarch
+  langpacks-core-font-en-3.0-21.amzn2023.0.4.noarch                     libICE-1.1.1-3.amzn2023.0.1.x86_64
+  libSM-1.2.4-3.amzn2023.0.1.x86_64                                     libX11-1.8.10-2.amzn2023.0.1.x86_64
+  libX11-common-1.8.10-2.amzn2023.0.1.noarch                            libXau-1.0.11-6.amzn2023.0.1.x86_64
+  libXext-1.3.6-1.amzn2023.0.1.x86_64                                   libXi-1.8.2-1.amzn2023.0.1.x86_64
+  libXinerama-1.1.5-6.amzn2023.0.1.x86_64                               libXrandr-1.5.4-3.amzn2023.0.1.x86_64
+  libXrender-0.9.11-6.amzn2023.0.1.x86_64                               libXt-1.3.0-3.amzn2023.0.1.x86_64
+  libXtst-1.2.5-1.amzn2023.0.1.x86_64                                   libbrotli-1.0.9-4.amzn2023.0.2.x86_64
+  libjpeg-turbo-2.1.4-2.amzn2023.0.5.x86_64                             libpng-2:1.6.37-10.amzn2023.0.9.x86_64
+  libxcb-1.17.0-1.amzn2023.0.1.x86_64                                   pixman-0.43.4-1.amzn2023.0.4.x86_64
+  xml-common-0.6.3-56.amzn2023.0.2.noarch
+
+Complete!
+[root@k8s srinu]# sh install/kops.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  263M  100  263M    0     0   179M      0  0:00:01  0:00:01 --:--:--  184M
+[root@k8s srinu]# sh install/kubectl.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 55.8M  100 55.8M    0     0   220M      0 --:--:-- --:--:-- --:--:--  220M
+[root@k8s srinu]# 
+[root@k8s srinu]# sh install/docker.sh
+Last metadata expiration check: 0:12:40 ago on Thu Feb 12 13:38:31 2026.
+Dependencies resolved.
+=====================================================================================================================================
+ Package                               Architecture          Version                                Repository                  Size
+=====================================================================================================================================
+Installing:
+ docker
+Installed:
+  container-selinux-4:2.242.0-1.amzn2023.noarch      containerd-2.1.5-1.amzn2023.0.5.x86_64    docker-25.0.14-1.amzn2023.0.1.x86_64
+  iptables-libs-1.8.8-3.amzn2023.0.2.x86_64          iptables-nft-1.8.8-3.amzn2023.0.2.x86_64  libcgroup-3.0-1.amzn2023.0.1.x86_64
+  libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64 libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64 libnftnl-1.2.2-2.amzn2023.0.2.x86_64
+  pigz-2.5-1.amzn2023.0.3.x86_64                     runc-1.3.4-1.amzn2023.0.1.x86_64
+
+Complete!
+● docker.service - Docker Application Container Engine
+     Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; preset: disabled)
+     Active: active (running) since Thu 2026-02-12 13:51:34 UTC; 24ms ago
+TriggeredBy: ● docker.socket
+       Docs: https://docs.docker.com
+    Process: 29549 ExecStartPre=/bin/mkdir -p /run/docker (code=exited, status=0/SUCCESS)
+    Process: 29550 ExecStartPre=/usr/libexec/docker/docker-setup-runtimes.sh (code=exited, status=0/SUCCESS)
+   Main PID: 29551 (dockerd)
+      Tasks: 8
+[root@k8s srinu]# docker run -itd --name sonar -p 333:9000 sonarqube:lts-community
+Unable to find image 'sonarqube:lts-community' locally
+lts-community: Pulling from library/sonarqube
+60d98d907669: Pull complete
+e24a8b9e652f: Pull complete
+f3929ce9ef98: Pull complete
+1df735f481ad: Pull complete
+5d5a1fad7028: Pull complete
+eb27e3a98da1: Pull complete
+c7ad1fe61e07: Pull complete
+4f4fb700ef54: Pull complete
+Digest: sha256:f709975ab31d2d08f5a3ae2dc73a31ee011afc8cf28845082c17c55d45df9df5
+Status: Downloaded newer image for sonarqube:lts-community
+8ce1d235feb666e3bdb0972f63faa77888affbd8948b7fd137f2e18fab35e68b
+[root@k8s srinu]#
+=============================================================================
+
+=====================		Cluster set up		=====================
+
+=============================================================================
+
+[root@k8s srinu]# kops create cluster --name srinu.k8s.local --zones us-east-2a,us-east-2b,us-east-2c --master-size c7i-flex.large --master-count 1 --master-volume-size 25 --node-size c7i-flex.large --node-count 2 --node-volume-size 20 --image ami-0f5fcdfbd140e4ab7
+kops update cluster --name srinu.k8s.local --yes --admin
+Flag --master-size has been deprecated, use --control-plane-size instead
+Flag --master-count has been deprecated, use --control-plane-count instead
+Flag --master-volume-size has been deprecated, use --control-plane-volume-size instead
+W0212 13:59:42.498027   34233 new_cluster.go:1407] Gossip is deprecated, using None DNS instead
+I0212 13:59:42.498088   34233 new_cluster.go:1426] Cloud Provider ID: "aws"
+I0212 13:59:42.641901   34233 subnets.go:224] Assigned CIDR 172.20.0.0/18 to subnet us-east-2a
+I0212 13:59:42.641924   34233 subnets.go:224] Assigned CIDR 172.20.64.0/18 to subnet us-east-2b
+I0212 13:59:42.641926   34233 subnets.go:224] Assigned CIDR 172.20.128.0/18 to subnet us-east-2c
+Previewing changes that will be made:
+
+I0212 13:59:53.844205   34233 executor.go:113] Tasks: 0 done / 135 total; 43 can run
+W0212 13:59:53.892094   34233 vfs_keystorereader.go:163] CA private key was not found
+I0212 13:59:54.072427   34233 executor.go:113] Tasks: 43 done / 135 total; 24 can run
+I0212 13:59:54.190510   34233 executor.go:113] Tasks: 67 done / 135 total; 36 can run
+I0212 13:59:54.266291   34233 executor.go:113] Tasks: 103 done / 135 total; 6 can run
+I0212 13:59:54.890845   34233 executor.go:113] Tasks: 109 done / 135 total; 10 can run
+I0212 13:59:55.063338   34233 executor.go:113] Tasks: 119 done / 135 total; 4 can run
+I0212 13:59:55.164509   34233 executor.go:113] Tasks: 123 done / 135 total; 8 can run
+I0212 13:59:55.255686   34233 executor.go:113] Tasks: 131 done / 135 total; 4 can run
+I0212 13:59:55.347778   34233 executor.go:113] Tasks: 135 done / 135 total; 0 can run
+Will create resources:
+I0212 14:06:16.383209   34239 executor.go:113] Tasks: 103 done / 135 total; 6 can run
+I0212 14:06:17.495633   34239 executor.go:113] Tasks: 109 done / 135 total; 10 can run
+I0212 14:06:18.390379   34239 executor.go:113] Tasks: 119 done / 135 total; 4 can run
+I0212 14:06:19.503121   34239 executor.go:113] Tasks: 123 done / 135 total; 8 can run
+I0212 14:06:19.764056   34239 executor.go:113] Tasks: 131 done / 135 total; 4 can run
+I0212 14:06:19.818063   34239 executor.go:113] Tasks: 135 done / 135 total; 0 can run
+I0212 14:06:19.818185   34239 update_cluster.go:419] Exporting kubeconfig for cluster
+kOps has set your kubectl context to srinu.k8s.local
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster --wait 10m
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to a control-plane node: ssh -i ~/.ssh/id_rsa ubuntu@
+ * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
+ * read about installing addons at: https://kops.sigs.k8s.io/addons.
+
+[root@k8s srinu]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE     VERSION
+i-02f73c071f098efdc   Ready    node            92s     v1.34.3
+i-048041803c53b02eb   Ready    node            100s    v1.34.3
+i-067df7b8bcc0fc0ed   Ready    control-plane   3m23s   v1.34.3
+[root@k8s srinu]#
+[root@k8s srinu]# sh install/trivy.sh
+aquasecurity/trivy info checking GitHub for tag 'v0.69.1'
+aquasecurity/trivy info found version: 0.69.1 for v0.69.1/Linux/64bit
+aquasecurity/trivy info installed /usr/local/bin/trivy
+[root@k8s srinu]#
+
+=============================================================================
+
+=====================		Ingress repo		=====================
+
+=============================================================================
+
+
+[root@k8s k8s]# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+namespace/ingress-nginx created
+serviceaccount/ingress-nginx created
+serviceaccount/ingress-nginx-admission created
+role.rbac.authorization.k8s.io/ingress-nginx created
+role.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+configmap/ingress-nginx-controller created
+service/ingress-nginx-controller created
+service/ingress-nginx-controller-admission created
+deployment.apps/ingress-nginx-controller created
+job.batch/ingress-nginx-admission-create created
+job.batch/ingress-nginx-admission-patch created
+ingressclass.networking.k8s.io/nginx created
+validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created
+[root@k8s k8s]# kubectl get pods -n ingress-nginx
+NAME                                        READY   STATUS    RESTARTS   AGE
+ingress-nginx-controller-74fdcbccdc-ljlnx   0/1     Running   0          16s
+[root@k8s k8s]# kubectl get pods -n ingress-nginx
+NAME                                        READY   STATUS    RESTARTS   AGE
+ingress-nginx-controller-74fdcbccdc-ljlnx   1/1     Running   0          21s
+[root@k8s k8s]# kubectl get ing
+NAME               CLASS   HOSTS   ADDRESS                                                                   PORTS   AGE
+bloodapp-ingress   nginx   *       a3754c67d69f747cd97368b7365b3715-2030914911.us-east-2.elb.amazonaws.com   80      47m
+[root@k8s k8s]#
+=============================================================================
+
+=====================		K8s files		=====================
+
+=============================================================================
+
+[root@k8s k8s]# ll
+total 44
+-rw-r--r--. 1 root root  181 Feb 12 14:52 appsvc.yml
+-rw-r--r--. 1 root root  149 Feb 12 15:44 cm.yml
+-rw-r--r--. 1 root root  162 Feb 12 15:41 dbsvc.yml
+-rw-r--r--. 1 root root  839 Feb 12 15:31 deploy.yml
+-rw-r--r--. 1 root root  345 Feb 12 14:42 hpa.yml
+-rw-r--r--. 1 root root  386 Feb 12 15:33 ingress.yml
+-rw-r--r--. 1 root root  829 Feb 12 14:46 netpol.yml
+-rw-r--r--. 1 root root  177 Feb 12 14:47 pdb.yml
+-rw-r--r--. 1 root root  188 Feb 12 14:49 rq.yml
+-rw-r--r--. 1 root root  163 Feb 12 15:29 secret.yml
+-rw-r--r--. 1 root root 1077 Feb 12 16:39 stateful.yml
+[root@k8s k8s]# 
+[root@k8s k8s]# kubectl apply -f .
+service/bloodappsvc unchanged
+configmap/bloodapp-config unchanged
+service/mysqldb unchanged
+deployment.apps/bloodapp unchanged
+horizontalpodautoscaler.autoscaling/bloodapp-hpa unchanged
+ingress.networking.k8s.io/bloodapp-ingress unchanged
+networkpolicy.networking.k8s.io/bloodapp-network-policy unchanged
+poddisruptionbudget.policy/bloodapp-pdb configured
+resourcequota/bloodapp-rq unchanged
+secret/bloodapp-secret unchanged
+statefulset.apps/bloodsql created
+[root@k8s k8s]# 
+[root@k8s k8s]# cat appsvc.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bloodappsvc
+spec:
+  type: NodePort
+  selector:
+    app: bloodapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+[root@k8s k8s]# cat cm.yml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bloodapp-config
+data:
+  DB_HOST: mysqldb # Service name ki thaggattu marchanu
+  DB_PORT: "3306"
+[root@k8s k8s]# cat hpa.yml
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: bloodapp-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: bloodapp
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 69
+[root@k8s k8s]# cat ingress.yml
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bloodapp-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: bloodappsvc
+            port:
+              number: 80
+[root@k8s k8s]# cat netpol.yml
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: bloodapp-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: bloodapp
+
+  policyTypes:
+  - Ingress
+  - Egress
+
+  ingress:
+  - from:
+    # Allow ingress-nginx controller pods
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ingress-nginx
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/component: controller
+    ports:
+    - protocol: TCP
+      port: 80
+
+  egress:
+  # Allow DB access
+  - to:
+    - podSelector:
+        matchLabels:
+          app: bloodsql
+    ports:
+    - protocol: TCP
+      port: 3306
+
+  # Allow DNS (VERY IMPORTANT)
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+[root@k8s k8s]# cat pdb.yml
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: bloodapp-pdb
+  namespace: default
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: bloodapp
+[root@k8s k8s]# cat rq.yml
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: bloodapp-rq
+spec:
+  hard:
+    pods: "10"
+    requests.cpu: "2"
+    requests.memory: 2Gi
+    limits.cpu: "4"
+    limits.memory: 4Gi
+[root@k8s k8s]# cat secret.yml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bloodapp-secret
+type: Opaque
+data:
+  DB_USERNAME: cm9vdA==
+  DB_PASSWORD: YWRtaW4xMjM=
+  DB_NAME: Y3VzdG9tZXJz
+[root@k8s k8s]# cat stateful.yml
+# StatefulSet file update
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bloodsql
+spec:
+  serviceName: "mysqldb"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bloodsql
+  template:
+    metadata:
+      labels:
+        app: bloodsql
+    spec:
+      containers:
+      - name: bloodsql
+        image: srinuas/bloodapp:dbimg
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bloodapp-secret
+              key: DB_PASSWORD
+        # --- IKKADA RESOURCES ADD CHEYYALI ---
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        # ------------------------------------
+        volumeMounts:
+        - name: dbvol
+          mountPath: /usr/share/nginx/html/
+  volumeClaimTemplates:
+  - metadata:
+      name: dbvol
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+[root@k8s k8s]#
+[root@k8s k8s]# kubectl get deploy
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+bloodapp   2/2     2            2           117m
+[root@k8s k8s]# kubectl get statefulset
+NAME       READY   AGE
+bloodsql   1/1     7m23s
+[root@k8s k8s]# kubectl get cm
+NAME               DATA   AGE
+bloodapp-config    2      117m
+kube-root-ca.crt   1      158m
+[root@k8s k8s]# kubectl get secret
+NAME              TYPE     DATA   AGE
+bloodapp-secret   Opaque   3      117m
+[root@k8s k8s]# kubectl get netpol
+NAME                      POD-SELECTOR   AGE
+bloodapp-network-policy   app=bloodapp   18m
+[root@k8s k8s]# kubectl get service
+NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+bloodappsvc   NodePort    100.65.239.75   <none>        80:31303/TCP   116m
+kubernetes    ClusterIP   100.64.0.1      <none>        443/TCP        161m
+mysqldb       ClusterIP   None            <none>        3306/TCP       116m
+[root@k8s k8s]# kubectl get hpa
+NAME           REFERENCE             TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+bloodapp-hpa   Deployment/bloodapp   cpu: 1%/69%   2         5         2          119m
+[root@k8s k8s]# kubectl get ing
+NAME               CLASS   HOSTS   ADDRESS                                                                   PORTS   AGE
+bloodapp-ingress   nginx   *       a3754c67d69f747cd97368b7365b3715-2030914911.us-east-2.elb.amazonaws.com   80      120m
+[root@k8s k8s]# kubectl get pdb
+NAME           MIN AVAILABLE   MAX UNAVAILABLE   ALLOWED DISRUPTIONS   AGE
+bloodapp-pdb   2               N/A               0                     120m
+[root@k8s k8s]# kubectl get resourcequota
+NAME          REQUEST                                                        LIMIT                                         AGE
+bloodapp-rq   pods: 3/10, requests.cpu: 450m/2, requests.memory: 512Mi/2Gi   limits.cpu: 1500m/4, limits.memory: 1Gi/4Gi   120m
+[root@k8s k8s]# kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+bloodapp-5b4f5dfb88-cf2zp   1/1     Running   0          79m
+bloodapp-5b4f5dfb88-fjkdl   1/1     Running   0          79m
+bloodsql-0                  1/1     Running   0          10m
+[root@k8s k8s]#
+=============================================================================
+
+=====================		Cluster delete		=====================
+
+=============================================================================
+
+[root@k8s k8s]# export KOPS_STATE_STORE=s3://srinu.as
+[root@k8s k8s]# kops delete cluster --name srinu.k8s.local --yes
+I0212 16:56:41.956274   48514 delete_cluster.go:143] Looking for cloud resources to delete
+TYPE                    NAME                                                                    ID
+autoscaling-config      control-plane-us-east-2a.masters.srinu.k8s.local                        lt-06116ee61ddc38675
+autoscaling-config      nodes-us-east-2a.srinu.k8s.local                                        lt-043cce9aeb49de5d0
+autoscaling-config      nodes-us-east-2b.srinu.k8s.local                                        lt-0046a79ebfa34ec9e
+autoscaling-config      nodes-us-east-2c.srinu.k8s.local                                        lt-012af76483d96611c
+autoscaling-group
+subnet:subnet-04a73a0d90e48cb19 ok
+security-group:sg-0a9a94fb011aaf57c     ok
+route-table:rtb-00e542c1c24695be0       ok
+vpc:vpc-019115593e28981ec       ok
+dhcp-options:dopt-01c30282eea5024c3     ok
+Deleted kubectl config for srinu.k8s.local
+
+Deleted cluster: "srinu.k8s.local"
+[root@k8s k8s]#
