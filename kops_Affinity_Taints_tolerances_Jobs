@@ -1,0 +1,1234 @@
+Affinity --->
+ 		1. Node Affinity
+ 		2. Pod Affinity
+ 		3. Pod Anti Affinity
+
+Taints
+tolerances
+
+Jobs	--->
+ 		1. One Job
+ 		2. Cron Job
+
+____________________________________________________________________________
+
+****************	Server connect 		****************************
+____________________________________________________________________________
+
+
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@18.225.254.105
+The authenticity of host '18.225.254.105 (18.225.254.105)' can't be established.
+ED25519 key fingerprint is SHA256:8Q2MDuVrPpNZwVY2y4BulpQMfPc6qPJd+VHDsZqAazw.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '18.225.254.105' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-13-226 ~]$ sudo -i
+amectl set-hostname affinityhostnamectl set-hostname affinity
+[root@ip-172-31-13-226 ~]# hostnamectl set-hostname affinity
+[root@ip-172-31-13-226 ~]# exit
+logout
+[ec2-user@ip-172-31-13-226 ~]$ sudo -i
+____________________________________________________________________________
+
+****************	git install 		****************************
+____________________________________________________________________________
+
+[root@affinity ~]# yum install git -y && mkdir /srinu && cd /srinu && git clone https://github.com/Srinuas/intall.git && git clone https://github.com/Srinuas/practice-files.git && sh install/gitconfig.sh
+Amazon Linux 2023 Kernel Livepatch repository                                 300 kB/s |  31 kB     00:00
+Last metadata expiration check: 0:00:01 ago on Fri Feb  6 08:17:59 2026.
+Dependencies resolved.
+==============================================================================================================
+ Package                    Architecture     Version                              Repository             Size
+==============================================================================================================
+Installing:
+ git
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64                       git-core-2.50.1-1.amzn2023.0.1.x86_64
+  git-core-doc-2.50.1-1.amzn2023.0.1.noarch              perl-Error-1:0.17029-5.amzn2023.0.2.noarch
+  perl-File-Find-1.37-477.amzn2023.0.7.noarch            perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64            perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 89, done.
+remote: Counting objects: 100% (89/89), done.
+remote: Compressing objects: 100% (84/84), done.
+remote: Total 89 (delta 42), reused 25 (delta 5), pack-reused 0 (from 0)
+Receiving objects: 100% (89/89), 26.87 KiB | 3.36 MiB/s, done.
+Resolving deltas: 100% (42/42), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 73, done.
+remote: Counting objects: 100% (73/73), done.
+remote: Compressing objects: 100% (65/65), done.
+remote: Total 73 (delta 28), reused 38 (delta 8), pack-reused 0 (from 0)
+Receiving objects: 100% (73/73), 82.25 KiB | 3.43 MiB/s, done.
+Resolving deltas: 100% (28/28), done.
+[root@affinity srinu]#
+____________________________________________________________________________
+
+****************	Cluster set up 		****************************
+____________________________________________________________________________
+
+
+[root@affinity ~]# sh /srinu/install/kops.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  263M  100  263M    0     0   124M      0  0:00:02  0:00:02 --:--:--  148M
+[root@affinity ~]# sh /srinu/install/kubectl.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   138  100   138    0     0   2930      0 --:--:-- --:--:-- --:--:--  2936
+100 55.8M  100 55.8M    0     0   187M      0 --:--:-- --:--:-- --:--:--  303M
+[root@affinity ~]# export KOPS_STATE_STORE=s3://srinu.as
+[root@affinity ~]#
+[root@affinity srinu]# export KOPS_STATE_STORE=s3://srinu.as
+[root@affinity srinu]# kops create cluster --name srinu.k8s.local --zones us-east-2a,us-east-2b,us-east-2c --master-size c7i-flex.large --master-count 1 --master-volume-size 25 --node-size c7i-flex.large --node-count 3 -
+-node-volume-size 20 --image ami-0f5fcdfbd140e4ab7
+Flag --master-size has been deprecated, use --control-plane-size instead
+Flag --master-count has been deprecated, use --control-plane-count instead
+Flag --master-volume-size has been deprecated, use --control-plane-volume-size instead
+W0206 08:41:54.184573   30110 new_cluster.go:1407] Gossip is deprecated, using None DNS instead
+I0206 08:41:54.184636   30110 new_cluster.go:1426] Cloud Provider ID: "aws"
+I0206 08:41:54.352558   30110 subnets.go:224] Assigned CIDR 172.20.0.0/18 to subnet us-east-2a
+I0206 08:41:54.352582   30110 subnets.go:224] Assigned CIDR 172.20.64.0/18 to subnet us-east-2b
+I0206 08:41:54.352585   30110 subnets.go:224] Assigned CIDR 172.20.128.0/18 to subnet us-east-2c
+Previewing changes that will be made:
+
+I0206 08:42:03.583118   30110 executor.go:113] Tasks: 0 done / 135 total; 43 can run
+W0206 08:42:03.608878   30110 vfs_keystorereader.go:163] CA private key was not found
+I0206 08:42:03.816774   30110 executor.go:113] Tasks: 43 done / 135 total; 24 can run
+I0206 08:42:03.945754   30110 executor.go:113] Tasks: 67 done / 135 total; 36 can run
+I0206 08:42:04.040526   30110 executor.go:113] Tasks: 103 done / 135 total; 6 can run
+I0206 08:42:04.823471   30110 executor.go:113] Tasks: 109 done / 135 total; 10 can run
+I0206 08:42:05.007647   30110 executor.go:113] Tasks: 119 done / 135 total; 4 can run
+I0206 08:42:05.074992   30110 executor.go:113] Tasks: 123 done / 135 total; 8 can run
+I0206 08:42:05.192630   30110 executor.go:113] Tasks: 131 done / 135 total; 4 can run
+I0206 08:42:05.236417   30110 executor.go:113] Tasks: 135 done / 135 total; 0 can run
+Will create resources:
+  AutoscalingGroup/control-plane-us-east-2a.masters.srinu.k8s.local
+        Granularity
+
+I0206 08:42:30.045707   30115 executor.go:171] Continuing to run 1 task(s)
+I0206 08:42:40.046390   30115 executor.go:113] Tasks: 102 done / 135 total; 1 can run
+I0206 08:42:40.765978   30115 network_load_balancer.go:539] Waiting for load balancer "api-srinu-k8s-local-si3119" to be created...
+I0206 08:45:36.483893   30115 executor.go:113] Tasks: 103 done / 135 total; 6 can run
+I0206 08:45:37.574591   30115 executor.go:113] Tasks: 109 done / 135 total; 10 can run
+I0206 08:45:38.464057   30115 executor.go:113] Tasks: 119 done / 135 total; 4 can run
+I0206 08:45:39.628509   30115 executor.go:113] Tasks: 123 done / 135 total; 8 can run
+I0206 08:45:39.822007   30115 executor.go:113] Tasks: 131 done / 135 total; 4 can run
+I0206 08:45:39.898657   30115 executor.go:113] Tasks: 135 done / 135 total; 0 can run
+I0206 08:45:39.898786   30115 update_cluster.go:419] Exporting kubeconfig for cluster
+kOps has set your kubectl context to srinu.k8s.local
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster --wait 10m
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to a control-plane node: ssh -i ~/.ssh/id_rsa ubuntu@
+ * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
+ * read about installing addons at: https://kops.sigs.k8s.io/addons.
+
+[root@affinity srinu]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE   VERSION
+i-026886012dfcd52bf   Ready    node            15m   v1.34.3
+i-03cf608d98c798e1a   Ready    control-plane   16m   v1.34.3
+i-0c09b7537afa8088a   Ready    node            14m   v1.34.3
+i-0ea2e8ecc1e8f6416   Ready    node            15m   v1.34.3
+[root@affinity srinu]#
+[root@affinity srinu]# cd
+[root@affinity ~]# ll
+total 0
+
+____________________________________________________________________________
+
+****************	Affinity's 		****************************
+____________________________________________________________________________
+
+[root@affinity ~]# mkdir affinity
+[root@affinity ~]# cd affinity/
+[root@affinity affinity]#
+[root@affinity affinity]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE   VERSION
+i-026886012dfcd52bf   Ready    node            34m   v1.34.3
+i-03cf608d98c798e1a   Ready    control-plane   36m   v1.34.3
+i-0c09b7537afa8088a   Ready    node            34m   v1.34.3
+i-0ea2e8ecc1e8f6416   Ready    node            34m   v1.34.3
+[root@affinity affinity]#
+[root@affinity affinity]# kubectl label node i-0ea2e8ecc1e8f6416 app srinu
+error: at least one label update is required
+[root@affinity affinity]# kubectl label node i-0ea2e8ecc1e8f6416 node=srinu
+node/i-0ea2e8ecc1e8f6416 labeled
+[root@affinity affinity]# kubectl label node i-0c09b7537afa8088a node=siri
+node/i-0c09b7537afa8088a labeled
+[root@affinity affinity]# kubectl label node i-026886012dfcd52bf node=ammu
+node/i-026886012dfcd52bf labeled
+[root@affinity affinity]# kubectl label node i-03cf608d98c798e1a node=manager
+node/i-03cf608d98c798e1a labeled
+[root@affinity affinity]#
+____________________________________________________________________________
+
+****************	Node Affinity 		****************************
+____________________________________________________________________________
+
+[root@affinity affinity]# kubectl get nodes -o custom-columns=node_id:.metadata.name,node=:.metadata.labels.node
+node_id               node=
+i-026886012dfcd52bf   ammu
+i-03cf608d98c798e1a   manager
+i-0c09b7537afa8088a   siri
+i-0ea2e8ecc1e8f6416   srinu
+[root@affinity affinity]#
+[root@affinity affinity]# vi node_affinity.yml
+[root@affinity affinity]#
+[root@affinity affinity]# cat node_affinity.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node-af-pod
+  labels:
+    node: srinu
+spec:
+  containers:
+    - name: node-af-con
+      image: nginx
+      ports:
+        - containerPort: 80
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: node
+                operator: In
+                values:
+                  - srinu
+[root@affinity affinity]# kubectl apply -f node_affinity.yml
+pod/node-af-pod created
+[root@affinity affinity]# kubectl get pod node-af-pod --show-labels -o wide
+NAME          READY   STATUS    RESTARTS   AGE   IP             NODE                  NOMINATED NODE   READINESS GATES   LABELS
+node-af-pod   1/1     Running   0          26s   100.96.1.244   i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+[root@affinity affinity]# kubectl get nodes -o custom-columns=node_id:.metadata.name,node=:.metadata.labels.node
+node_id               node=
+i-026886012dfcd52bf   ammu
+i-03cf608d98c798e1a   manager
+i-0c09b7537afa8088a   siri
+i-0ea2e8ecc1e8f6416   srinu
+[root@affinity affinity]#
+[root@affinity affinity]# kubectl apply -f node_affinity.yml
+pod/node-af-pod2 created
+[root@affinity affinity]#
+[root@affinity affinity]# kubectl get pods --show-labels -o wide
+NAME           READY   STATUS    RESTARTS   AGE     IP             NODE                  NOMINATED NODE   READINESS GATES   LABELS
+node-af-pod    1/1     Running   0          7m35s   100.96.1.244   i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+node-af-pod2   1/1     Running   0          3m25s   100.96.1.34    i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+[root@affinity affinity]# kubectl get nodes -o custom-columns=node_id:.metadata.name,node=:.metadata.labels.node
+node_id               node=
+i-026886012dfcd52bf   ammu
+i-03cf608d98c798e1a   manager
+i-0c09b7537afa8088a   siri
+i-0ea2e8ecc1e8f6416   srinu
+[root@affinity affinity]#
+
+____________________________________________________________________________
+
+****************	Pod Affinity 		****************************
+____________________________________________________________________________
+
+
+[root@affinity affinity]# vi pod_affinity.yml
+[root@affinity affinity]# cat pod_affinity.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-af-app
+  labels:
+    label: app
+spec:
+  containers:
+    - name: pod-af-app
+      image: nginx
+      ports:
+        - containerPort: 80
+
+[root@affinity affinity]# kubectl apply -f pod_affinity.yml
+pod/pod-af-app created
+[root@affinity affinity]#
+[root@affinity affinity]# kubectl get pods --show-labels -o wide
+NAME           READY   STATUS    RESTARTS   AGE   IP             NODE                  NOMINATED NODE   READINESS GATES   LABELS
+node-af-pod    1/1     Running   0          21m   100.96.1.244   i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+node-af-pod2   1/1     Running   0          17m   100.96.1.34    i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+pod-af-app     1/1     Running   0          36s   100.96.3.33    i-0c09b7537afa8088a   <none>           <none>            label=app
+[root@affinity affinity]# kubectl get nodes -o custom-columns=node_id:.metadata.name,node=:.metadata.labels.node
+node_id               node=
+i-026886012dfcd52bf   ammu
+i-03cf608d98c798e1a   manager
+i-0c09b7537afa8088a   siri
+i-0ea2e8ecc1e8f6416   srinu
+[root@affinity affinity]#
+[root@affinity affinity]# cp pod_affinity.yml db_pod_affinity.yml
+[root@affinity affinity]# vi db_pod_affinity.yml
+[root@affinity affinity]# cat db_pod_affinity.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-af-db
+  labels:
+    label: db
+spec:
+  containers:
+    - name: pod-af-db
+      image: nginx
+      ports:
+        - containerPort: 80
+
+  affinity:
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              label: app
+          topologyKey: kubernetes.io/hostname
+[root@affinity affinity]# kubectl apply -f db_pod_affinity.yml
+pod/pod-af-db created
+[root@affinity affinity]#
+[root@affinity affinity]# kubectl get nodes -o custom-columns=node_id:.metadata.name,node=:.metadata.labels.node
+node_id               node=
+i-026886012dfcd52bf   ammu
+i-03cf608d98c798e1a   manager
+i-0c09b7537afa8088a   siri
+i-0ea2e8ecc1e8f6416   srinu
+[root@affinity affinity]# kubectl get pods --show-labels -o wide
+NAME           READY   STATUS    RESTARTS   AGE     IP             NODE                  NOMINATED NODE   READINESS GATES   LABELS
+node-af-pod    1/1     Running   0          29m     100.96.1.244   i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+node-af-pod2   1/1     Running   0          25m     100.96.1.34    i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+pod-af-app     1/1     Running   0          8m17s   100.96.3.33    i-0c09b7537afa8088a   <none>           <none>            label=app
+pod-af-db      1/1     Running   0          29s     100.96.3.220   i-0c09b7537afa8088a   <none>           <none>            label=db
+[root@affinity affinity]#
+____________________________________________________________________________
+
+****************	Pod Anti Affinity 	****************************
+____________________________________________________________________________
+
+[root@affinity affinity]# cp pod_affinity.yml pod_anti_affinity.yml
+[root@affinity affinity]# vi pod_anti_affinity.yml
+[root@affinity affinity]# cat pod_anti_affinity.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-anti-af
+  labels:
+    label: anti-pod
+spec:
+  containers:
+    - name: anti-con
+      image: nginx
+      ports:
+        - containerPort: 80
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: label
+                operator: In
+                values:
+                  - app
+                  - db
+          topologyKey: kubernetes.io/hostname
+[root@affinity affinity]# kubectl apply -f pod_anti_affinity.yml
+pod/pod-anti-af created
+[root@affinity affinity]#
+[root@affinity affinity]# kubectl get nodes -o custom-columns=node_id:.metadata.name,node=:.metadata.labels.node
+node_id               node=
+i-026886012dfcd52bf   ammu
+i-03cf608d98c798e1a   manager
+i-0c09b7537afa8088a   siri
+i-0ea2e8ecc1e8f6416   srinu
+[root@affinity affinity]# kubectl get pods --show-labels -o wide
+NAME           READY   STATUS    RESTARTS   AGE     IP             NODE                  NOMINATED NODE   READINESS GATES   LABELS
+node-af-pod    1/1     Running   0          38m     100.96.1.244   i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+node-af-pod2   1/1     Running   0          34m     100.96.1.34    i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+pod-af-app     1/1     Running   0          17m     100.96.3.33    i-0c09b7537afa8088a   <none>           <none>            label=app
+pod-af-db      1/1     Running   0          9m31s   100.96.3.220   i-0c09b7537afa8088a   <none>           <none>            label=db
+pod-anti-af    1/1     Running   0          36s     100.96.2.60    i-026886012dfcd52bf   <none>           <none>            label=anti-pod
+[root@affinity affinity]#
+[root@affinity affinity]# vi pod_anti_affinity.yml
+[root@affinity affinity]# cat pod_anti_affinity.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-anti-af2
+  labels:
+    label: anti-pod
+spec:
+  containers:
+    - name: anti-con
+      image: nginx
+      ports:
+        - containerPort: 80
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: label
+                operator: In
+                values:
+                  - app
+                  - db
+          topologyKey: kubernetes.io/hostname
+[root@affinity affinity]# kubectl apply -f pod_anti_affinity.yml
+pod/pod-anti-af2 created
+[root@affinity affinity]#
+[root@affinity affinity]# vi pod_anti_affinity.yml
+[root@affinity affinity]# cat pod_anti_affinity.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-anti-af3
+  labels:
+    label: anti-pod
+spec:
+  containers:
+    - name: anti-con
+      image: nginx
+      ports:
+        - containerPort: 80
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: label
+                operator: In
+                values:
+                  - app
+                  - db
+          topologyKey: kubernetes.io/hostname
+[root@affinity affinity]# kubectl apply -f pod_anti_affinity.yml
+pod/pod-anti-af3 created
+[root@affinity affinity]#
+[root@affinity affinity]# kubectl get nodes -o custom-columns=node_id:.metadata.name,node=:.metadata.labels.node
+node_id               node=
+i-026886012dfcd52bf   ammu
+i-03cf608d98c798e1a   manager
+i-0c09b7537afa8088a   siri
+i-0ea2e8ecc1e8f6416   srinu
+[root@affinity affinity]# kubectl get pods --show-labels -o wide
+NAME           READY   STATUS    RESTARTS   AGE     IP             NODE                  NOMINATED NODE   READINESS GATES   LABELS
+node-af-pod    1/1     Running   0          50m     100.96.1.244   i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+node-af-pod2   1/1     Running   0          46m     100.96.1.34    i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+pod-af-app     1/1     Running   0          29m     100.96.3.33    i-0c09b7537afa8088a   <none>           <none>            label=app
+pod-af-db      1/1     Running   0          21m     100.96.3.220   i-0c09b7537afa8088a   <none>           <none>            label=db
+pod-anti-af    1/1     Running   0          13m     100.96.2.60    i-026886012dfcd52bf   <none>           <none>            label=anti-pod
+pod-anti-af2   1/1     Running   0          9m15s   100.96.2.3     i-026886012dfcd52bf   <none>           <none>            label=anti-pod
+pod-anti-af3   1/1     Running   0          23s     100.96.2.156   i-026886012dfcd52bf   <none>           <none>            label=anti-pod
+[root@affinity affinity]#
+[root@affinity affinity]# vi pod_anti_affinity.yml
+[root@affinity affinity]# cat pod_anti_affinity.yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-anti-af4
+  labels:
+    label: anti-pod
+spec:
+  containers:
+    - name: anti-con
+      image: nginx
+      ports:
+        - containerPort: 80
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: label
+                operator: In
+                values:
+                  - app
+                  - db
+          topologyKey: kubernetes.io/hostname
+[root@affinity affinity]# kubectl apply -f pod_anti_affinity.yml
+pod/pod-anti-af4 created
+[root@affinity affinity]#
+[root@affinity affinity]# kubectl get nodes -o custom-columns=node_id:.metadata.name,node=:.metadata.labels.node
+node_id               node=
+i-026886012dfcd52bf   ammu
+i-03cf608d98c798e1a   manager
+i-0c09b7537afa8088a   siri
+i-0ea2e8ecc1e8f6416   srinu
+[root@affinity affinity]# kubectl get pods --show-labels -o wide
+NAME           READY   STATUS    RESTARTS   AGE     IP             NODE                  NOMINATED NODE   READINESS GATES   LABELS
+node-af-pod    1/1     Running   0          53m     100.96.1.244   i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+node-af-pod2   1/1     Running   0          49m     100.96.1.34    i-0ea2e8ecc1e8f6416   <none>           <none>            node=srinu
+pod-af-app     1/1     Running   0          32m     100.96.3.33    i-0c09b7537afa8088a   <none>           <none>            label=app
+pod-af-db      1/1     Running   0          24m     100.96.3.220   i-0c09b7537afa8088a   <none>           <none>            label=db
+pod-anti-af    1/1     Running   0          15m     100.96.2.60    i-026886012dfcd52bf   <none>           <none>            label=anti-pod
+pod-anti-af2   1/1     Running   0          11m     100.96.2.3     i-026886012dfcd52bf   <none>           <none>            label=anti-pod
+pod-anti-af3   1/1     Running   0          2m39s   100.96.2.156   i-026886012dfcd52bf   <none>           <none>            label=anti-pod
+pod-anti-af4   1/1     Running   0          19s     100.96.1.191   i-0ea2e8ecc1e8f6416   <none>           <none>            label=anti-pod
+[root@affinity affinity]#
+[root@affinity affinity]# kubectl get pods
+NAME           READY   STATUS    RESTARTS   AGE
+node-af-pod    1/1     Running   0          66m
+node-af-pod2   1/1     Running   0          62m
+pod-af-app     1/1     Running   0          45m
+pod-af-db      1/1     Running   0          37m
+pod-anti-af    1/1     Running   0          28m
+pod-anti-af2   1/1     Running   0          25m
+pod-anti-af3   1/1     Running   0          16m
+pod-anti-af4   1/1     Running   0          13m
+[root@affinity affinity]# kubectl delete pods --all
+pod "node-af-pod" deleted from default namespace
+pod "node-af-pod2" deleted from default namespace
+pod "pod-af-app" deleted from default namespace
+pod "pod-af-db" deleted from default namespace
+pod "pod-anti-af" deleted from default namespace
+pod "pod-anti-af2" deleted from default namespace
+pod "pod-anti-af3" deleted from default namespace
+pod "pod-anti-af4" deleted from default namespace
+[root@affinity affinity]# kubectl get pods
+No resources found in default namespace.
+[root@affinity affinity]#
+
+
+____________________________________________________________________________
+
+****************	Taints in nodes		****************************
+____________________________________________________________________________
+
+
+[root@affinity affinity]# cd ..
+[root@affinity ~]# ll
+total 0
+drwxr-xr-x. 2 root root 111 Feb  6 10:45 affinity
+[root@affinity ~]# mkdir taints
+[root@affinity ~]# cd taints/
+[root@affinity taints]# ll
+total 0
+[root@affinity taints]#
+[root@affinity taints]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE    VERSION
+i-026886012dfcd52bf   Ready    node            133m   v1.34.3
+i-03cf608d98c798e1a   Ready    control-plane   134m   v1.34.3
+i-0c09b7537afa8088a   Ready    node            133m   v1.34.3
+i-0ea2e8ecc1e8f6416   Ready    node            133m   v1.34.3
+[root@affinity taints]#
+[root@affinity taints]# kubectl get nodes -o custom-columns=node_id:.metadata.name,node=:.metadata.labels.node
+node_id               node=
+i-026886012dfcd52bf   ammu
+i-03cf608d98c798e1a   manager
+i-0c09b7537afa8088a   siri
+i-0ea2e8ecc1e8f6416   srinu
+[root@affinity taints]#
+[root@affinity taints]# kubectl taint node i-0c09b7537afa8088a node=siri:NoSchedule
+node/i-0c09b7537afa8088a tainted
+[root@affinity taints]# kubectl describe node i-0c09b7537afa8088a | grep -i taint
+Taints:             node=siri:NoSchedule
+[root@affinity taints]# kubectl taint node i-0c09b7537afa8088a node=siri:NoSchedule-
+node/i-0c09b7537afa8088a untainted
+[root@affinity taints]# kubectl describe node i-0c09b7537afa8088a | grep -i taint
+Taints:             <none>
+[root@affinity taints]# kubectl taint node i-0c09b7537afa8088a node=siri:NoSchedule
+node/i-0c09b7537afa8088a tainted
+[root@affinity taints]# kubectl describe node i-0c09b7537afa8088a | grep -i taint
+Taints:             node=siri:NoSchedule
+[root@affinity taints]# kubectl describe node i-026886012dfcd52bf | grep -i taint
+Taints:             <none>
+[root@affinity taints]# kubectl describe node i-03cf608d98c798e1a | grep -i taint
+Taints:             node-role.kubernetes.io/control-plane:NoSchedule
+[root@affinity taints]# kubectl describe node i-0ea2e8ecc1e8f6416 | grep -i taint
+Taints:             <none>
+[root@affinity taints]#
+____________________________________________________________________________
+
+****************	Siri Node Tainted	****************************
+____________________________________________________________________________
+
+[root@affinity taints]# vim pod.yml
+[root@affinity taints]# mv pod.yml dep.yml
+[root@affinity taints]# cat dep.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep1
+  labels:
+    taint: check
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: srinu
+
+  template:
+    metadata:
+      name: tem1
+      labels:
+        app: srinu
+    spec:
+      containers:
+        - name: taint
+          image: nginx
+          ports:
+            - containerPort: 80
+[root@affinity taints]# kubectl apply -f dep.yml
+deployment.apps/dep1 created
+[root@affinity taints]# kubectl get deploy
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+dep1   3/3     3            3           85s
+[root@affinity taints]#
+[root@affinity taints]# kubectl get pods --show-labels -o wide
+NAME                    READY   STATUS    RESTARTS   AGE   IP             NODE                  NOMINATED NODE   READINESS GATES   LABELS
+dep1-54cffd5f7c-c46cr   1/1     Running   0          15s   100.96.2.34    i-026886012dfcd52bf   <none>           <none>            app=srinu,pod-template-hash=54cffd5f7c
+dep1-54cffd5f7c-fkgrq   1/1     Running   0          15s   100.96.1.230   i-0ea2e8ecc1e8f6416   <none>           <none>            app=srinu,pod-template-hash=54cffd5f7c
+dep1-54cffd5f7c-mdnfq   1/1     Running   0          15s   100.96.2.102   i-026886012dfcd52bf   <none>           <none>            app=srinu,pod-template-hash=54cffd5f7c
+[root@affinity taints]# kubectl get nodes -o custom-columns=node_id:.metadata.name,node=:.metadata.labels.node
+node_id               node=
+i-026886012dfcd52bf   ammu
+i-03cf608d98c798e1a   manager
+i-0c09b7537afa8088a   siri
+i-0ea2e8ecc1e8f6416   srinu
+[root@affinity taints]#
+____________________________________________________________________________
+
+**************	Pods not generated in Siri Node ****************************
+____________________________________________________________________________
+
+[root@affinity taints]# kubectl get deploy
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+dep1   3/3     3            3           85s
+[root@affinity taints]# kubectl scale deploy dep1 --replicas=8
+deployment.apps/dep1 scaled
+[root@affinity taints]# kubectl get deploy
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+dep1   8/8     8            8           3m9s
+[root@affinity taints]#
+[root@affinity taints]# kubectl get nodes -o custom-columns=node_id:.metadata.name,node=:.metadata.labels.node
+node_id               node=
+i-026886012dfcd52bf   ammu
+i-03cf608d98c798e1a   manager
+i-0c09b7537afa8088a   siri
+i-0ea2e8ecc1e8f6416   srinu
+[root@affinity taints]# kubectl get pods --show-labels -o wide
+NAME                    READY   STATUS    RESTARTS   AGE     IP             NODE                  NOMINATED NODE   READINESS GATES   LABELS
+dep1-54cffd5f7c-2nfrx   1/1     Running   0          20s     100.96.1.53    i-0ea2e8ecc1e8f6416   <none>           <none>            app=srinu,pod-template-hash=54cffd5f7c
+dep1-54cffd5f7c-9ntb9   1/1     Running   0          20s     100.96.1.233   i-0ea2e8ecc1e8f6416   <none>           <none>            app=srinu,pod-template-hash=54cffd5f7c
+dep1-54cffd5f7c-c46cr   1/1     Running   0          3m25s   100.96.2.34    i-026886012dfcd52bf   <none>           <none>            app=srinu,pod-template-hash=54cffd5f7c
+dep1-54cffd5f7c-fkgrq   1/1     Running   0          3m25s   100.96.1.230   i-0ea2e8ecc1e8f6416   <none>           <none>            app=srinu,pod-template-hash=54cffd5f7c
+dep1-54cffd5f7c-g5c9g   1/1     Running   0          20s     100.96.2.171   i-026886012dfcd52bf   <none>           <none>            app=srinu,pod-template-hash=54cffd5f7c
+dep1-54cffd5f7c-hlz7j   1/1     Running   0          20s     100.96.1.36    i-0ea2e8ecc1e8f6416   <none>           <none>            app=srinu,pod-template-hash=54cffd5f7c
+dep1-54cffd5f7c-mdnfq   1/1     Running   0          3m25s   100.96.2.102   i-026886012dfcd52bf   <none>           <none>            app=srinu,pod-template-hash=54cffd5f7c
+dep1-54cffd5f7c-wx42r   1/1     Running   0          20s     100.96.2.219   i-026886012dfcd52bf   <none>           <none>            app=srinu,pod-template-hash=54cffd5f7c
+[root@affinity taints]#
+____________________________________________________________________________
+
+**************	Pods not generated in Siri Node ****************************
+____________________________________________________________________________
+[root@affinity taints]# kubectl scale deploy dep1 --replicas=12
+deployment.apps/dep1 scaled
+[root@affinity taints]# kubectl delete deploy dep1
+deployment.apps "dep1" deleted from default namespace
+[root@affinity taints]#
+[root@affinity taints]# kubectl apply -f dep.yml
+deployment.apps/dep1 created
+[root@affinity taints]# kubectl get deploy
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+dep1   3/3     3            3           4s
+[root@affinity taints]#
+
+____________________________________________________________________________
+
+**************	Applying taints for New Pods 	****************************
+____________________________________________________________________________
+
+[root@affinity taints]# vi tolerance.yml
+[root@affinity taints]# cat tolerance.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep2
+  labels:
+    tolerance: check
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: srinu
+  template:
+    metadata:
+      labels:
+        app: srinu
+    spec:
+      tolerations:
+        - key: "node"
+          operator: "Equal"
+          value: "siri"
+          effect: "NoSchedule"
+      containers:
+        - name: taint
+          image: nginx
+          ports:
+            - containerPort: 80
+[root@affinity taints]# kubectl apply -f tolerance.yml
+deployment.apps/dep2 created
+[root@affinity taints]#
+[root@affinity taints]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE    VERSION
+i-026886012dfcd52bf   Ready    node            169m   v1.34.3
+i-03cf608d98c798e1a   Ready    control-plane   171m   v1.34.3
+i-0c09b7537afa8088a   Ready    node            169m   v1.34.3
+i-0ea2e8ecc1e8f6416   Ready    node            169m   v1.34.3
+[root@affinity taints]# kubectl get deploy
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+dep1   3/3     3            3           10m
+dep2   3/3     3            3           96s
+[root@affinity taints]# kubectl get pods -o wide
+NAME                    READY   STATUS    RESTARTS   AGE    IP             NODE                  NOMINATED NODE   READINESS GATES
+dep1-54cffd5f7c-4sdbw   1/1     Running   0          10m    100.96.2.89    i-026886012dfcd52bf   <none>           <none>
+dep1-54cffd5f7c-sccxd   1/1     Running   0          10m    100.96.1.139   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep1-54cffd5f7c-zr8td   1/1     Running   0          10m    100.96.2.227   i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-669mq      1/1     Running   0          2m3s   100.96.3.45    i-0c09b7537afa8088a   <none>           <none>
+dep2-876c4c6-fdglb      1/1     Running   0          2m3s   100.96.1.181   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-zjtng      1/1     Running   0          2m3s   100.96.2.131   i-026886012dfcd52bf   <none>           <none>
+[root@affinity taints]#
+[root@affinity taints]# kubectl scale deploy dep1 dep2 --replicas=6
+deployment.apps/dep1 scaled
+deployment.apps/dep2 scaled
+[root@affinity taints]# kubectl get deploy
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+dep1   6/6     6            6           12m
+dep2   6/6     6            6           3m50s
+[root@affinity taints]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE    VERSION
+i-026886012dfcd52bf   Ready    node            172m   v1.34.3
+i-03cf608d98c798e1a   Ready    control-plane   174m   v1.34.3
+i-0c09b7537afa8088a   Ready    node            172m   v1.34.3
+i-0ea2e8ecc1e8f6416   Ready    node            172m   v1.34.3
+[root@affinity taints]# kubectl get pods -o wide
+NAME                    READY   STATUS    RESTARTS   AGE     IP             NODE                  NOMINATED NODE   READINESS GATES
+dep1-54cffd5f7c-2nmsd   1/1     Running   0          56s     100.96.2.68    i-026886012dfcd52bf   <none>           <none>
+dep1-54cffd5f7c-4sdbw   1/1     Running   0          13m     100.96.2.89    i-026886012dfcd52bf   <none>           <none>
+dep1-54cffd5f7c-jjchg   1/1     Running   0          56s     100.96.1.10    i-0ea2e8ecc1e8f6416   <none>           <none>
+dep1-54cffd5f7c-sccxd   1/1     Running   0          13m     100.96.1.139   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep1-54cffd5f7c-zr8td   1/1     Running   0          13m     100.96.2.227   i-026886012dfcd52bf   <none>           <none>
+dep1-54cffd5f7c-zzmp5   1/1     Running   0          56s     100.96.1.155   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-669mq      1/1     Running   0          4m30s   100.96.3.45    i-0c09b7537afa8088a   <none>           <none>
+dep2-876c4c6-b66rp      1/1     Running   0          56s     100.96.1.153   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-fdglb      1/1     Running   0          4m30s   100.96.1.181   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-j957k      1/1     Running   0          56s     100.96.3.44    i-0c09b7537afa8088a   <none>           <none>
+dep2-876c4c6-v4rss      1/1     Running   0          56s     100.96.2.194   i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-zjtng      1/1     Running   0          4m30s   100.96.2.131   i-026886012dfcd52bf   <none>           <none>
+[root@affinity taints]# kubectl scale deploy dep1 dep2 --replicas=3
+deployment.apps/dep1 scaled
+deployment.apps/dep2 scaled
+[root@affinity taints]# kubectl get pods -o wide
+NAME                    READY   STATUS    RESTARTS   AGE     IP             NODE                  NOMINATED NODE   READINESS GATES
+dep1-54cffd5f7c-4sdbw   1/1     Running   0          14m     100.96.2.89    i-026886012dfcd52bf   <none>           <none>
+dep1-54cffd5f7c-sccxd   1/1     Running   0          14m     100.96.1.139   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep1-54cffd5f7c-zr8td   1/1     Running   0          14m     100.96.2.227   i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-669mq      1/1     Running   0          5m26s   100.96.3.45    i-0c09b7537afa8088a   <none>           <none>
+dep2-876c4c6-fdglb      1/1     Running   0          5m26s   100.96.1.181   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-zjtng      1/1     Running   0          5m26s   100.96.2.131   i-026886012dfcd52bf   <none>           <none>
+[root@affinity taints]# kubectl scale deploy dep2 --replicas=6
+deployment.apps/dep2 scaled
+[root@affinity taints]# kubectl get pods -o wide
+NAME                    READY   STATUS    RESTARTS   AGE     IP             NODE                  NOMINATED NODE   READINESS GATES
+dep1-54cffd5f7c-4sdbw   1/1     Running   0          14m     100.96.2.89    i-026886012dfcd52bf   <none>           <none>
+dep1-54cffd5f7c-sccxd   1/1     Running   0          14m     100.96.1.139   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep1-54cffd5f7c-zr8td   1/1     Running   0          14m     100.96.2.227   i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-669mq      1/1     Running   0          5m58s   100.96.3.45    i-0c09b7537afa8088a   <none>           <none>
+dep2-876c4c6-dbpr9      1/1     Running   0          3s      100.96.1.98    i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-fdglb      1/1     Running   0          5m58s   100.96.1.181   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-xcbzc      1/1     Running   0          3s      100.96.2.6     i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-zjtng      1/1     Running   0          5m58s   100.96.2.131   i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-zmzk2      1/1     Running   0          3s      100.96.3.211   i-0c09b7537afa8088a   <none>           <none>
+[root@affinity taints]# kubectl scale deploy dep2 --replicas=9
+deployment.apps/dep2 scaled
+[root@affinity taints]# kubectl get pods -o wide
+NAME                    READY   STATUS    RESTARTS   AGE     IP             NODE                  NOMINATED NODE   READINESS GATES
+dep1-54cffd5f7c-4sdbw   1/1     Running   0          15m     100.96.2.89    i-026886012dfcd52bf   <none>           <none>
+dep1-54cffd5f7c-sccxd   1/1     Running   0          15m     100.96.1.139   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep1-54cffd5f7c-zr8td   1/1     Running   0          15m     100.96.2.227   i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-669mq      1/1     Running   0          6m55s   100.96.3.45    i-0c09b7537afa8088a   <none>           <none>
+dep2-876c4c6-99hdh      1/1     Running   0          3s      100.96.3.48    i-0c09b7537afa8088a   <none>           <none>
+dep2-876c4c6-dbpr9      1/1     Running   0          60s     100.96.1.98    i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-fdglb      1/1     Running   0          6m55s   100.96.1.181   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-fw4zb      1/1     Running   0          3s      100.96.1.3     i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-jbw2j      1/1     Running   0          3s      100.96.2.213   i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-xcbzc      1/1     Running   0          60s     100.96.2.6     i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-zjtng      1/1     Running   0          6m55s   100.96.2.131   i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-zmzk2      1/1     Running   0          60s     100.96.3.211   i-0c09b7537afa8088a   <none>           <none>
+[root@affinity taints]#
+[root@affinity taints]# kubectl get deploy
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+dep1   3/3     3            3           16m
+dep2   9/9     9            9           8m3s
+[root@affinity taints]#
+[root@affinity taints]# kubectl delete deploy dep1 dep2
+deployment.apps "dep1" deleted from default namespace
+deployment.apps "dep2" deleted from default namespace
+[root@affinity taints]# kubectl get pods
+No resources found in default namespace.
+[root@affinity taints]#
+[root@affinity taints]# ll
+total 8
+-rw-r--r--. 1 root root 356 Feb  6 11:18 dep.yml
+-rw-r--r--. 1 root root 466 Feb  6 11:37 tolerance.yml
+[root@affinity taints]#
+[root@affinity taints]# vi tolerance.yml
+[root@affinity taints]# kubectl get pods
+No resources found in default namespace.
+[root@affinity taints]# cat tolerance.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep2
+  labels:
+    tolerance: check
+spec:
+  replicas: 9
+  selector:
+    matchLabels:
+      app: srinu
+  template:
+    metadata:
+      labels:
+        app: srinu
+    spec:
+      tolerations:
+        - key: "node"
+          operator: "Equal"
+          value: "siri"
+          effect: "NoSchedule"
+      containers:
+        - name: taint
+          image: nginx
+          ports:
+            - containerPort: 80
+[root@affinity taints]# kubectl apply -f tolerance.yml
+deployment.apps/dep2 created
+[root@affinity taints]# kubectl get deploy
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+dep2   9/9     9            9           11s
+[root@affinity taints]# kubectl get nodes
+NAME                  STATUS   ROLES           AGE    VERSION
+i-026886012dfcd52bf   Ready    node            3h2m   v1.34.3
+i-03cf608d98c798e1a   Ready    control-plane   3h4m   v1.34.3
+i-0c09b7537afa8088a   Ready    node            3h2m   v1.34.3
+i-0ea2e8ecc1e8f6416   Ready    node            3h2m   v1.34.3
+[root@affinity taints]# kubectl get podes -o wide
+error: the server doesn't have a resource type "podes"
+[root@affinity taints]# kubectl get pods -o wide
+NAME                 READY   STATUS    RESTARTS   AGE   IP             NODE                  NOMINATED NODE   READINESS GATES
+dep2-876c4c6-7n428   1/1     Running   0          39s   100.96.1.157   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-8znzh   1/1     Running   0          39s   100.96.1.151   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-c6w87   1/1     Running   0          39s   100.96.3.83    i-0c09b7537afa8088a   <none>           <none>
+dep2-876c4c6-dt949   1/1     Running   0          39s   100.96.3.162   i-0c09b7537afa8088a   <none>           <none>
+dep2-876c4c6-gt7h7   1/1     Running   0          39s   100.96.2.47    i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-khp9l   1/1     Running   0          39s   100.96.1.102   i-0ea2e8ecc1e8f6416   <none>           <none>
+dep2-876c4c6-kz22c   1/1     Running   0          39s   100.96.2.188   i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-ptcc6   1/1     Running   0          39s   100.96.2.98    i-026886012dfcd52bf   <none>           <none>
+dep2-876c4c6-vz2wq   1/1     Running   0          39s   100.96.3.112   i-0c09b7537afa8088a   <none>           <none>
+[root@affinity taints]#
+
+
+____________________________________________________________________________
+
+****************	Creating jobs 		****************************
+____________________________________________________________________________
+
+
+____________________________________________________________________________
+
+****************	One Job 		****************************
+____________________________________________________________________________
+
+[root@affinity taints]# cd ..
+[root@affinity ~]# mkdir jobs
+[root@affinity ~]# cd jobs/
+[root@affinity jobs]# ll
+total 0
+[root@affinity jobs]#
+[root@affinity jobs]# vi job.yml
+[root@affinity jobs]# cat job.yml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: testjob
+spec:
+  template:
+    metadata:
+      name: jobtem
+      labels:
+        app: testjob
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: cont
+          image: nginx
+          command: ["/bin/sh", "-c", "sudo apt update -y; sleep 20"]
+[root@affinity jobs]# kubectl apply -f job.yml
+job.batch/testjob created
+[root@affinity jobs]#
+[root@affinity jobs]# kubectl delete deploy dep2
+deployment.apps "dep2" deleted from default namespace
+[root@affinity jobs]# kubectl get pods -w
+NAME            READY   STATUS    RESTARTS   AGE
+testjob-7857g   0/1     Pending   0          0s
+testjob-7857g   0/1     Pending   0          0s
+testjob-7857g   0/1     ContainerCreating   0          0s
+testjob-7857g   1/1     Running             0          2s
+testjob-7857g   0/1     Completed           0          22s
+testjob-7857g   0/1     Completed           0          23s
+testjob-7857g   0/1     Completed           0          24s
+^C[root@affinity jobs]# kubectl get pods
+NAME            READY   STATUS      RESTARTS   AGE
+testjob-7857g   0/1     Completed   0          74s
+[root@affinity jobs]#
+
+
+____________________________________________________________________________
+
+****************	Cron Jobs 		****************************
+____________________________________________________________________________
+
+
+[root@affinity jobs]# vi cronjob.yml
+[root@affinity jobs]# cat cronjob.yml
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mycron-job
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cont1
+              image: httpd
+              command: ["/bin/bash", "-c", "sudo apt update -y; sudo apt install git -y; sleep 10"]
+          restartPolicy: Never
+[root@affinity jobs]#
+[root@affinity jobs]# kubectl apply -f cronjob.yml
+cronjob.batch/mycron-job created
+[root@affinity jobs]#
+[root@affinity jobs]# kubectl get pods -w
+NAME            READY   STATUS      RESTARTS   AGE
+testjob-7857g   0/1     Completed   0          46m
+mycron-job-29506388-j2qtw   0/1     Pending     0          0s
+mycron-job-29506388-j2qtw   0/1     Pending     0          0s
+mycron-job-29506388-j2qtw   0/1     ContainerCreating   0          0s
+mycron-job-29506388-j2qtw   1/1     Running             0          2s
+mycron-job-29506388-j2qtw   0/1     Completed           0          12s
+mycron-job-29506388-j2qtw   0/1     Completed           0          13s
+mycron-job-29506388-j2qtw   0/1     Completed           0          14s
+mycron-job-29506389-bh4qm   0/1     Pending             0          0s
+mycron-job-29506389-bh4qm   0/1     Pending             0          0s
+mycron-job-29506389-bh4qm   0/1     ContainerCreating   0          0s
+mycron-job-29506389-bh4qm   1/1     Running             0          1s
+mycron-job-29506389-bh4qm   0/1     Completed           0          11s
+mycron-job-29506389-bh4qm   0/1     Completed           0          12s
+mycron-job-29506389-bh4qm   0/1     Completed           0          13s
+mycron-job-29506390-t28mb   0/1     Pending             0          0s
+mycron-job-29506390-t28mb   0/1     Pending             0          0s
+mycron-job-29506390-t28mb   0/1     ContainerCreating   0          0s
+mycron-job-29506390-t28mb   1/1     Running             0          1s
+mycron-job-29506390-t28mb   0/1     Completed           0          11s
+mycron-job-29506390-t28mb   0/1     Completed           0          12s
+mycron-job-29506390-t28mb   0/1     Completed           0          13s
+mycron-job-29506391-d44v8   0/1     Pending             0          0s
+mycron-job-29506391-d44v8   0/1     Pending             0          0s
+mycron-job-29506391-d44v8   0/1     ContainerCreating   0          0s
+mycron-job-29506391-d44v8   1/1     Running             0          1s
+mycron-job-29506391-d44v8   0/1     Completed           0          11s
+mycron-job-29506391-d44v8   0/1     Completed           0          12s
+mycron-job-29506391-d44v8   0/1     Completed           0          13s
+mycron-job-29506388-j2qtw   0/1     Completed           0          3m13s
+mycron-job-29506388-j2qtw   0/1     Completed           0          3m13s
+mycron-job-29506392-xdc2p   0/1     Pending             0          0s
+mycron-job-29506392-xdc2p   0/1     Pending             0          0s
+mycron-job-29506392-xdc2p   0/1     ContainerCreating   0          0s
+mycron-job-29506392-xdc2p   1/1     Running             0          1s
+mycron-job-29506392-xdc2p   0/1     Completed           0          11s
+mycron-job-29506392-xdc2p   0/1     Completed           0          12s
+mycron-job-29506392-xdc2p   0/1     Completed           0          13s
+mycron-job-29506389-bh4qm   0/1     Completed           0          3m13s
+mycron-job-29506389-bh4qm   0/1     Completed           0          3m13s
+mycron-job-29506393-2n4hl   0/1     Pending             0          0s
+mycron-job-29506393-2n4hl   0/1     Pending             0          0s
+mycron-job-29506393-2n4hl   0/1     ContainerCreating   0          0s
+mycron-job-29506393-2n4hl   1/1     Running             0          0s
+mycron-job-29506393-2n4hl   0/1     Completed           0          10s
+mycron-job-29506393-2n4hl   0/1     Completed           0          12s
+mycron-job-29506393-2n4hl   0/1     Completed           0          13s
+mycron-job-29506390-t28mb   0/1     Completed           0          3m13s
+mycron-job-29506390-t28mb   0/1     Completed           0          3m13s
+^C[root@affinity jobs]#
+
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506388-j2qtw   0/1     Completed   0          2m51s
+mycron-job-29506389-bh4qm   0/1     Completed   0          111s
+mycron-job-29506390-t28mb   0/1     Completed   0          51s
+testjob-7857g               0/1     Completed   0          49m
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506388-j2qtw   0/1     Completed   0          2m55s
+mycron-job-29506389-bh4qm   0/1     Completed   0          115s
+mycron-job-29506390-t28mb   0/1     Completed   0          55s
+testjob-7857g               0/1     Completed   0          49m
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506388-j2qtw   0/1     Completed   0          2m56s
+mycron-job-29506389-bh4qm   0/1     Completed   0          116s
+mycron-job-29506390-t28mb   0/1     Completed   0          56s
+testjob-7857g               0/1     Completed   0          49m
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506388-j2qtw   0/1     Completed   0          2m57s
+mycron-job-29506389-bh4qm   0/1     Completed   0          117s
+mycron-job-29506390-t28mb   0/1     Completed   0          57s
+testjob-7857g               0/1     Completed   0          49m
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506388-j2qtw   0/1     Completed   0          2m59s
+mycron-job-29506389-bh4qm   0/1     Completed   0          119s
+mycron-job-29506390-t28mb   0/1     Completed   0          59s
+testjob-7857g               0/1     Completed   0          49m
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+mycron-job-29506388-j2qtw   0/1     Completed           0          3m
+mycron-job-29506389-bh4qm   0/1     Completed           0          2m
+mycron-job-29506390-t28mb   0/1     Completed           0          60s
+mycron-job-29506391-d44v8   0/1     ContainerCreating   0          0s
+testjob-7857g               0/1     Completed           0          49m
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506389-bh4qm   0/1     Completed   0          3m4s
+mycron-job-29506390-t28mb   0/1     Completed   0          2m4s
+mycron-job-29506391-d44v8   0/1     Completed   0          64s
+mycron-job-29506392-xdc2p   1/1     Running     0          4s
+testjob-7857g               0/1     Completed   0          50m
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506390-t28mb   0/1     Completed   0          3m9s
+mycron-job-29506391-d44v8   0/1     Completed   0          2m9s
+mycron-job-29506392-xdc2p   0/1     Completed   0          69s
+mycron-job-29506393-2n4hl   1/1     Running     0          9s
+testjob-7857g               0/1     Completed   0          51m
+[root@affinity jobs]# kubectl get cj
+NAME         SCHEDULE    TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+mycron-job   * * * * *   <none>     False     0        22s             7m35s
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506393-2n4hl   0/1     Completed   0          2m30s
+mycron-job-29506394-f87l8   0/1     Completed   0          90s
+mycron-job-29506395-2sw4p   0/1     Completed   0          30s
+testjob-7857g               0/1     Completed   0          54m
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506393-2n4hl   0/1     Completed   0          2m43s
+mycron-job-29506394-f87l8   0/1     Completed   0          103s
+mycron-job-29506395-2sw4p   0/1     Completed   0          43s
+testjob-7857g               0/1     Completed   0          54m
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506393-2n4hl   0/1     Completed   0          3m6s
+mycron-job-29506394-f87l8   0/1     Completed   0          2m6s
+mycron-job-29506395-2sw4p   0/1     Completed   0          66s
+mycron-job-29506396-xmzvc   1/1     Running     0          6s
+testjob-7857g               0/1     Completed   0          54m
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506393-2n4hl   0/1     Completed   0          3m8s
+mycron-job-29506394-f87l8   0/1     Completed   0          2m8s
+mycron-job-29506395-2sw4p   0/1     Completed   0          68s
+mycron-job-29506396-xmzvc   1/1     Running     0          8s
+testjob-7857g               0/1     Completed   0          54m
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506393-2n4hl   0/1     Completed   0          3m10s
+mycron-job-29506394-f87l8   0/1     Completed   0          2m10s
+mycron-job-29506395-2sw4p   0/1     Completed   0          70s
+mycron-job-29506396-xmzvc   1/1     Running     0          10s
+testjob-7857g               0/1     Completed   0          54m
+[root@affinity jobs]# kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+mycron-job-29506394-f87l8   0/1     Completed   0          2m20s
+mycron-job-29506395-2sw4p   0/1     Completed   0          80s
+mycron-job-29506396-xmzvc   0/1     Completed   0          20s
+testjob-7857g               0/1     Completed   0          55m
+[root@affinity jobs]# kubectl get jobs
+NAME                  STATUS     COMPLETIONS   DURATION   AGE
+mycron-job-29506395   Complete   1/1           13s        3m8s
+mycron-job-29506396   Complete   1/1           13s        2m8s
+mycron-job-29506397   Complete   1/1           13s        68s
+mycron-job-29506398   Running    0/1           8s         8s
+testjob               Complete   1/1           24s        56m
+[root@affinity jobs]# kubectl get cj
+NAME         SCHEDULE    TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+mycron-job   * * * * *   <none>     False     0        51s             11m
+[root@affinity jobs]# kubectl get Job
+NAME                  STATUS     COMPLETIONS   DURATION   AGE
+mycron-job-29506397   Complete   1/1           13s        2m22s
+mycron-job-29506398   Complete   1/1           13s        82s
+mycron-job-29506399   Complete   1/1           13s        22s
+testjob               Complete   1/1           24s        58m
+[root@affinity jobs]#
+
+
+____________________________________________________________________________
+
+****************	Jobs Delete 		****************************
+____________________________________________________________________________
+
+
+
+[root@affinity jobs]# kubectl delete Job testjob mycron-job
+job.batch "testjob" deleted from default namespace
+Error from server (NotFound): jobs.batch "mycron-job" not found
+[root@affinity jobs]# kubectl delete cj mycron-job
+cronjob.batch "mycron-job" deleted from default namespace
+[root@affinity jobs]# kubectl get pods
+No resources found in default namespace.
+[root@affinity jobs]#
+[root@affinity jobs]# kubectl get job
+No resources found in default namespace.
+[root@affinity jobs]# kubectl get cj
+No resources found in default namespace.
+[root@affinity jobs]#
+
+
+____________________________________________________________________________________________
+
+**************** 	Sample affinity deployment file 	****************************
+____________________________________________________________________________________________
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-af-deploy
+  labels:
+    app: node-af
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node-af
+  template:
+    metadata:
+      labels:
+        app: node-af
+        node: srinu
+    spec:
+      containers:
+        - name: node-af-con
+          image: nginx
+          ports:
+            - containerPort: 80
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node
+                    operator: In
+                    values:
+                      - Srinu
+
+
+
+____________________________________________________________________________________
+
+****************	To check the cluster 		****************************
+____________________________________________________________________________________
+
+
+root@affinity affinity]# kubectl config current-context
+srinu.k8s.local
+[root@affinity affinity]# kubectl cluster-info
+Kubernetes control plane is running at https://api-srinu-k8s-local-si3119-c16cbef899c0b726.elb.us-east-2.amazonaws.com
+CoreDNS is running at https://api-srinu-k8s-local-si3119-c16cbef899c0b726.elb.us-east-2.amazonaws.com/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+[root@affinity affinity]# kubectl config get-contexts
+CURRENT   NAME              CLUSTER           AUTHINFO          NAMESPACE
+*         srinu.k8s.local   srinu.k8s.local   srinu.k8s.local
+[root@affinity affinity]# kubectl api-resources | head
+``
+NAME                                SHORTNAMES                          APIVERSION                        NAMESPACED   KIND
+bindings                                                                v1                                true         Binding
+componentstatuses                   cs                                  v1                                false        ComponentStatus
+configmaps                          cm                                  v1                                true         ConfigMap
+endpoints                           ep                                  v1                                true         Endpoints
+events                              ev                                  v1                                true         Event
+limitranges                         limits                              v1                                true         LimitRange
+namespaces                          ns                                  v1                                false        Namespace
+nodes                               no                                  v1                                false        Node
+persistentvolumeclaims              pvc                                 v1                                true         PersistentVolumeClaim
+[root@affinity affinity]# kubectl api-resources | grep -i cluster
+ciliumclusterwidenetworkpolicies    ccnp                                cilium.io/v2                      false        CiliumClusterwideNetworkPolicy
+clusterrolebindings                                                     rbac.authorization.k8s.io/v1      false        ClusterRoleBinding
+clusterroles                                                            rbac.authorization.k8s.io/v1      false        ClusterRole
+[root@affinity affinity]#
+
+[root@affinity affinity]# export KOPS_STATE_STORE=s3://srinu.as
+kops delete cluster --name srinu.k8s.local --yes
+I0206 13:42:39.186447   40240 delete_cluster.go:143] Looking for cloud resources to delete
+TYPE                    NAME                                                                    ID
+autoscaling-config      control-plane-us-east-2a.masters.srinu.k8s.local                        lt-03ba815df9574bdb0
+autoscaling-config      nodes-us-east-2a.srinu.k8s.local                                        lt-03c4426d5f120a956
+autoscaling-config      nodes-us-east-2b.srinu.k8s.local                                        lt-0b53570c5660e7c10
+autoscaling-config      nodes-us-east-2c.srinu.k8s.local                                        lt-0280142aa9c5619cc
+autoscaling-group       control-plane-us-east-2a.masters.srinu.k8s.local                        control-plane-us-east-2a.masters.srinu.k8s.local
+
+internet-gateway:igw-00ee06a08de9eb35c  still has dependencies, will retry
+subnet:subnet-02879184eef4b0fe1 still has dependencies, will retry
+security-group:sg-0d6164a2f55f79584     still has dependencies, will retry
+Not all resources deleted; waiting before reattempting deletion
+        subnet:subnet-02879184eef4b0fe1
+        internet-gateway:igw-00ee06a08de9eb35c
+        dhcp-options:dopt-0621f23b274566a61
+        security-group:sg-0d6164a2f55f79584
+        route-table:rtb-0efe1f3e9cdd72515
+        vpc:vpc-0ab7179146df38cda
+internet-gateway:igw-00ee06a08de9eb35c  ok
+subnet:subnet-02879184eef4b0fe1 ok
+security-group:sg-0d6164a2f55f79584     ok
+route-table:rtb-0efe1f3e9cdd72515       ok
+vpc:vpc-0ab7179146df38cda       ok
+dhcp-options:dopt-0621f23b274566a61     ok
+Deleted kubectl config for srinu.k8s.local
+
+Deleted cluster: "srinu.k8s.local"
+[root@affinity affinity]#
