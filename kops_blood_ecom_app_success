@@ -1,0 +1,579 @@
+k8s eks ecom application deployment
+
+=============================================================================
+=====================          Jenkins set up           =====================
+=============================================================================
+
+PS C:\Users\srini> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=30 -i "C:\Users\srini\Downloads\mykey.pem" ec2-user@3.145.54.119
+The authenticity of host '3.145.54.119 (3.145.54.119)' can't be established.
+ED25519 key fingerprint is SHA256:kdo7h6fVBIrXwQratDZr0DvZaQH5WWgmgy7IQgPKf1E.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '3.145.54.119' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-14-234 ~]$ sudo -i
+h[root@ip-172-31-14-234 ~]# hostnamectl set-hostname eks
+[root@ip-172-31-14-234 ~]# exit
+logout
+[ec2-user@ip-172-31-14-234 ~]$ sudo -i
+[root@eks ~]# mkdir /srinu && cd /srinu && yum install git -y  && git clone https://github.com/Srinuas/install.git
+Amazon Linux 2023 Kernel Livepatch repository                                                        286 kB/s |  31 kB     00:00
+Dependencies resolved.
+=====================================================================================================================================
+ Package                          Architecture           Version                                   Repository                   Size
+=====================================================================================================================================
+Installing:
+ git                              x86_64                 2.50.1-1.amzn2023.0.1                     amazonlinux                  53 k
+Installing dependencies:
+ git-core                         x86_64                 2.50.1-1.amzn2023.0.1                     amazonlinux                 4.9 M
+ git-core-doc                     noarch                 2.50.1-1.amzn2023.0.1                     amazonlinux                 2.8 M
+ perl-Error                       noarch                 1:0.17029-5.amzn2023.0.2                  amazonlinux                  41 k
+ perl-File-Find                   noarch                 1.37-477.amzn2023.0.7                     amazonlinux                  25 k
+ perl-Git                         noarch                 2.50.1-1.amzn2023.0.1                     amazonlinux                  41 k
+ perl-TermReadKey                 x86_64                 2.38-9.amzn2023.0.2                       amazonlinux                  36 k
+ perl-lib                         x86_64                 0.65-477.amzn2023.0.7                     amazonlinux                  15 k
+
+Transaction Summary
+=====================================================================================================================================
+Install  8 Packages
+
+Total download size: 7.9 M
+Installed size: 41 M
+Downloading Packages:
+(1/8): git-2.50.1-1.amzn2023.0.1.x86_64.rpm                                                          1.4 MB/s |  53 kB     00:00
+(2/8): git-core-doc-2.50.1-1.amzn2023.0.1.noarch.rpm                                                  43 MB/s | 2.8 MB     00:00
+(3/8): perl-Error-0.17029-5.amzn2023.0.2.noarch.rpm                                                  1.3 MB/s |  41 kB     00:00
+(4/8): git-core-2.50.1-1.amzn2023.0.1.x86_64.rpm                                                      62 MB/s | 4.9 MB     00:00
+(5/8): perl-File-Find-1.37-477.amzn2023.0.7.noarch.rpm                                               860 kB/s |  25 kB     00:00
+(6/8): perl-Git-2.50.1-1.amzn2023.0.1.noarch.rpm                                                     1.4 MB/s |  41 kB     00:00
+(7/8): perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64.rpm                                               1.3 MB/s |  36 kB     00:00
+(8/8): perl-lib-0.65-477.amzn2023.0.7.x86_64.rpm                                                     572 kB/s |  15 kB     00:00
+---
+Total                                                                                                 52 MB/s | 7.9 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                             1/1
+  Installing       : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                                       1/8
+  Installing       : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                                                   2/8
+  Installing       : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                                       3/8
+  Installing       : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                                                 4/8
+  Installing       : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                                                 5/8
+  Installing       : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                                                  6/8
+  Installing       : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                                       7/8
+  Installing       : git-2.50.1-1.amzn2023.0.1.x86_64                                                                            8/8
+  Running scriptlet: git-2.50.1-1.amzn2023.0.1.x86_64                                                                            8/8
+  Verifying        : git-2.50.1-1.amzn2023.0.1.x86_64                                                                            1/8
+  Verifying        : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                                       2/8
+  Verifying        : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                                                   3/8
+  Verifying        : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                                                  4/8
+  Verifying        : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                                                 5/8
+  Verifying        : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                                       6/8
+  Verifying        : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                                                 7/8
+  Verifying        : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                                       8/8
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64            git-core-2.50.1-1.amzn2023.0.1.x86_64       git-core-doc-2.50.1-1.amzn2023.0.1.noarch
+  perl-Error-1:0.17029-5.amzn2023.0.2.noarch  perl-File-Find-1.37-477.amzn2023.0.7.noarch perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64 perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 95, done.
+remote: Counting objects: 100% (95/95), done.
+remote: Compressing objects: 100% (90/90), done.
+remote: Total 95 (delta 46), reused 23 (delta 5), pack-reused 0 (from 0)
+Receiving objects: 100% (95/95), 28.69 KiB | 9.56 MiB/s, done.
+Resolving deltas: 100% (46/46), done.
+[root@eks srinu]#
+[root@eks srinu]# sh install/jenkins.sh
+---
+Starting Jenkins Installation...
+---
+[Step 1] Updating System...
+Last metadata expiration check: 0:09:04 ago on Mon Feb 16 15:47:42 2026.
+Dependencies resolved.
+Nothing to do.
+Complete!
+[Step 2] Installing Java 21 (Amazon Corretto)...
+Last metadata expiration check: 0:09:04 ago on Mon Feb 16 15:47:42 2026.
+Dependencies resolved.
+=====================================================================================================================================
+ Package                                      Architecture       Version                               Repository               Size
+=====================================================================================================================================
+Installing:
+ java-21-amazon-corretto
+
+Installed:
+  alsa-lib-1.2.7.2-1.amzn2023.0.2.x86_64                                cairo-1.18.0-4.amzn2023.0.3.x86_64
+  dejavu-sans-fonts-2.37-16.amzn2023.0.2.noarch                         dejavu-sans-mono-fonts-2.37-16.amzn2023.0.2.noarch
+  dejavu-serif-fonts-2.37-16.amzn2023.0.2.noarch                        fontconfig-2.13.94-2.amzn2023.0.2.x86_64
+  fonts-filesystem-1:2.0.5-12.amzn2023.0.2.noarch                       freetype-2.13.2-5.amzn2023.0.1.x86_64
+  giflib-5.2.1-9.amzn2023.0.2.x86_64                                    google-noto-fonts-common-20240401-1.amzn2023.0.2.noarch
+  google-noto-sans-vf-fonts-20240401-1.amzn2023.0.2.noarch              graphite2-1.3.14-7.amzn2023.0.2.x86_64
+  harfbuzz-7.0.0-2.amzn2023.0.2.x86_64                                  java-21-amazon-corretto-1:21.0.10+7-1.amzn2023.1.x86_64
+  java-21-amazon-corretto-headless-1:21.0.10+7-1.amzn2023.1.x86_64      javapackages-filesystem-6.0.0-7.amzn2023.0.6.noarch
+  langpacks-core-font-en-3.0-21.amzn2023.0.4.noarch                     libICE-1.1.1-3.amzn2023.0.1.x86_64
+  libSM-1.2.4-3.amzn2023.0.1.x86_64                                     libX11-1.8.10-2.amzn2023.0.1.x86_64
+  libX11-common-1.8.10-2.amzn2023.0.1.noarch                            libXau-1.0.11-6.amzn2023.0.1.x86_64
+  libXext-1.3.6-1.amzn2023.0.1.x86_64                                   libXi-1.8.2-1.amzn2023.0.1.x86_64
+  libXinerama-1.1.5-6.amzn2023.0.1.x86_64                               libXrandr-1.5.4-3.amzn2023.0.1.x86_64
+  libXrender-0.9.11-6.amzn2023.0.1.x86_64                               libXt-1.3.0-3.amzn2023.0.1.x86_64
+  libXtst-1.2.5-1.amzn2023.0.1.x86_64                                   libbrotli-1.0.9-4.amzn2023.0.2.x86_64
+  libjpeg-turbo-2.1.4-2.amzn2023.0.5.x86_64                             libpng-2:1.6.37-10.amzn2023.0.9.x86_64
+  libxcb-1.17.0-1.amzn2023.0.1.x86_64                                   pixman-0.43.4-1.amzn2023.0.4.x86_64
+  xml-common-0.6.3-56.amzn2023.0.2.noarch
+
+Complete!
+Java found at: /usr/lib/jvm/java-21-amazon-corretto.x86_64
+[Step 3] Adding Jenkins Repository...
+--2026-02-16 15:56:54--  https://pkg.jenkins.io/rpm-stable/jenkins.repo
+Resolving pkg.jenkins.io (pkg.jenkins.io)... 146.75.78.133, 2a04:4e42:83::645
+Connecting to pkg.jenkins.io (pkg.jenkins.io)|146.75.78.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 267 [application/octet-stream]
+Saving to: ‘/etc/yum.repos.d/jenkins.repo’
+
+/etc/yum.repos.d/jenkins.repo     100%[==========================================================>]     267  --.-KB/s    in 0s
+
+2026-02-16 15:56:54 (36.1 MB/s) - ‘/etc/yum.repos.d/jenkins.repo’ saved [267/267]
+
+[Step 4] Installing Jenkins...
+Jenkins-stable                                                                                       7.2 kB/s | 833  B     00:00
+Jenkins-stable                                                                                        41 kB/s | 1.6 kB     00:00
+Importing GPG key 0x14ABFC68:
+ Userid     : "Jenkins Project jenkinsci-board@googlegroups.com"
+ Fingerprint: 5E38 6EAD B55F 0150 4CAE 8BCF 7198 F4B7 14AB FC68
+ From       : https://pkg.jenkins.io/rpm-stable/repodata/repomd.xml.key
+Jenkins-stable                                                                                       8.9 kB/s | 1.4 kB     00:00
+Dependencies resolved.
+=====================================================================================================================================
+ Package                        Architecture                  Version                           Repository                      Size
+=====================================================================================================================================
+Installing:
+ jenkins
+
+---
+Waiting for Jenkins to generate the admin password (10 seconds)...
+---
+YOUR INITIAL ADMIN PASSWORD IS:
+---
+1ad199e43b954e68bc8e028df6aca3c9
+---
+
+=============================================================================
+=====================          Install aws CLI          =====================
+=============================================================================
+
+
+[root@eks srinu]# curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 63.6M  100 63.6M    0     0   340M      0 --:--:-- --:--:-- --:--:--  342M
+Archive:  awscliv2.zip
+   creating: aws/
+   creating: aws/dist/
+  inflating: aws/THIRD_PARTY_LICENSES
+  inflating: aws/README.md
+  inflating: aws/install
+   creating: aws/dist/awscli/
+   creating: aws/dist/dateutil/
+   creating: aws/dist/docutils/
+  inflating: aws/dist/prompt_toolkit-3.0.51.dist-info/licenses/AUTHORS.rst
+  inflating: aws/dist/prompt_toolkit-3.0.51.dist-info/licenses/LICENSE
+You can now run: /usr/local/bin/aws --version
+[root@eks srinu]#
+
+=============================================================================
+=====================    Install kubectl and Eksctl     =====================
+=============================================================================
+
+[root@eks srinu]# sh install/kubectl.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 55.8M  100 55.8M    0     0   138M      0 --:--:-- --:--:-- --:--:--  138M
+[root@eks srinu]# curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version
+0.223.0
+[root@eks srinu]#
+
+=============================================================================
+=====================        Install Eks cluster        =====================
+=============================================================================
+
+[root@eks srinu]# eksctl create cluster --name=EKS-1 --region=us-east-2 --zones=us-east-2a,us-east-2b --without-nodegroup
+2026-02-16 16:22:06 [ℹ]  eksctl version 0.223.0
+2026-02-16 16:22:06 [ℹ]  using region us-east-2
+2026-02-16 16:22:06 [ℹ]  subnets for us-east-2a - public:192.168.0.0/19 private:192.168.64.0/19
+2026-02-16 16:22:06 [ℹ]  subnets for us-east-2b - public:192.168.32.0/19 private:192.168.96.0/19
+2026-02-16 16:22:06 [!]  Auto Mode will be enabled by default in an upcoming release of eksctl. This means managed node groups and managed networking add-ons will no longer be created by default. To maintain current behavior, explicitly set 'autoModeConfig.enabled: false' in your cluster configuration. Learn more: https://eksctl.io/usage/auto-mode/
+2026-02-16 16:22:06 [ℹ]  using Kubernetes version 1.34
+2026-02-16 16:22:06 [ℹ]  creating EKS cluster "EKS-1" in "us-east-2" region with
+2026-02-16 16:22:06 [ℹ]  if you encounter any issues, check CloudFormation console or try 'eksctl utils describe-stacks --region=us-east-2 --cluster=EKS-1'
+2026-02-16 16:22:06 [ℹ]  Kubernetes API endpoint access will use default of {publicAccess=true, privateAccess=false} for cluster "EKS-1" in "us-east-2"
+2026-02-16 16:22:06 [ℹ]  CloudWatch logging will not be enabled for cluster "EKS-1" in "us-east-2"
+2026-02-16 16:22:06 [ℹ]  you can enable it with 'eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all)} --region=us-east-2 --cluster=EKS-1'
+2026-02-16 16:22:06 [ℹ]  default addons metrics-server, vpc-cni, kube-proxy, coredns were not specified, will install them as EKS addons
+2026-02-16 16:22:06 [ℹ]
+2 sequential tasks: { create cluster control plane "EKS-1",
+    2 sequential sub-tasks: {
+        1 task: { create addons },
+        wait for control plane to become ready,
+    }
+}
+2026-02-16 16:22:06 [ℹ]  building cluster stack "eksctl-EKS-1-cluster"
+2026-02-16 16:22:07 [ℹ]  deploying stack "eksctl-EKS-1-cluster"
+2026-02-16 16:22:37 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-cluster"
+2026-02-16 16:23:07 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-cluster"
+2026-02-16 16:24:07 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-cluster"
+2026-02-16 16:25:07 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-cluster"
+2026-02-16 16:26:07 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-cluster"
+2026-02-16 16:27:07 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-cluster"
+2026-02-16 16:28:07 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-cluster"
+2026-02-16 16:29:07 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-cluster"
+2026-02-16 16:30:07 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-cluster"
+2026-02-16 16:30:08 [!]  recommended policies were found for "vpc-cni" addon, but since OIDC is disabled on the cluster, eksctl cannot configure the requested permissions; the recommended way to provide IAM permissions for "vpc-cni" addon is via pod identity associations; after addon creation is completed, add all recommended policies to the config file, under `addon.PodIdentityAssociations`, and run `eksctl update addon`
+2026-02-16 16:30:08 [ℹ]  creating addon: vpc-cni
+2026-02-16 16:30:09 [ℹ]  successfully created addon: vpc-cni
+2026-02-16 16:30:09 [ℹ]  creating addon: kube-proxy
+2026-02-16 16:30:09 [ℹ]  successfully created addon: kube-proxy
+2026-02-16 16:30:10 [ℹ]  creating addon: coredns
+2026-02-16 16:30:10 [ℹ]  successfully created addon: coredns
+2026-02-16 16:32:11 [ℹ]  waiting for the control plane to become ready
+2026-02-16 16:32:11 [✔]  saved kubeconfig as "/root/.kube/config"
+2026-02-16 16:32:11 [ℹ]  no tasks
+2026-02-16 16:32:11 [✔]  all EKS cluster resources for "EKS-1" have been created
+2026-02-16 16:32:12 [ℹ]  creating addon: metrics-server
+2026-02-16 16:32:12 [ℹ]  successfully created addon: metrics-server
+2026-02-16 16:32:13 [ℹ]  kubectl command should work with "/root/.kube/config", try 'kubectl get nodes'
+2026-02-16 16:32:13 [✔]  EKS cluster "EKS-1" in "us-east-2" region is ready
+[root@eks srinu]# eksctl utils associate-iam-oidc-provider --region us-east-2 --cluster EKS-1 --approve
+2026-02-16 16:34:56 [ℹ]  will create IAM Open ID Connect provider for cluster "EKS-1" in "us-east-2"
+2026-02-16 16:34:56 [✔]  created IAM Open ID Connect provider for cluster "EKS-1" in "us-east-2"
+[root@eks srinu]#
+[root@eks srinu]#
+[root@eks srinu]#
+[root@eks srinu]#
+[root@eks srinu]#
+[root@eks srinu]#
+[root@eks srinu]#
+[root@eks srinu]# eksctl create nodegroup --cluster=EKS-1 --region=us-east-2 --name=node2 --node-type=c7i-flex.large --nodes=2 --nodes-min=2 --nodes-max=4 --node-volume-size=20 --ssh-access --ssh-public-key=mykey --managed --asg-access --external-dns-access --full-ecr-access --appmesh-access --alb-ingress-access
+2026-02-16 16:43:54 [ℹ]  will use version 1.34 for new nodegroup(s) based on control plane version
+2026-02-16 16:43:55 [ℹ]  nodegroup "node2" will use "" [AmazonLinux2023/1.34]
+2026-02-16 16:43:55 [ℹ]  using EC2 key pair "mykey"
+2026-02-16 16:43:55 [ℹ]  1 nodegroup (node2) was included (based on the include/exclude rules)
+2026-02-16 16:43:55 [ℹ]  will create a CloudFormation stack for each of 1 managed nodegroups in cluster "EKS-1"
+2026-02-16 16:43:55 [ℹ]
+2 sequential tasks: { fix cluster compatibility, 1 task: { 1 task: { create managed nodegroup "node2" } }
+}
+2026-02-16 16:43:55 [ℹ]  checking cluster stack for missing resources
+2026-02-16 16:43:55 [ℹ]  cluster stack has all required resources
+2026-02-16 16:43:55 [ℹ]  building managed nodegroup stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 16:43:55 [ℹ]  deploying stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 16:43:56 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 16:44:26 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 16:44:56 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 16:46:40 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 16:46:40 [ℹ]  no tasks
+2026-02-16 16:46:40 [✔]  created 0 nodegroup(s) in cluster "EKS-1"
+2026-02-16 16:46:40 [ℹ]  nodegroup "node2" has 2 node(s)
+2026-02-16 16:46:40 [ℹ]  node "ip-192-168-11-162.us-east-2.compute.internal" is ready
+2026-02-16 16:46:40 [ℹ]  node "ip-192-168-53-144.us-east-2.compute.internal" is ready
+2026-02-16 16:46:40 [ℹ]  waiting for at least 2 node(s) to become ready in "node2"
+2026-02-16 16:46:40 [ℹ]  nodegroup "node2" has 2 node(s)
+2026-02-16 16:46:40 [ℹ]  node "ip-192-168-11-162.us-east-2.compute.internal" is ready
+2026-02-16 16:46:40 [ℹ]  node "ip-192-168-53-144.us-east-2.compute.internal" is ready
+2026-02-16 16:46:40 [✔]  created 1 managed nodegroup(s) in cluster "EKS-1"
+2026-02-16 16:46:40 [ℹ]  checking security group configuration for all nodegroups
+2026-02-16 16:46:40 [ℹ]  all nodegroups have up-to-date cloudformation templates
+[root@eks srinu]#
+[root@eks srinu]# aws eks update-kubeconfig --name EKS-1 --region us-east-2
+Added new context arn:aws:eks:us-east-2:041878608675:cluster/EKS-1 to /root/.kube/config
+[root@eks srinu]#
+[root@eks srinu]# kubectl get nodes
+NAME                                           STATUS   ROLES    AGE   VERSION
+ip-192-168-11-162.us-east-2.compute.internal   Ready    <none>   28m   v1.34.3-eks-70ce843
+ip-192-168-53-144.us-east-2.compute.internal   Ready    <none>   28m   v1.34.3-eks-70ce843
+[root@eks srinu]#
+[root@eks srinu]# ll
+total 65244
+drwxr-xr-x. 3 root root       78 Feb 13 19:16 aws
+-rw-r--r--. 1 root root 66790977 Feb 16 15:58 awscliv2.zip
+drwxr-xr-x. 3 root root    16384 Feb 16 15:47 install
+[root@eks srinu]# rm -rf aws awscliv2.zip
+[root@eks srinu]# ll
+total 16
+drwxr-xr-x. 3 root root 16384 Feb 16 15:47 install
+[root@eks srinu]# mkdir ecom
+[root@eks srinu]# cd ecom/
+[root@eks ecom]# ll
+total 0
+[root@eks ecom]# kubectl create ns webapps
+namespace/webapps created
+[root@eks ecom]# kubectl get ns
+NAME              STATUS   AGE
+default           Active   52m
+kube-node-lease   Active   52m
+kube-public       Active   52m
+kube-system       Active   52m
+webapps           Active   12s
+[root@eks ecom]# 
+
+=============================================================================
+=====================          Docker install           =====================
+=============================================================================
+
+[root@eks ecom]# sh /srinu/install/docker.sh
+Last metadata expiration check: 1:26:47 ago on Mon Feb 16 15:56:55 2026.
+Dependencies resolved.
+=====================================================================================================================================
+ Package                               Architecture          Version                                Repository                  Size
+=====================================================================================================================================
+Installing:
+ docker
+
+Installed:
+  container-selinux-4:2.242.0-1.amzn2023.noarch      containerd-2.1.5-1.amzn2023.0.5.x86_64    docker-25.0.14-1.amzn2023.0.1.x86_64
+  iptables-libs-1.8.8-3.amzn2023.0.2.x86_64          iptables-nft-1.8.8-3.amzn2023.0.2.x86_64  libcgroup-3.0-1.amzn2023.0.1.x86_64
+  libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64 libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64 libnftnl-1.2.2-2.amzn2023.0.2.x86_64
+  pigz-2.5-1.amzn2023.0.3.x86_64                     runc-1.3.4-1.amzn2023.0.1.x86_64
+
+Complete!
+● docker.service - Docker Application Container Engine
+     Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; preset: disabled)
+     Active: active (running) since Mon 2026-02-16 17:24:07 UTC; 27ms ago
+TriggeredBy: ● docker.socket
+       Docs: https://docs.docker.com
+    Process: 32712 ExecStartPre=/bin/mkdir -p /run/docker (code=exited, status=0/SUCCESS)
+    Process: 32713 ExecStartPre=/usr/libexec/docker/docker-setup-runtimes.sh (code=exited, status=0/SUCCESS)
+   Main PID: 32714 (dockerd)
+      Tasks: 8
+     Memory: 30.3M
+        CPU: 208ms
+[root@eks ecom]#
+[root@eks ecom]#
+=============================================================================
+=====================          app deployment           =====================
+=============================================================================
+
+[root@eks ecom]#[root@eks ecom]# ll
+total 16
+-rw-r--r--. 1 root root 265 Feb 16 18:37 rb.yml
+-rw-r--r--. 1 root root 759 Feb 16 18:33 role.yml
+-rw-r--r--. 1 root root 189 Feb 16 18:40 secret.yml
+-rw-r--r--. 1 root root  83 Feb 16 18:15 svc-acc.yml
+[root@eks ecom]# cat svc-acc.yml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins
+  namespace: webapps
+[root@eks ecom]# cat role.yml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: app-role
+  namespace: webapps
+rules:
+  - apiGroups:
+    - ""
+    - apps
+    - autoscaling
+    - batch
+    - extensions
+    - policy
+    - rbac.authorization.k8s.io
+    resources:
+      - pods
+      - componentstatuses
+      - configmaps
+      - daemonsets
+      - deployments
+      - events
+      - endpoints
+      - horizontalpodautoscalers
+      - ingress
+      - jobs
+      - limitranges
+      - namespaces
+      - nodes
+      - pods
+      - persistentvolumes
+      - persistentvolumeclaims
+      - resourcequotas
+      - replicasets
+      - replicationcontrollers
+      - serviceaccounts
+      - services
+
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+[root@eks ecom]# cat rb.yml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: app-rolebinding
+  namespace: webapps
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: app-role
+subjects:
+- namespace: webapps
+  kind: ServiceAccount
+  name: jenkins
+[root@eks ecom]# cat secret.yml
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  namespace: webapps
+  name: mysecretname
+  annotations:
+    kubernetes.io/service-account.name: jenkins
+[root@eks ecom]#
+[root@eks ecom]# kubectl apply -f svc-acc.yml
+serviceaccount/jenkins created
+[root@eks ecom]# kubectl get ServiceAccount -n webapps
+NAME      SECRETS   AGE
+default   0         57m
+jenkins   0         83s
+[root@eks ecom]# 
+[root@eks ecom]# kubectl apply -f rb.yml
+rolebinding.rbac.authorization.k8s.io/app-rolebinding created
+[root@eks ecom]# vi secret.yml
+[root@eks ecom]# kubectl apply -f secret.yml
+secret/mysecretname created
+[root@eks ecom]# kubectl get secret -n webapps
+NAME           TYPE                                  DATA   AGE
+mysecretname   kubernetes.io/service-account-token   3      38s
+[root@eks ecom]# kubectl describe secret mysecretname -n webapps
+Name:         mysecretname
+Namespace:    webapps
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: jenkins
+              kubernetes.io/service-account.uid: 74d7296a-7544-4a43-af97-29741f34be7c
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1107 bytes
+namespace:  7 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6InA1bUZsRDRMdmlpNjBPdVNicHM5c0ZBZklJTDhrdmlxMUJycnlyVTJkQ00ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJ3ZWJhcHBzIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6Im15c2VjcmV0bmFtZSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJqZW5raW5zIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiNzRkNzI5NmEtNzU0NC00YTQzLWFmOTctMjk3NDFmMzRiZTdjIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OndlYmFwcHM6amVua2lucyJ9.BtOrJSvQqxRrHmJrApNuIADeaGbkb96Y9OG3N_S5iNWRgRqG0Tbo3o8vQDXMFAGDDLt5qHETxX31eQU-oQ4E5bLxUBMBVgvtcafDB4VEMGJ72sjAJN6eWDMDCJJo7MfyFGnesgffZrsyVKfVgcjsucfLZyGE_jR4VDGeEZtd0OPkEXjOrYdeiCObvQle0R5_NqTj5sPQZuvahDk682OxsLM_7nMdRQsgjApm6V7FbMh3klnrvQqiMyi8lyjjpfLDXNw75Ig7rRnlXtcON9aNhr5po6-PSqf-IumXk2Ln806-M4rKRjOc6wKzO0NqTaDaFTd0O9Mgnikgy6EskFNDhg
+[root@eks ecom]# 
+[root@eks ecom]# kubectl get all -n webapps
+No resources found in webapps namespace.
+[root@eks ecom]# kubectl get all -n webapps
+NAME                                         READY   STATUS    RESTARTS   AGE
+pod/adservice-6576bc64f9-dsj7g               1/1     Running   0          3m45s
+pod/cartservice-675fc79f96-8kjlz             1/1     Running   0          3m46s
+pod/checkoutservice-5cf9b68c9-5zmvd          1/1     Running   0          3m46s
+pod/currencyservice-57c654c949-bgx9s         1/1     Running   0          3m46s
+pod/emailservice-775b58fdd7-lvj8r            1/1     Running   0          3m46s
+pod/frontend-9c889bbf-2m48q                  1/1     Running   0          3m46s
+pod/loadgenerator-6c5bfcdfb6-lpndr           1/1     Running   0          3m46s
+pod/paymentservice-78cc7bbcf7-bjvv8          1/1     Running   0          3m46s
+pod/productcatalogservice-54658fc69c-9zqgd   1/1     Running   0          3m46s
+pod/recommendationservice-8f9c7486c-sl8vz    1/1     Running   0          3m46s
+pod/redis-cart-5cc6c9f86c-677jz              1/1     Running   0          3m45s
+pod/shippingservice-9c778df99-z9zhb          1/1     Running   0          3m45s
+
+NAME                            TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)        AGE
+service/adservice               ClusterIP      10.100.173.41    <none>                                                                    9555/TCP       3m45s
+service/cartservice             ClusterIP      10.100.182.111   <none>                                                                    7070/TCP       3m46s
+service/checkoutservice         ClusterIP      10.100.55.158    <none>                                                                    5050/TCP       3m46s
+service/currencyservice         ClusterIP      10.100.33.80     <none>                                                                    7000/TCP       3m46s
+service/emailservice            ClusterIP      10.100.249.204   <none>                                                                    5000/TCP       3m46s
+service/frontend                NodePort       10.100.83.212    <none>                                                                    80:32326/TCP   3m46s
+service/frontend-external       LoadBalancer   10.100.54.143    af5f625db8d1f42d6a2fd17b470d95db-1007335493.us-east-2.elb.amazonaws.com   80:30644/TCP   3m46s
+service/paymentservice          ClusterIP      10.100.117.238   <none>                                                                    50051/TCP      3m46s
+service/productcatalogservice   ClusterIP      10.100.143.177   <none>                                                                    3550/TCP       3m46s
+service/recommendationservice   ClusterIP      10.100.79.4      <none>                                                                    8080/TCP       3m46s
+service/redis-cart              ClusterIP      10.100.242.115   <none>                                                                    6379/TCP       3m46s
+service/shippingservice         ClusterIP      10.100.23.230    <none>                                                                    50051/TCP      3m46s
+
+NAME                                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/adservice               1/1     1            1           3m45s
+deployment.apps/cartservice             1/1     1            1           3m46s
+deployment.apps/checkoutservice         1/1     1            1           3m46s
+deployment.apps/currencyservice         1/1     1            1           3m46s
+deployment.apps/emailservice            1/1     1            1           3m46s
+deployment.apps/frontend                1/1     1            1           3m46s
+deployment.apps/loadgenerator           1/1     1            1           3m46s
+deployment.apps/paymentservice          1/1     1            1           3m46s
+deployment.apps/productcatalogservice   1/1     1            1           3m46s
+deployment.apps/recommendationservice   1/1     1            1           3m46s
+deployment.apps/redis-cart              1/1     1            1           3m46s
+deployment.apps/shippingservice         1/1     1            1           3m46s
+
+NAME                                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/adservice-6576bc64f9               1         1         1       3m45s
+replicaset.apps/cartservice-675fc79f96             1         1         1       3m46s
+replicaset.apps/checkoutservice-5cf9b68c9          1         1         1       3m46s
+replicaset.apps/currencyservice-57c654c949         1         1         1       3m46s
+replicaset.apps/emailservice-775b58fdd7            1         1         1       3m46s
+replicaset.apps/frontend-9c889bbf                  1         1         1       3m46s
+replicaset.apps/loadgenerator-6c5bfcdfb6           1         1         1       3m46s
+replicaset.apps/paymentservice-78cc7bbcf7          1         1         1       3m46s
+replicaset.apps/productcatalogservice-54658fc69c   1         1         1       3m46s
+replicaset.apps/recommendationservice-8f9c7486c    1         1         1       3m46s
+replicaset.apps/redis-cart-5cc6c9f86c              1         1         1       3m45s
+replicaset.apps/shippingservice-9c778df99          1         1         1       3m45s
+[root@eks ecom]#
+
+[root@eks ecom]# kubectl get svc frontend-external -n webapps
+NAME                TYPE           CLUSTER-IP      EXTERNAL-IP                                                               PORT(S)        AGE
+frontend-external   LoadBalancer   10.100.54.143   af5f625db8d1f42d6a2fd17b470d95db-1007335493.us-east-2.elb.amazonaws.com   80:30644/TCP   7m42s
+[root@eks ecom]#
+=============================================================================
+=====================          Cluster delete           =====================
+=============================================================================
+
+[root@eks ecom]# eksctl delete cluster --name EKS-1 --region us-east-2
+2026-02-16 21:58:56 [ℹ]  deleting EKS cluster "EKS-1"
+2026-02-16 21:58:56 [ℹ]  will drain 0 unmanaged nodegroup(s) in cluster "EKS-1"
+2026-02-16 21:58:56 [ℹ]  starting parallel draining, max in-flight of 1
+2026-02-16 21:58:56 [ℹ]  deleted 0 Fargate profile(s)
+2026-02-16 21:58:56 [✔]  kubeconfig has been updated
+2026-02-16 21:58:56 [ℹ]  cleaning up AWS load balancers created by Kubernetes objects of Kind Service or Ingress
+2026-02-16 21:59:26 [ℹ]
+3 sequential tasks: { delete nodegroup "node2", delete IAM OIDC provider, delete cluster control plane "EKS-1" [async]
+}
+2026-02-16 21:59:26 [ℹ]  will delete stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 21:59:26 [ℹ]  waiting for stack "eksctl-EKS-1-nodegroup-node2" to get deleted
+2026-02-16 21:59:26 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 21:59:56 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 22:00:44 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 22:01:49 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 22:02:44 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 22:03:34 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 22:04:04 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 22:04:41 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 22:06:07 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 22:07:50 [ℹ]  waiting for CloudFormation stack "eksctl-EKS-1-nodegroup-node2"
+2026-02-16 22:07:50 [ℹ]  will delete stack "eksctl-EKS-1-cluster"
+2026-02-16 22:07:51 [✔]  all cluster resources were deleted
+[root@eks ecom]#
+[root@eks ecom]# kubectl get nodes
+Unable to connect to the server: dial tcp: lookup 806ACE1CA4C6DBFE48725AA407B47666.gr7.us-east-2.eks.amazonaws.com on 172.31.0.2:53: no such host
+[root@eks ecom]#
+[root@eks ecom]# Connection to 3.137.180.21 closed by remote host.
+Connection to 3.137.180.21 closed.
+PS C:\Users\srini>
