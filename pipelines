@@ -1,0 +1,248 @@
+Pluggins:
+
+Pipeline: Stage View
+SonarQube Scanner
+Nexus Artifact Uploader
+Docker Pipeline
+Email Extension Template
+Kubernetes
+Kubernetes CLI
+_______________________________________________
+
+pipeline {
+    agent any
+    tools {
+        maven 'mymvn'
+    }
+    stages {
+        stage ('code') {
+            steps {
+                git branch: 'main', credentialsId: 'Git-http-key', url: 'https://github.com/Srinuas/dockerapp.git'
+            }
+        }
+        stage ('cqa') {
+            steps {
+                withSonarQubeEnv('mysnr') {
+                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=app"
+                }
+            }
+        }
+        stage ('maven') {
+            steps {
+                sh 'mvn clean package'
+                sh 'cp -r target Docker-app'
+            }
+        }
+        stage ('artifact') {
+            steps {
+                nexusArtifactUploader artifacts: [[artifactId: 'vprofile', classifier: '', file: 'target/vprofile-v2.war', type: 'war']], credentialsId: 'nex-key', groupId: 'com.visualpathit', nexusUrl: '23.20.139.218:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'nexrepo', version: 'v2'
+            }
+        }
+        stage ('docker build') {
+            steps {
+                sh 'docker build -t appimg:1 Docker-app'
+                sh 'docker build -t dbimg:1 Docker-db'
+            }
+        }
+        stage ('docker deploy') {
+            input {
+                message 'deploy???'
+            }
+            steps {
+                sh 'docker rm -f devopsdb appcon'
+                sh 'docker run -d --name devopsdb -p 2222:3306 dbimg:1'
+                sh 'docker run -itd --name appcon -p 3333:8080 --link devopsdb:mysqlcon appimg:1'
+            }
+        }
+    }
+    post {
+        always {
+            mail to: 'srinivasvanapalli0499@gmail.com',
+            subject: "Pipeline : ${JOB_NAME} - ${BUILD_DISPLAY_NAME}",
+            body: "Your pipeline is : ${currentBuild.currentResult.toLowerCase()}\nMore info at: ${BUILD_URL}"
+        }
+    }
+}
+_______________________________________________
+
+pipeline {
+    agent {
+        node {
+            label 'jenkins'
+        }
+    }
+    
+    environment {
+        scannerHome = tool 'snr'
+    }
+    
+    stages {
+        stage('Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Srinuas/library_management.git'
+            }
+        }
+
+        stage('CQA') {
+            steps {
+                script {
+                    withSonarQubeEnv('snr') {
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=sonartext -Dsonar.projectName='proj'"
+                    }
+                }
+            }
+        }
+
+        stage('Image Build') {
+            steps {
+                sh '''
+                    docker build -t dbimg microservice/database
+                    docker build -t auimg microservice/auth
+                    docker build -t bkimg microservice/book
+                    docker build -t brimg microservice/borrow
+                    docker build -t feimg microservice
+                '''
+            }
+        }
+
+        stage('Scan') {
+            steps {
+                sh '''
+                    trivy image dbimg
+                    trivy image auimg
+                    trivy image bkimg
+                    trivy image brimg
+                    trivy image feimg
+                '''
+            }
+        }
+
+        stage('Tags') {
+            steps {
+                sh '''
+                    docker tag dbimg srinuas/mylib:db
+                    docker tag auimg srinuas/mylib:au
+                    docker tag bkimg srinuas/mylib:bk
+                    docker tag brimg srinuas/mylib:br
+                    docker tag feimg srinuas/mylib:fe
+                '''
+            }
+        }
+
+        stage('Registry') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker') {
+                        sh '''
+                            docker push srinuas/mylib:db
+                            docker push srinuas/mylib:au
+                            docker push srinuas/mylib:bk
+                            docker push srinuas/mylib:br
+                            docker push srinuas/mylib:fe
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'docker stack deploy srinu --compose-file=microservice/compose.yml'
+            }
+        }
+    }
+
+    post {
+        always {
+            mail to: 'srinivasvanapalli0499@gmail.com',
+                 subject: "Pipeline status - ${currentBuild.currentResult}",
+                 body: """Your pipeline name: ${JOB_NAME}
+                          Build #${BUILD_NUMBER}
+                          Status: ${currentBuild.currentResult}
+                          Build URL: ${BUILD_URL}
+                          Console Output: ${BUILD_URL}console"""
+        }
+    }
+}
+
+_____________________________________________
+
+
+pipeline {
+    agent any
+    environment {
+        scannerHome = tool 'snr'
+    }
+    stages {
+        stage ('code') {
+            steps {
+                git branch: 'main1', url: 'https://github.com/Srinuas/bloodbankapp.git'
+            }
+        }
+        stage('cqa') {
+            steps {
+                script {
+                    withSonarQubeEnv('snr') {
+                        //sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=myproj -Dsonar.projectName='myproj'"
+                    }
+                }
+            }
+        }
+        stage('quality') {
+            steps {
+                //waitForQualityGate abortPipeline: false, credentialsId: 'sonar-secret'
+            }
+        }
+        stage('image') {
+            steps {
+                echo 'build done'
+                sh 'docker build -t dbimg code/database'
+                sh 'docker build -t apimg code'
+            }
+        }
+        stage('scan') {
+            steps {
+                echo 'scan done'
+                //sh 'trivy image dbimg'
+                //sh 'trivy image apimg'
+            }
+        }
+        stage('tags') {
+            steps {
+                echo 'tags done'
+                sh 'docker tag dbimg srinuas/bloodapp:dbimg'
+                sh 'docker tag apimg srinuas/bloodapp:apimg'
+            }
+        }
+        stage('registry') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-cred') {
+                        sh 'docker push srinuas/bloodapp:dbimg'
+                        sh 'docker push srinuas/bloodapp:apimg'
+                        sh 'docker rm -f mysqldb'
+                        sh 'docker rm -f blood'
+                    }
+                }
+            }
+        }
+        stage('deploy') {
+            steps {
+                sh 'docker volume create mysql-data'
+                sh 'docker run -d --name mysqldb -v mysql-data:/srinu/mysql -p 3306:3306 srinuas/bloodapp:dbimg'
+                sh 'docker run -itd --name blood -p 444:80 --link mysqldb:mysqlcon srinuas/bloodapp:apimg'
+            }
+        }
+    }
+    post {
+        always {
+            mail to: 'srinivasvanapalli0499@gmail.com',
+                 subject: "Pipeline status - ${currentBuild.currentResult}",
+                 body: """Your pipeline name: ${JOB_NAME}
+                          Build #${BUILD_NUMBER}
+                          Status: ${currentBuild.currentResult}
+                          Build URL: ${BUILD_URL}
+                          Console Output: ${BUILD_URL}console"""
+        }
+    }
+}
