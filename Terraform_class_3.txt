@@ -1,0 +1,2434 @@
+alias and creating security groups in Terraform
+
+======================================================================
+
+**************		Initial Instance launch 	**************
+
+======================================================================
+
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@3.16.128.72
+The authenticity of host '3.16.128.72 (3.16.128.72)' can't be established.
+ED25519 key fingerprint is SHA256:GA8/biQAxxXZaXN7kGdeoN5Rym+B2vHQVub22PBhekA.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '3.16.128.72' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-21-221 ~]$ sudo -i
+ectlhostnamectl s[root@ip-172-31-21-221 ~]# hostnamectl set-hostname terra
+[root@ip-172-31-21-221 ~]# exit
+logout
+[ec2-user@ip-172-31-21-221 ~]$ sudo -i
+yyu[root@terra ~]# yum install git -y && mkdir /srinu && cd /srinu && git clone https://github.com/Srinuas/insl.git && git clone https://github.com/Srinuas/practice-files.git && sh install/gitconfig.sh
+Amazon Linux 2023 Kernel Livepatch repository                                 258 kB/s |  31 kB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                    Architecture     Version                              Repository             Size
+==============================================================================================================
+Installing:
+ git                        x86_64           2.50.1-1.amzn2023.0.1                amazonlinux            53 k
+Installing dependencies:
+ git-core                   x86_64           2.50.1-1.amzn2023.0.1                amazonlinux           4.9 M
+ git-core-doc               noarch           2.50.1-1.amzn2023.0.1                amazonlinux           2.8 M
+ perl-Error                 noarch           1:0.17029-5.amzn2023.0.2             amazonlinux            41 k
+ perl-File-Find             noarch           1.37-477.amzn2023.0.7                amazonlinux            25 k
+ perl-Git                   noarch           2.50.1-1.amzn2023.0.1                amazonlinux            41 k
+ perl-TermReadKey           x86_64           2.38-9.amzn2023.0.2                  amazonlinux            36 k
+ perl-lib                   x86_64           0.65-477.amzn2023.0.7                amazonlinux            15 k
+
+Transaction Summary
+==============================================================================================================
+Install  8 Packages
+
+Total download size: 7.9 M
+Installed size: 41 M
+Downloading Packages:
+(1/8): git-2.50.1-1.amzn2023.0.1.x86_64.rpm                                   1.2 MB/s |  53 kB     00:00
+(2/8): git-core-doc-2.50.1-1.amzn2023.0.1.noarch.rpm                           39 MB/s | 2.8 MB     00:00
+(3/8): perl-Error-0.17029-5.amzn2023.0.2.noarch.rpm                           1.2 MB/s |  41 kB     00:00
+(4/8): git-core-2.50.1-1.amzn2023.0.1.x86_64.rpm                               47 MB/s | 4.9 MB     00:00
+(5/8): perl-File-Find-1.37-477.amzn2023.0.7.noarch.rpm                        756 kB/s |  25 kB     00:00
+(6/8): perl-Git-2.50.1-1.amzn2023.0.1.noarch.rpm                              1.2 MB/s |  41 kB     00:00
+(7/8): perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64.rpm                        1.3 MB/s |  36 kB     00:00
+(8/8): perl-lib-0.65-477.amzn2023.0.7.x86_64.rpm                              577 kB/s |  15 kB     00:00
+--------------------------------------------------------------------------------------------------------------
+Total                                                                          45 MB/s | 7.9 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                      1/1
+  Installing       : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                1/8
+  Installing       : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            2/8
+  Installing       : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                3/8
+  Installing       : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          4/8
+  Installing       : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Installing       : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           6/8
+  Installing       : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                7/8
+  Installing       : git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Running scriptlet: git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Verifying        : git-2.50.1-1.amzn2023.0.1.x86_64                                                     1/8
+  Verifying        : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                2/8
+  Verifying        : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            3/8
+  Verifying        : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           4/8
+  Verifying        : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Verifying        : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                6/8
+  Verifying        : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          7/8
+  Verifying        : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                8/8
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64                       git-core-2.50.1-1.amzn2023.0.1.x86_64
+  git-core-doc-2.50.1-1.amzn2023.0.1.noarch              perl-Error-1:0.17029-5.amzn2023.0.2.noarch
+  perl-File-Find-1.37-477.amzn2023.0.7.noarch            perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64            perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 109, done.
+remote: Counting objects: 100% (109/109), done.
+remote: Compressing objects: 100% (103/103), done.
+remote: Total 109 (delta 51), reused 27 (delta 6), pack-reused 0 (from 0)
+Receiving objects: 100% (109/109), 33.12 KiB | 8.28 MiB/s, done.
+Resolving deltas: 100% (51/51), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 88, done.
+remote: Counting objects: 100% (88/88), done.
+remote: Compressing objects: 100% (79/79), done.
+remote: Total 88 (delta 33), reused 43 (delta 9), pack-reused 0 (from 0)
+Receiving objects: 100% (88/88), 121.14 KiB | 4.33 MiB/s, done.
+Resolving deltas: 100% (33/33), done.
+[root@terra srinu]# sh install/terraform.sh
+Last metadata expiration check: 0:00:18 ago on Fri Feb 20 11:43:14 2026.
+Package dnf-utils-4.3.0-13.amzn2023.0.6.noarch is already installed.
+Package shadow-utils-2:4.9-12.amzn2023.0.4.x86_64 is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+Adding repo from: https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+Hashicorp Stable - x86_64                                                      31 MB/s | 2.0 MB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                   Architecture           Version                     Repository                 Size
+==============================================================================================================
+Installing:
+ terraform                 x86_64                 1.14.5-1                    hashicorp                  30 M
+
+Transaction Summary
+==============================================================================================================
+Install  1 Package
+
+Total download size: 30 M
+Installed size: 96 M
+Downloading Packages:
+terraform-1.14.5-1.x86_64.rpm                                                 143 MB/s |  30 MB     00:00
+--------------------------------------------------------------------------------------------------------------
+Total                                                                         142 MB/s |  30 MB     00:00
+Hashicorp Stable - x86_64                                                     256 kB/s | 3.9 kB     00:00
+Importing GPG key 0xA621E701:
+ Userid     : "HashiCorp Security (HashiCorp Package Signing) <security+packaging@hashicorp.com>"
+ Fingerprint: 798A EC65 4E5C 1542 8C8E 42EE AA16 FCBC A621 E701
+ From       : https://rpm.releases.hashicorp.com/gpg
+Key imported successfully
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                      1/1
+  Installing       : terraform-1.14.5-1.x86_64                                                            1/1
+  Verifying        : terraform-1.14.5-1.x86_64                                                            1/1
+
+Installed:
+  terraform-1.14.5-1.x86_64
+
+Complete!
+[root@terra srinu]# cd
+[root@terra ~]# ll
+total 0
+[root@terra ~]# mkdir form
+[root@terra ~]# cd form/
+[root@terra form]# ll
+total 0
+[root@terra form]# vi provider.tf
+[root@terra form]# vi main.tf
+[root@terra form]# 
+[root@terra form]# terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.ohio[0] will be created
+  + resource "aws_instance" "ohio" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Env"  = "prod"
+          + "Name" = "ohio_instance"
+          + "Org"  = "wip"
+        }
+      + tags_all                             = {
+          + "Env"  = "prod"
+          + "Name" = "ohio_instance"
+          + "Org"  = "wip"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # aws_instance.ohio[1] will be created
+  + resource "aws_instance" "ohio" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Env"  = "prod"
+          + "Name" = "ohio_instance"
+          + "Org"  = "wip"
+        }
+      + tags_all                             = {
+          + "Env"  = "prod"
+          + "Name" = "ohio_instance"
+          + "Org"  = "wip"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these
+actions if you run "terraform apply" now.
+[root@terra form]# 
+[root@terra form]# terraform apply --auto-approve
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.ohio[0] will be created
+  + resource "aws_instance" "ohio" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Env"  = "prod"
+          + "Name" = "ohio_instance"
+          + "Org"  = "wip"
+        }
+      + tags_all                             = {
+          + "Env"  = "prod"
+          + "Name" = "ohio_instance"
+          + "Org"  = "wip"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # aws_instance.ohio[1] will be created
+  + resource "aws_instance" "ohio" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Env"  = "prod"
+          + "Name" = "ohio_instance"
+          + "Org"  = "wip"
+        }
+      + tags_all                             = {
+          + "Env"  = "prod"
+          + "Name" = "ohio_instance"
+          + "Org"  = "wip"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+aws_instance.ohio[1]: Creating...
+aws_instance.ohio[0]: Creating...
+aws_instance.ohio[0]: Still creating... [00m10s elapsed]
+aws_instance.ohio[1]: Still creating... [00m10s elapsed]
+aws_instance.ohio[1]: Creation complete after 12s [id=i-054071febf870c30a]
+aws_instance.ohio[0]: Creation complete after 12s [id=i-02efcdd19f1014be4]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+[root@terra form]# 
+[root@terra form]# terraform fmt
+main.tf
+provider.tf
+[root@terra form]# cat provider.tf
+provider "aws" {
+  region = "us-east-2"
+}
+[root@terra form]# cat main.tf
+resource "aws_instance" "ohio" {
+  tags = {
+    Name = "ohio_instance"
+    Env  = "prod"
+    Org  = "wip"
+  }
+
+  ami           = "ami-09256c524fab91d36"
+  count         = 2
+  instance_type = "t3.micro"
+  key_name      = "mykey1"
+  root_block_device {
+    volume_size = 9
+  }
+}
+[root@terra form]# terraform state list
+aws_instance.ohio[0]
+aws_instance.ohio[1]
+[root@terra form]#
+[root@terra form]# terraform destroy --auto-approve
+aws_instance.ohio[1]: Refreshing state... [id=i-054071febf870c30a]
+aws_instance.ohio[0]: Refreshing state... [id=i-02efcdd19f1014be4]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_instance.ohio[0] will be destroyed
+  - resource "aws_instance" "ohio" {
+      - ami                                  = "ami-09256c524fab91d36" -> null
+      - arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-02efcdd19f1014be4" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-2b" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-02efcdd19f1014be4" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "mykey1" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-0b4f0a2bce635a046" -> null
+      - private_dns                          = "ip-172-31-26-41.us-east-2.compute.internal" -> null
+      - private_ip                           = "172.31.26.41" -> null
+      - public_dns                           = "ec2-13-59-177-86.us-east-2.compute.amazonaws.com" -> null
+      - public_ip                            = "13.59.177.86" -> null
+      - region                               = "us-east-2" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "default",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-09822063ebd3763d0" -> null
+      - tags                                 = {
+          - "Env"  = "prod"
+          - "Name" = "ohio_instance"
+          - "Org"  = "wip"
+        } -> null
+      - tags_all                             = {
+          - "Env"  = "prod"
+          - "Name" = "ohio_instance"
+          - "Org"  = "wip"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-08c1450f2a2f83031",
+        ] -> null
+        # (8 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0b4f0a2bce635a046" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-0be17c91e209ed024" -> null
+          - volume_size           = 9 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # aws_instance.ohio[1] will be destroyed
+  - resource "aws_instance" "ohio" {
+      - ami                                  = "ami-09256c524fab91d36" -> null
+      - arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-054071febf870c30a" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-2b" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-054071febf870c30a" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "mykey1" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-0f39b83f2a98b89b1" -> null
+      - private_dns                          = "ip-172-31-16-40.us-east-2.compute.internal" -> null
+      - private_ip                           = "172.31.16.40" -> null
+      - public_dns                           = "ec2-18-219-83-212.us-east-2.compute.amazonaws.com" -> null
+      - public_ip                            = "18.219.83.212" -> null
+      - region                               = "us-east-2" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "default",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-09822063ebd3763d0" -> null
+      - tags                                 = {
+          - "Env"  = "prod"
+          - "Name" = "ohio_instance"
+          - "Org"  = "wip"
+        } -> null
+      - tags_all                             = {
+          - "Env"  = "prod"
+          - "Name" = "ohio_instance"
+          - "Org"  = "wip"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-08c1450f2a2f83031",
+        ] -> null
+        # (8 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0f39b83f2a98b89b1" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-02f12ff98d2275478" -> null
+          - volume_size           = 9 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+Plan: 0 to add, 0 to change, 2 to destroy.
+aws_instance.ohio[0]: Destroying... [id=i-02efcdd19f1014be4]
+aws_instance.ohio[1]: Destroying... [id=i-054071febf870c30a]
+aws_instance.ohio[0]: Still destroying... [id=i-02efcdd19f1014be4, 00m10s elapsed]
+aws_instance.ohio[1]: Still destroying... [id=i-054071febf870c30a, 00m10s elapsed]
+aws_instance.ohio[1]: Still destroying... [id=i-054071febf870c30a, 00m20s elapsed]
+aws_instance.ohio[0]: Still destroying... [id=i-02efcdd19f1014be4, 00m20s elapsed]
+aws_instance.ohio[0]: Still destroying... [id=i-02efcdd19f1014be4, 00m30s elapsed]
+aws_instance.ohio[1]: Still destroying... [id=i-054071febf870c30a, 00m30s elapsed]
+aws_instance.ohio[1]: Still destroying... [id=i-054071febf870c30a, 00m40s elapsed]
+aws_instance.ohio[0]: Still destroying... [id=i-02efcdd19f1014be4, 00m40s elapsed]
+aws_instance.ohio[0]: Destruction complete after 49s
+aws_instance.ohio[1]: Still destroying... [id=i-054071febf870c30a, 00m50s elapsed]
+aws_instance.ohio[1]: Still destroying... [id=i-054071febf870c30a, 01m00s elapsed]
+aws_instance.ohio[1]: Still destroying... [id=i-054071febf870c30a, 01m10s elapsed]
+aws_instance.ohio[1]: Destruction complete after 1m10s
+
+Destroy complete! Resources: 2 destroyed.
+[root@terra form]#
+
+
+
+___________________________________________________________________
+
+
+[root@terra form]# vi main.tf
+[root@terra form]# mv main.tf provider.tf /srinu/
+[root@terra form]# ll
+total 16
+-rw-r--r--. 1 root root   181 Feb 20 12:15 terraform.tfstate
+-rw-r--r--. 1 root root 10776 Feb 20 12:15 terraform.tfstate.backup
+[root@terra form]# vi main.tf
+[root@terra form]# vi prov.tf
+[root@terra form]# vi main.tf
+[root@terra form]# vi segr.tf
+[root@terra form]# terraform fmt
+main.tf
+prov.tf
+segr.tf
+[root@terra form]#
+[root@terra form]# cat prov.tf
+provider "aws" {
+  region = "us-east-2"
+}
+[root@terra form]# cat main.tf
+resource "aws_instance" "srinu" {
+  tags = {
+    Name = "ohio_instance"
+    Org  = "flipkart"
+  }
+
+  count             = 1
+  ami               = "ami-09256c524fab91d36"
+  instance_type     = "t3.micro"
+  key_name          = "mykey1"
+  availability_zone = "us-east-2c"
+  root_block_device {
+    volume_size = 9
+  }
+
+}
+[root@terra form]# cat segr.tf
+resource "aws_security_group" "label-sg" {
+  name        = "terrasg"
+  description = "terraform created this sg"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+[root@terra form]#
+[root@terra form]# 
+[root@terra form]#
+[root@terra form]# terraform plan
+
+Planning failed. Terraform encountered an error while generating this plan.
+
+╷
+│ Error: No valid credential sources found
+│
+│   with provider["registry.terraform.io/hashicorp/aws"],
+│   on prov.tf line 1, in provider "aws":
+│    1: provider "aws" {
+│
+│ Please see https://registry.terraform.io/providers/hashicorp/aws
+│ for more information about providing credentials.
+│
+│ Error: failed to refresh cached credentials, no EC2 IMDS role found, operation error ec2imds: GetMetadata,
+│ http response error StatusCode: 404, request to EC2 IMDS failed
+│
+╵
+[root@terra form]#
+[root@terra form]# aws configure
+AWS Access Key ID [None]: AKIAQTQBI3MRZS3RVDXE
+AWS Secret Access Key [None]: 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
+Default region name [None]: {ENTER}
+Default output format [None]: {ENTER}
+[root@terra form]#
+[root@terra form]# terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.srinu will be created
+  + resource "aws_instance" "srinu" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-2c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "ohio_instance"
+          + "Org"  = "flipkart"
+        }
+      + tags_all                             = {
+          + "Name" = "ohio_instance"
+          + "Org"  = "flipkart"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # aws_security_group.label-sg will be created
+  + resource "aws_security_group" "label-sg" {
+      + arn                    = (known after apply)
+      + description            = "terraform created this sg"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 22
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 22
+                # (1 unchanged attribute hidden)
+            },
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 8080
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 8080
+                # (1 unchanged attribute hidden)
+            },
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 80
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 80
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + name                   = "terrasg"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + region                 = "us-east-2"
+      + revoke_rules_on_delete = false
+      + tags_all               = (known after apply)
+      + vpc_id                 = (known after apply)
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these
+actions if you run "terraform apply" now.
+[root@terra form]# 
+
+# It will create the Security Group and Instance, but not attached and We need to attach using the changes in main.tf 
+
+[root@terra form]# terraform fmt
+main.tf
+[root@terra form]# cat prov.tf
+provider "aws" {
+  region = "us-east-2"
+}
+[root@terra form]# cat segr.tf
+resource "aws_security_group" "label-sg" {
+  name        = "terrasg"
+  description = "terraform created this sg"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+[root@terra form]# cat main.tf
+resource "aws_instance" "srinu" {
+  tags = {
+    Name = "ohio_instance"
+    Org  = "flipkart"
+  }
+
+  ami                    = "ami-09256c524fab91d36"
+  instance_type          = "t3.micro"
+  key_name               = "mykey1"
+  availability_zone      = "us-east-2c"
+  vpc_security_group_ids = [aws_security_group.label-sg.id]
+  root_block_device {
+    volume_size = 9
+  }
+}
+[root@terra form]# ll
+total 28
+-rw-r--r--. 1 root root  372 Feb 20 13:58 main.tf
+-rw-r--r--. 1 root root   42 Feb 20 12:45 prov.tf
+-rw-r--r--. 1 root root  575 Feb 20 12:53 segr.tf
+-rw-r--r--. 1 root root  182 Feb 20 13:06 terraform.tfstate
+-rw-r--r--. 1 root root 8388 Feb 20 13:05 terraform.tfstate.backup
+[root@terra form]#
+[root@terra form]# terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.srinu will be created
+  + resource "aws_instance" "srinu" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-2c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "ohio_instance"
+          + "Org"  = "flipkart"
+        }
+      + tags_all                             = {
+          + "Name" = "ohio_instance"
+          + "Org"  = "flipkart"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # aws_security_group.label-sg will be created
+  + resource "aws_security_group" "label-sg" {
+      + arn                    = (known after apply)
+      + description            = "terraform created this sg"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 22
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 22
+                # (1 unchanged attribute hidden)
+            },
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 8080
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 8080
+                # (1 unchanged attribute hidden)
+            },
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 80
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 80
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + name                   = "terrasg"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + region                 = "us-east-2"
+      + revoke_rules_on_delete = false
+      + tags_all               = (known after apply)
+      + vpc_id                 = (known after apply)
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these
+actions if you run "terraform apply" now.
+[root@terra form]# terraform apply --auto-approve
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.srinu will be created
+  + resource "aws_instance" "srinu" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-2c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "ohio_instance"
+          + "Org"  = "flipkart"
+        }
+      + tags_all                             = {
+          + "Name" = "ohio_instance"
+          + "Org"  = "flipkart"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # aws_security_group.label-sg will be created
+  + resource "aws_security_group" "label-sg" {
+      + arn                    = (known after apply)
+      + description            = "terraform created this sg"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 22
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 22
+                # (1 unchanged attribute hidden)
+            },
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 8080
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 8080
+                # (1 unchanged attribute hidden)
+            },
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 80
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 80
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + name                   = "terrasg"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + region                 = "us-east-2"
+      + revoke_rules_on_delete = false
+      + tags_all               = (known after apply)
+      + vpc_id                 = (known after apply)
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+aws_security_group.label-sg: Creating...
+aws_security_group.label-sg: Creation complete after 2s [id=sg-061806abea2ae40ad]
+aws_instance.srinu: Creating...
+aws_instance.srinu: Still creating... [00m10s elapsed]
+aws_instance.srinu: Creation complete after 13s [id=i-0209e35a199ce3084]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+[root@terra form]#
+[root@terra form]# terraform destroy --auto-approve
+aws_security_group.label-sg: Refreshing state... [id=sg-061806abea2ae40ad]
+aws_instance.srinu: Refreshing state... [id=i-0209e35a199ce3084]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_instance.srinu will be destroyed
+  - resource "aws_instance" "srinu" {
+      - ami                                  = "ami-09256c524fab91d36" -> null
+      - arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-0209e35a199ce3084" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-2c" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-0209e35a199ce3084" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "mykey1" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-0d56d62055d590b0a" -> null
+      - private_dns                          = "ip-172-31-33-50.us-east-2.compute.internal" -> null
+      - private_ip                           = "172.31.33.50" -> null
+      - public_dns                           = "ec2-3-144-146-93.us-east-2.compute.amazonaws.com" -> null
+      - public_ip                            = "3.144.146.93" -> null
+      - region                               = "us-east-2" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "terrasg",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-0bfc50430744a1299" -> null
+      - tags                                 = {
+          - "Name" = "ohio_instance"
+          - "Org"  = "flipkart"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "ohio_instance"
+          - "Org"  = "flipkart"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-061806abea2ae40ad",
+        ] -> null
+        # (8 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0d56d62055d590b0a" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-027219fd1123df929" -> null
+          - volume_size           = 9 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # aws_security_group.label-sg will be destroyed
+  - resource "aws_security_group" "label-sg" {
+      - arn                    = "arn:aws:ec2:us-east-2:041878608675:security-group/sg-061806abea2ae40ad" -> null
+      - description            = "terraform created this sg" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-061806abea2ae40ad" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 22
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 22
+                # (1 unchanged attribute hidden)
+            },
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 8080
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 8080
+                # (1 unchanged attribute hidden)
+            },
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 80
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 80
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - name                   = "terrasg" -> null
+      - owner_id               = "041878608675" -> null
+      - region                 = "us-east-2" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {} -> null
+      - tags_all               = {} -> null
+      - vpc_id                 = "vpc-0589067c4f12032ca" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+Plan: 0 to add, 0 to change, 2 to destroy.
+aws_instance.srinu: Destroying... [id=i-0209e35a199ce3084]
+aws_instance.srinu: Still destroying... [id=i-0209e35a199ce3084, 00m10s elapsed]
+aws_instance.srinu: Still destroying... [id=i-0209e35a199ce3084, 00m20s elapsed]
+aws_instance.srinu: Still destroying... [id=i-0209e35a199ce3084, 00m30s elapsed]
+aws_instance.srinu: Still destroying... [id=i-0209e35a199ce3084, 00m40s elapsed]
+aws_instance.srinu: Still destroying... [id=i-0209e35a199ce3084, 00m50s elapsed]
+aws_instance.srinu: Still destroying... [id=i-0209e35a199ce3084, 01m00s elapsed]
+aws_instance.srinu: Still destroying... [id=i-0209e35a199ce3084, 01m10s elapsed]
+aws_instance.srinu: Destruction complete after 1m10s
+aws_security_group.label-sg: Destroying... [id=sg-061806abea2ae40ad]
+aws_security_group.label-sg: Destruction complete after 1s
+
+Destroy complete! Resources: 2 destroyed.
+[root@terra form]#
+
+__________________________________________________________________
+
+[root@terra form]# ll
+total 28
+-rw-r--r--. 1 root root  372 Feb 20 13:58 main.tf
+-rw-r--r--. 1 root root   42 Feb 20 12:45 prov.tf
+-rw-r--r--. 1 root root  575 Feb 20 12:53 segr.tf
+-rw-r--r--. 1 root root  182 Feb 20 14:11 terraform.tfstate
+-rw-r--r--. 1 root root 8444 Feb 20 14:11 terraform.tfstate.backup
+[root@terra form]# rm -rf segr.tf prov.tf
+[root@terra form]# vi main.tf
+[root@terra form]# terraform fmt
+main.tf
+[root@terra form]# 
+[root@terra form]# cat main.tf
+provider "aws" {
+  region = "us-east-1"
+  alias  = "us"
+}
+
+provider "aws" {
+  region = "ap-south-1"
+  alias  = "mumbai"
+}
+
+resource "aws_instance" "srinu" {
+  tags = {
+    Name = "us-nv-instance"
+    Org  = "flipkart"
+  }
+  provider          = aws.us
+  ami               = "ami-0f3caa1cf4417e51b"
+  instance_type     = "t3.micro"
+  key_name          = "mykeyus"
+  availability_zone = "us-east-1c"
+  root_block_device {
+    volume_size = 9
+  }
+}
+
+resource "aws_instance" "praise" {
+  tags = {
+    Name = "Mumbai-instance"
+    Org  = "flipkart"
+  }
+  provider          = aws.mumbai
+  ami               = "ami-051a31ab2f4d498f5"
+  instance_type     = "t3.micro"
+  key_name          = "mykeyin"
+  availability_zone = "ap-south-1c"
+  root_block_device {
+    volume_size = 9
+  }
+}
+[root@terra form]#
+[root@terra form]# terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.praise will be created
+  + resource "aws_instance" "praise" {
+      + ami                                  = "ami-051a31ab2f4d498f5"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "ap-south-1c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykeyin"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "ap-south-1"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "Mumbai-instance"
+          + "Org"  = "flipkart"
+        }
+      + tags_all                             = {
+          + "Name" = "Mumbai-instance"
+          + "Org"  = "flipkart"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # aws_instance.srinu will be created
+  + resource "aws_instance" "srinu" {
+      + ami                                  = "ami-0f3caa1cf4417e51b"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-1c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykeyus"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-1"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "us-nv-instance"
+          + "Org"  = "flipkart"
+        }
+      + tags_all                             = {
+          + "Name" = "us-nv-instance"
+          + "Org"  = "flipkart"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these
+actions if you run "terraform apply" now.
+[root@terra form]# 
+[root@terra form]# terraform apply --auto-approve
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.praise will be created
+  + resource "aws_instance" "praise" {
+      + ami                                  = "ami-051a31ab2f4d498f5"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "ap-south-1c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykeyin"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "ap-south-1"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "Mumbai-instance"
+          + "Org"  = "flipkart"
+        }
+      + tags_all                             = {
+          + "Name" = "Mumbai-instance"
+          + "Org"  = "flipkart"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # aws_instance.srinu will be created
+  + resource "aws_instance" "srinu" {
+      + ami                                  = "ami-0f3caa1cf4417e51b"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-1c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykeyus"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-1"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "us-nv-instance"
+          + "Org"  = "flipkart"
+        }
+      + tags_all                             = {
+          + "Name" = "us-nv-instance"
+          + "Org"  = "flipkart"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+aws_instance.srinu: Creating...
+aws_instance.praise: Creating...
+aws_instance.srinu: Still creating... [00m10s elapsed]
+aws_instance.praise: Still creating... [00m10s elapsed]
+aws_instance.srinu: Creation complete after 13s [id=i-064c7f6af9e9c4d3c]
+aws_instance.praise: Still creating... [00m20s elapsed]
+aws_instance.praise: Still creating... [00m30s elapsed]
+aws_instance.praise: Creation complete after 35s [id=i-0addd17b22fcea0fa]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+[root@terra form]#
+[root@terra form]# terraform state list
+aws_instance.praise
+aws_instance.srinu
+[root@terra form]#
+[root@terra form]# terraform destroy --auto-approve
+aws_instance.srinu: Refreshing state... [id=i-064c7f6af9e9c4d3c]
+aws_instance.praise: Refreshing state... [id=i-0addd17b22fcea0fa]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_instance.praise will be destroyed
+  - resource "aws_instance" "praise" {
+      - ami                                  = "ami-051a31ab2f4d498f5" -> null
+      - arn                                  = "arn:aws:ec2:ap-south-1:041878608675:instance/i-0addd17b22fcea0fa" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "ap-south-1c" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-0addd17b22fcea0fa" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "mykeyin" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-06d7ca3863245b152" -> null
+      - private_dns                          = "ip-172-31-22-205.ap-south-1.compute.internal" -> null
+      - private_ip                           = "172.31.22.205" -> null
+      - public_dns                           = "ec2-13-204-89-11.ap-south-1.compute.amazonaws.com" -> null
+      - public_ip                            = "13.204.89.11" -> null
+      - region                               = "ap-south-1" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "default",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-0cde8dca044837f5f" -> null
+      - tags                                 = {
+          - "Name" = "Mumbai-instance"
+          - "Org"  = "flipkart"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "Mumbai-instance"
+          - "Org"  = "flipkart"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-04cbab14fd6eb99a4",
+        ] -> null
+        # (8 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-06d7ca3863245b152" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-076cd9c87623246d3" -> null
+          - volume_size           = 9 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # aws_instance.srinu will be destroyed
+  - resource "aws_instance" "srinu" {
+      - ami                                  = "ami-0f3caa1cf4417e51b" -> null
+      - arn                                  = "arn:aws:ec2:us-east-1:041878608675:instance/i-064c7f6af9e9c4d3c" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-1c" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-064c7f6af9e9c4d3c" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "mykeyus" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-07f4d24befb6ccb05" -> null
+      - private_dns                          = "ip-172-31-18-241.ec2.internal" -> null
+      - private_ip                           = "172.31.18.241" -> null
+      - public_dns                           = "ec2-54-82-19-28.compute-1.amazonaws.com" -> null
+      - public_ip                            = "54.82.19.28" -> null
+      - region                               = "us-east-1" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "default",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-0729d6f7f93c927f3" -> null
+      - tags                                 = {
+          - "Name" = "us-nv-instance"
+          - "Org"  = "flipkart"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "us-nv-instance"
+          - "Org"  = "flipkart"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-0ec6d7a19750246d2",
+        ] -> null
+        # (8 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-07f4d24befb6ccb05" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-0488ccfe8b2b33bcf" -> null
+          - volume_size           = 9 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+Plan: 0 to add, 0 to change, 2 to destroy.
+aws_instance.srinu: Destroying... [id=i-064c7f6af9e9c4d3c]
+aws_instance.praise: Destroying... [id=i-0addd17b22fcea0fa]
+aws_instance.srinu: Still destroying... [id=i-064c7f6af9e9c4d3c, 00m10s elapsed]
+aws_instance.praise: Still destroying... [id=i-0addd17b22fcea0fa, 00m10s elapsed]
+aws_instance.srinu: Still destroying... [id=i-064c7f6af9e9c4d3c, 00m20s elapsed]
+aws_instance.praise: Still destroying... [id=i-0addd17b22fcea0fa, 00m20s elapsed]
+aws_instance.srinu: Still destroying... [id=i-064c7f6af9e9c4d3c, 00m30s elapsed]
+aws_instance.praise: Still destroying... [id=i-0addd17b22fcea0fa, 00m30s elapsed]
+aws_instance.srinu: Still destroying... [id=i-064c7f6af9e9c4d3c, 00m40s elapsed]
+aws_instance.praise: Still destroying... [id=i-0addd17b22fcea0fa, 00m40s elapsed]
+aws_instance.srinu: Still destroying... [id=i-064c7f6af9e9c4d3c, 00m50s elapsed]
+aws_instance.praise: Still destroying... [id=i-0addd17b22fcea0fa, 00m50s elapsed]
+aws_instance.srinu: Still destroying... [id=i-064c7f6af9e9c4d3c, 01m00s elapsed]
+aws_instance.praise: Still destroying... [id=i-0addd17b22fcea0fa, 01m00s elapsed]
+aws_instance.praise: Destruction complete after 1m2s
+aws_instance.srinu: Still destroying... [id=i-064c7f6af9e9c4d3c, 01m10s elapsed]
+aws_instance.srinu: Destruction complete after 1m10s
+
+Destroy complete! Resources: 2 destroyed.
+[root@terra form]#
+[root@terra form]# terraform state list
+[root@terra form]#
