@@ -1,0 +1,3153 @@
+Terraform_class_4_workspace_locals_taint_ignore_lifecycle_and_import
+======================================================================
+
+**************		Initial Instance launch 	**************
+
+======================================================================
+
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@3.129.66.47
+The authenticity of host '3.129.66.47 (3.129.66.47)' can't be established.
+ED25519 key fingerprint is SHA256:Psy/it8yWHUp5mGHh1jRDuz4pWPeK9PYrnlS2zrOtrk.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '3.129.66.47' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-21-235 ~]$ sudo -i
+hostnamectl set-hostname terra
+hostnamectl set-hostname terra
+[root@ip-172-31-21-235 ~]# hostnamectl set-hostname terra
+[root@ip-172-31-21-235 ~]# exit
+logout
+[ec2-user@ip-172-31-21-235 ~]$ sudo -i
+[root@terra ~]# yum install git -y && mkdir /srinu && cd /srinu && git clone https://github.com/Srinl.git && git clone https://github.com/Srinuas/practice-files.git && sh install/gitconfig.sh
+Amazon Linux 2023 Kernel Livepatch repository                                 272 kB/s |  31 kB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                    Architecture     Version                              Repository             Size
+==============================================================================================================
+Installing:
+ git                        x86_64           2.50.1-1.amzn2023.0.1                amazonlinux            53 k
+Installing dependencies:
+ git-core                   x86_64           2.50.1-1.amzn2023.0.1                amazonlinux           4.9 M
+ git-core-doc               noarch           2.50.1-1.amzn2023.0.1                amazonlinux           2.8 M
+ perl-Error                 noarch           1:0.17029-5.amzn2023.0.2             amazonlinux            41 k
+ perl-File-Find             noarch           1.37-477.amzn2023.0.7                amazonlinux            25 k
+ perl-Git                   noarch           2.50.1-1.amzn2023.0.1                amazonlinux            41 k
+ perl-TermReadKey           x86_64           2.38-9.amzn2023.0.2                  amazonlinux            36 k
+ perl-lib                   x86_64           0.65-477.amzn2023.0.7                amazonlinux            15 k
+
+Transaction Summary
+==============================================================================================================
+Install  8 Packages
+
+Total download size: 7.9 M
+Installed size: 41 M
+Downloading Packages:
+(1/8): git-2.50.1-1.amzn2023.0.1.x86_64.rpm                                   1.3 MB/s |  53 kB     00:00
+(2/8): git-core-doc-2.50.1-1.amzn2023.0.1.noarch.rpm                           46 MB/s | 2.8 MB     00:00
+(3/8): perl-Error-0.17029-5.amzn2023.0.2.noarch.rpm                           1.6 MB/s |  41 kB     00:00
+(4/8): git-core-2.50.1-1.amzn2023.0.1.x86_64.rpm                               54 MB/s | 4.9 MB     00:00
+(5/8): perl-File-Find-1.37-477.amzn2023.0.7.noarch.rpm                        813 kB/s |  25 kB     00:00
+(6/8): perl-Git-2.50.1-1.amzn2023.0.1.noarch.rpm                              1.3 MB/s |  41 kB     00:00
+(7/8): perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64.rpm                        1.6 MB/s |  36 kB     00:00
+(8/8): perl-lib-0.65-477.amzn2023.0.7.x86_64.rpm                              617 kB/s |  15 kB     00:00
+--------------------------------------------------------------------------------------------------------------
+Total                                                                          49 MB/s | 7.9 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                      1/1
+  Installing       : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                1/8
+  Installing       : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            2/8
+  Installing       : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                3/8
+  Installing       : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          4/8
+  Installing       : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Installing       : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           6/8
+  Installing       : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                7/8
+  Installing       : git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Running scriptlet: git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Verifying        : git-2.50.1-1.amzn2023.0.1.x86_64                                                     1/8
+  Verifying        : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                2/8
+  Verifying        : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            3/8
+  Verifying        : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           4/8
+  Verifying        : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Verifying        : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                6/8
+  Verifying        : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          7/8
+  Verifying        : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                8/8
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64                       git-core-2.50.1-1.amzn2023.0.1.x86_64
+  git-core-doc-2.50.1-1.amzn2023.0.1.noarch              perl-Error-1:0.17029-5.amzn2023.0.2.noarch
+  perl-File-Find-1.37-477.amzn2023.0.7.noarch            perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64            perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 109, done.
+remote: Counting objects: 100% (109/109), done.
+remote: Compressing objects: 100% (103/103), done.
+remote: Total 109 (delta 51), reused 27 (delta 6), pack-reused 0 (from 0)
+Receiving objects: 100% (109/109), 33.12 KiB | 6.62 MiB/s, done.
+Resolving deltas: 100% (51/51), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 104, done.
+remote: Counting objects: 100% (104/104), done.
+remote: Compressing objects: 100% (95/95), done.
+remote: Total 104 (delta 42), reused 43 (delta 9), pack-reused 0 (from 0)
+Receiving objects: 100% (104/104), 152.66 KiB | 4.63 MiB/s, done.
+Resolving deltas: 100% (42/42), done.
+[root@terra srinu]# sh install/terraform.sh
+Last metadata expiration check: 0:00:41 ago on Sat Feb 21 10:46:57 2026.
+Package dnf-utils-4.3.0-13.amzn2023.0.6.noarch is already installed.
+Package shadow-utils-2:4.9-12.amzn2023.0.4.x86_64 is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+Adding repo from: https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+Hashicorp Stable - x86_64                                                      42 MB/s | 2.0 MB     00:00
+Last metadata expiration check: 0:00:01 ago on Sat Feb 21 10:47:39 2026.
+Dependencies resolved.
+==============================================================================================================
+ Package                   Architecture           Version                     Repository                 Size
+==============================================================================================================
+Installing:
+ terraform                 x86_64                 1.14.5-1                    hashicorp                  30 M
+
+Transaction Summary
+==============================================================================================================
+Install  1 Package
+
+Total download size: 30 M
+Installed size: 96 M
+Downloading Packages:
+terraform-1.14.5-1.x86_64.rpm                                                 179 MB/s |  30 MB     00:00
+--------------------------------------------------------------------------------------------------------------
+Total                                                                         177 MB/s |  30 MB     00:00
+Hashicorp Stable - x86_64                                                     174 kB/s | 3.9 kB     00:00
+Importing GPG key 0xA621E701:
+ Userid     : "HashiCorp Security (HashiCorp Package Signing) <security+packaging@hashicorp.com>"
+ Fingerprint: 798A EC65 4E5C 1542 8C8E 42EE AA16 FCBC A621 E701
+ From       : https://rpm.releases.hashicorp.com/gpg
+Key imported successfully
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                      1/1
+  Installing       : terraform-1.14.5-1.x86_64                                                            1/1
+  Verifying        : terraform-1.14.5-1.x86_64                                                            1/1
+
+Installed:
+  terraform-1.14.5-1.x86_64
+
+Complete!
+[root@terra srinu]#
+[root@terra srinu]# cd
+[root@terra ~]# mkdir form
+[root@terra ~]# cd form/
+[root@terra form]# ll
+total 0
+[root@terra form]# vi main.tf
+[root@terra form]# terraform init
+Initializing the backend...
+╷
+│ Error: Terraform encountered problems during initialisation, including problems
+│ with the configuration, described below.
+│
+│ The Terraform configuration must be valid before initialization so that
+│ Terraform can determine which modules and providers need to be installed.
+│
+│
+╵
+╷
+│ Error: Invalid block definition
+│
+│   on main.tf line 2, in provider "aws":
+│    2: region "us-east-2"
+│    3: }
+│
+│ A block definition must have block content delimited by "{" and "}", starting on the same line as the block
+│ header.
+╵
+[root@terra form]# aws configure
+AWS Access Key ID [None]: ejsbcjegfshcehbeiecm
+AWS Secret Access Key [None]: sjcvrxsjndceicmecrnenfrfn
+Default region name [None]: Default output format [None]: [root@terra form]#
+[root@terra form]# terraform init
+Initializing the backend...
+╷
+│ Error: Terraform encountered problems during initialisation, including problems
+│ with the configuration, described below.
+│
+│ The Terraform configuration must be valid before initialization so that
+│ Terraform can determine which modules and providers need to be installed.
+│
+│
+╵
+╷
+│ Error: Invalid block definition
+│
+│   on main.tf line 2, in provider "aws":
+│    2: region "us-east-2"
+│    3: }
+│
+│ A block definition must have block content delimited by "{" and "}", starting on the same line as the block
+│ header.
+╵
+[root@terra form]# v main.tf
+-bash: v: command not found
+[root@terra form]# vi main.tf
+[root@terra form]# terraform init
+Initializing the backend...
+Initializing provider plugins...
+- Finding latest version of hashicorp/aws...
+- Installing hashicorp/aws v6.33.0...
+- Installed hashicorp/aws v6.33.0 (signed by HashiCorp)
+Terraform has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that Terraform can guarantee to make the same selections by default when
+you run "terraform init" in the future.
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+[root@terra form]#
+[root@terra form]# terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins will be created
+  + resource "aws_instance" "ins" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-2c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "Inst-1"
+        }
+      + tags_all                             = {
+          + "Name" = "Inst-1"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these
+actions if you run "terraform apply" now.
+[root@terra form]#
+[root@terra form]# terraform fmt
+main.tf
+[root@terra form]# 
+[root@terra form]# cat main.tf
+provider "aws" {
+  region = "us-east-2"
+}
+
+resource "aws_instance" "ins" {
+  tags = {
+    Name = "Inst-1"
+  }
+
+  ami               = "ami-09256c524fab91d36"
+  instance_type     = "t3.micro"
+  key_name          = "mykey1"
+  availability_zone = "us-east-2c"
+  root_block_device {
+    volume_size = 9
+  }
+}
+[root@terra form]#
+[root@terra form]# terraform apply --auto-approve
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins will be created
+  + resource "aws_instance" "ins" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-2c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "Inst-1"
+        }
+      + tags_all                             = {
+          + "Name" = "Inst-1"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+aws_instance.ins: Creating...
+aws_instance.ins: Still creating... [00m10s elapsed]
+aws_instance.ins: Creation complete after 12s [id=i-0ff57bffdd4a435bf]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+[root@terra form]#
+[root@terra form]# terraform state list
+aws_instance.ins
+[root@terra form]#
+[root@terra form]# terraform apply --auto-approve
+aws_instance.ins: Refreshing state... [id=i-0ff57bffdd4a435bf]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration and found no differences, so no
+changes are needed.
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+[root@terra form]#
+
+###################################################################################
+
+##################		Workspaces in terraform 	###################
+
+###################################################################################
+
+[root@terra form]# terraform workspace
+Usage: terraform [global options] workspace
+
+  new, list, show, select and delete Terraform workspaces.
+
+Subcommands:
+    delete    Delete a workspace
+    list      List Workspaces
+    new       Create a new workspace
+    select    Select a workspace
+    show      Show the name of the current workspace
+[root@terra form]#
+[root@terra form]# terraform workspace show
+default
+[root@terra form]# terraform workspace list
+* default
+
+[root@terra form]# terraform workspace new srinu
+Created and switched to workspace "srinu"!
+
+You're now on a new, empty workspace. Workspaces isolate their state,
+so if you run "terraform plan" Terraform will not see any existing state
+for this configuration.
+[root@terra form]# terraform workspace list
+  default
+* srinu
+
+[root@terra form]# terraform apply --auto-approve
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins will be created
+  + resource "aws_instance" "ins" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-2c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "Inst-1"
+        }
+      + tags_all                             = {
+          + "Name" = "Inst-1"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+aws_instance.ins: Creating...
+aws_instance.ins: Still creating... [00m10s elapsed]
+aws_instance.ins: Creation complete after 13s [id=i-034cc93654a5d5091]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+[root@terra form]#
+[root@terra form]# terraform state list
+aws_instance.ins
+[root@terra form]#
+[root@terra form]# terraform workspace list
+  default
+* srinu
+
+[root@terra form]#
+[root@terra form]# terraform destroy --auto-approve
+aws_instance.ins: Refreshing state... [id=i-034cc93654a5d5091]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins will be destroyed
+  - resource "aws_instance" "ins" {
+      - ami                                  = "ami-09256c524fab91d36" -> null
+      - arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-034cc93654a5d5091" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-2c" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-034cc93654a5d5091" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "mykey1" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-0783e5a456716dd20" -> null
+      - private_dns                          = "ip-172-31-46-189.us-east-2.compute.internal" -> null
+      - private_ip                           = "172.31.46.189" -> null
+      - public_dns                           = "ec2-18-189-2-87.us-east-2.compute.amazonaws.com" -> null
+      - public_ip                            = "18.189.2.87" -> null
+      - region                               = "us-east-2" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "default",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-0bfc50430744a1299" -> null
+      - tags                                 = {
+          - "Name" = "Inst-1"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "Inst-1"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-08c1450f2a2f83031",
+        ] -> null
+        # (8 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0783e5a456716dd20" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-075445d01f5940b53" -> null
+          - volume_size           = 9 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+Plan: 0 to add, 0 to change, 1 to destroy.
+aws_instance.ins: Destroying... [id=i-034cc93654a5d5091]
+aws_instance.ins: Still destroying... [id=i-034cc93654a5d5091, 00m10s elapsed]
+aws_instance.ins: Still destroying... [id=i-034cc93654a5d5091, 00m20s elapsed]
+aws_instance.ins: Still destroying... [id=i-034cc93654a5d5091, 00m30s elapsed]
+aws_instance.ins: Destruction complete after 40s
+
+Destroy complete! Resources: 1 destroyed.
+[root@terra form]#
+[root@terra form]# terraform workspace select default
+Switched to workspace "default".
+[root@terra form]# terraform workspace list
+* default
+  srinu
+
+[root@terra form]# terraform state list
+aws_instance.ins
+[root@terra form]# terraform destroy --auto-approve
+aws_instance.ins: Refreshing state... [id=i-0ff57bffdd4a435bf]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins will be destroyed
+  - resource "aws_instance" "ins" {
+      - ami                                  = "ami-09256c524fab91d36" -> null
+      - arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-0ff57bffdd4a435bf" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-2c" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-0ff57bffdd4a435bf" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "mykey1" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-0f10030c18e2b36dd" -> null
+      - private_dns                          = "ip-172-31-33-236.us-east-2.compute.internal" -> null
+      - private_ip                           = "172.31.33.236" -> null
+      - public_dns                           = "ec2-3-145-0-185.us-east-2.compute.amazonaws.com" -> null
+      - public_ip                            = "3.145.0.185" -> null
+      - region                               = "us-east-2" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "default",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-0bfc50430744a1299" -> null
+      - tags                                 = {
+          - "Name" = "Inst-1"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "Inst-1"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-08c1450f2a2f83031",
+        ] -> null
+        # (8 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0f10030c18e2b36dd" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-0e54f69b554310f9f" -> null
+          - volume_size           = 9 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+Plan: 0 to add, 0 to change, 1 to destroy.
+aws_instance.ins: Destroying... [id=i-0ff57bffdd4a435bf]
+aws_instance.ins: Still destroying... [id=i-0ff57bffdd4a435bf, 00m10s elapsed]
+aws_instance.ins: Still destroying... [id=i-0ff57bffdd4a435bf, 00m20s elapsed]
+aws_instance.ins: Still destroying... [id=i-0ff57bffdd4a435bf, 00m30s elapsed]
+aws_instance.ins: Still destroying... [id=i-0ff57bffdd4a435bf, 00m40s elapsed]
+aws_instance.ins: Still destroying... [id=i-0ff57bffdd4a435bf, 00m50s elapsed]
+aws_instance.ins: Destruction complete after 1m0s
+
+Destroy complete! Resources: 1 destroyed.
+[root@terra form]# terraform state list
+[root@terra form]# terraform workspace list
+* default
+  srinu
+
+[root@terra form]#
+
+###################################################################################
+
+##################	locals, Workspaces in terraform 	###################
+
+###################################################################################
+
+[root@terra form]# ll
+total 16
+-rw-r--r--. 1 root root  304 Feb 21 11:29 main.tf
+-rw-r--r--. 1 root root  181 Feb 21 12:00 terraform.tfstate
+-rw-r--r--. 1 root root 5416 Feb 21 12:00 terraform.tfstate.backup
+drwxr-xr-x. 3 root root   19 Feb 21 11:42 terraform.tfstate.d
+[root@terra form]# vi main.tf
+[root@terra form]# terraform fmt
+main.tf
+[root@terra form]# cat main.tf
+provider "aws" {
+  region = "us-east-2"
+}
+locals {
+  it = {
+    dev  = "t3.micro"
+    test = "t3.small"
+    uat  = "c7i-flex.large"
+    prod = "m7i-flex.large"
+  }
+}
+resource "aws_instance" "ins" {
+  tags = {
+    Name = "${terraform.workspace}-Inst"
+  }
+
+  ami               = "ami-09256c524fab91d36"
+  instance_type     = local.it[terraform.workspace]
+  key_name          = "mykey1"
+  availability_zone = "us-east-2c"
+  root_block_device {
+    volume_size = 9
+  }
+}
+[root@terra form]# terraform workspace new dev
+Created and switched to workspace "dev"!
+
+You're now on a new, empty workspace. Workspaces isolate their state,
+so if you run "terraform plan" Terraform will not see any existing state
+for this configuration.
+[root@terra form]# terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins will be created
+  + resource "aws_instance" "ins" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-2c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "dev-Inst"
+        }
+      + tags_all                             = {
+          + "Name" = "dev-Inst"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these
+actions if you run "terraform apply" now.
+[root@terra form]# terraform workspace new test
+Created and switched to workspace "test"!
+
+You're now on a new, empty workspace. Workspaces isolate their state,
+so if you run "terraform plan" Terraform will not see any existing state
+for this configuration.
+[root@terra form]# terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins will be created
+  + resource "aws_instance" "ins" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-2c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.small"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "test-Inst"
+        }
+      + tags_all                             = {
+          + "Name" = "test-Inst"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these
+actions if you run "terraform apply" now.
+[root@terra form]# terraform workspace new uat
+Created and switched to workspace "uat"!
+
+You're now on a new, empty workspace. Workspaces isolate their state,
+so if you run "terraform plan" Terraform will not see any existing state
+for this configuration.
+[root@terra form]# terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins will be created
+  + resource "aws_instance" "ins" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-2c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "c7i-flex.large"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "uat-Inst"
+        }
+      + tags_all                             = {
+          + "Name" = "uat-Inst"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these
+actions if you run "terraform apply" now.
+[root@terra form]# terraform workspace new prod
+Created and switched to workspace "prod"!
+
+You're now on a new, empty workspace. Workspaces isolate their state,
+so if you run "terraform plan" Terraform will not see any existing state
+for this configuration.
+[root@terra form]# terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins will be created
+  + resource "aws_instance" "ins" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-2c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "m7i-flex.large"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "prod-Inst"
+        }
+      + tags_all                             = {
+          + "Name" = "prod-Inst"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these
+actions if you run "terraform apply" now.
+[root@terra form]#
+[root@terra form]# terraform workspace new cat
+Created and switched to workspace "cat"!
+
+You're now on a new, empty workspace. Workspaces isolate their state,
+so if you run "terraform plan" Terraform will not see any existing state
+for this configuration.
+[root@terra form]# terraform plan
+╷
+│ Error: Invalid index
+│
+│   on main.tf line 18, in resource "aws_instance" "ins":
+│   18:   instance_type     = local.it[terraform.workspace]
+│     ├────────────────
+│     │ local.it is object with 4 attributes
+│     │ terraform.workspace is "cat"
+│
+│ The given key does not identify an element in this collection value.
+╵
+[root@terra form]#
+[root@terra form]# terraform workspace list
+  default
+* cat
+  dev
+  prod
+  srinu
+  test
+  uat
+
+[root@terra form]# terraform workspace select default
+Switched to workspace "default".
+[root@terra form]# terraform workspace list
+* default
+  cat
+  dev
+  prod
+  srinu
+  test
+  uat
+
+[root@terra form]#
+[root@terra form]# terraform workspace
+Usage: terraform [global options] workspace
+
+  new, list, show, select and delete Terraform workspaces.
+
+Subcommands:
+    delete    Delete a workspace
+    list      List Workspaces
+    new       Create a new workspace
+    select    Select a workspace
+    show      Show the name of the current workspace
+[root@terra form]# terraform workspace delete cat
+Deleted workspace "cat"!
+[root@terra form]# terraform workspace delete srinu
+Deleted workspace "srinu"!
+[root@terra form]# terraform workspace list
+* default
+  dev
+  prod
+  test
+  uat
+
+[root@terra form]#
+
+###################################################################################
+
+##################		Taint in terraform		###################
+
+###################################################################################
+
+[root@terra form]# terraform workspace select dev
+Switched to workspace "dev".
+[root@terra form]# terraform apply --auto-approve
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins will be created
+  + resource "aws_instance" "ins" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-2c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "dev-Inst"
+        }
+      + tags_all                             = {
+          + "Name" = "dev-Inst"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+aws_instance.ins: Creating...
+aws_instance.ins: Still creating... [00m10s elapsed]
+aws_instance.ins: Creation complete after 13s [id=i-0d3f6c0d891e4aa0b]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+[root@terra form]# vi main.tf
+[root@terra form]# terraform apply --auto-approve
+aws_instance.ins[0]: Refreshing state... [id=i-0d3f6c0d891e4aa0b]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins has moved to aws_instance.ins[0]
+    resource "aws_instance" "ins" {
+        id                                   = "i-0d3f6c0d891e4aa0b"
+        tags                                 = {
+            "Name" = "dev-Inst"
+        }
+        # (40 unchanged attributes hidden)
+
+        # (9 unchanged blocks hidden)
+    }
+
+  # aws_instance.ins[1] will be created
+  + resource "aws_instance" "ins" {
+      + ami                                  = "ami-09256c524fab91d36"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = "us-east-2c"
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "mykey1"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "dev-Inst"
+        }
+      + tags_all                             = {
+          + "Name" = "dev-Inst"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 9
+          + volume_type           = (known after apply)
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+aws_instance.ins[1]: Creating...
+aws_instance.ins[1]: Still creating... [00m10s elapsed]
+aws_instance.ins[1]: Creation complete after 12s [id=i-03aaa3ae016e32af9]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+[root@terra form]# terraform state list
+aws_instance.ins[0]
+aws_instance.ins[1]
+[root@terra form]#
+[root@terra form]# terraform
+Usage: terraform [global options] <subcommand> [args]
+
+The available commands for execution are listed below.
+The primary workflow commands are given first, followed by
+less common or more advanced commands.
+
+Main commands:
+  init          Prepare your working directory for other commands
+  validate      Check whether the configuration is valid
+  plan          Show changes required by the current configuration
+  apply         Create or update infrastructure
+  destroy       Destroy previously-created infrastructure
+
+All other commands:
+  console       Try Terraform expressions at an interactive command prompt
+  fmt           Reformat your configuration in the standard style
+  force-unlock  Release a stuck lock on the current workspace
+  get           Install or upgrade remote Terraform modules
+  graph         Generate a Graphviz graph of the steps in an operation
+  import        Associate existing infrastructure with a Terraform resource
+  login         Obtain and save credentials for a remote host
+  logout        Remove locally-stored credentials for a remote host
+  metadata      Metadata related commands
+  modules       Show all declared modules in a working directory
+  output        Show output values from your root module
+  providers     Show the providers required for this configuration
+  query         Search and list remote infrastructure with Terraform
+  refresh       Update the state to match remote systems
+  show          Show the current state or a saved plan
+  stacks        Manage HCP Terraform stack operations
+  state         Advanced state management
+  taint         Mark a resource instance as not fully functional
+  test          Execute integration tests for Terraform modules
+  untaint       Remove the 'tainted' state from a resource instance
+  version       Show the current Terraform version
+  workspace     Workspace management
+
+Global options (use these before the subcommand, if any):
+  -chdir=DIR    Switch to a different working directory before executing the
+                given subcommand.
+  -help         Show this help output or the help for a specified subcommand.
+  -version      An alias for the "version" subcommand.
+[root@terra form]# terraform taint
+The taint command expects exactly one argument.
+Usage: terraform [global options] taint [options] <address>
+
+  Terraform uses the term "tainted" to describe a resource instance
+  which may not be fully functional, either because its creation
+  partially failed or because you've manually marked it as such using
+  this command.
+
+  This will not modify your infrastructure directly, but subsequent
+  Terraform plans will include actions to destroy the remote object
+  and create a new object to replace it.
+
+  You can remove the "taint" state from a resource instance using
+  the "terraform untaint" command.
+
+  The address is in the usual resource address syntax, such as:
+    aws_instance.foo
+    aws_instance.bar[1]
+    module.foo.module.bar.aws_instance.baz
+
+  Use your shell's quoting or escaping syntax to ensure that the
+  address will reach Terraform correctly, without any special
+  interpretation.
+
+Options:
+
+  -allow-missing          If specified, the command will succeed (exit code 0)
+                          even if the resource is missing.
+
+  -lock=false             Don't hold a state lock during the operation. This is
+                          dangerous if others might concurrently run commands
+                          against the same workspace.
+
+  -lock-timeout=0s        Duration to retry a state lock.
+
+  -ignore-remote-version  A rare option used for the remote backend only. See
+                          the remote backend documentation for more information.
+
+  -state, state-out, and -backup are legacy options supported for the local
+  backend only. For more information, see the local backend's documentation.
+[root@terra form]# terraform state list
+aws_instance.ins[0]
+aws_instance.ins[1]
+[root@terra form]# terraform taint aws_instance.ins[1]
+Resource instance aws_instance.ins[1] has been marked as tainted.
+[root@terra form]# terraform untaint aws_instance.ins[1]
+Resource instance aws_instance.ins[1] has been successfully untainted.
+[root@terra form]# terraform taint aws_instance.ins[1]
+Resource instance aws_instance.ins[1] has been marked as tainted.
+[root@terra form]# terraform untaint aws_instance.ins[1]
+Resource instance aws_instance.ins[1] has been successfully untainted.
+[root@terra form]# terraform plan
+aws_instance.ins[1]: Refreshing state... [id=i-03aaa3ae016e32af9]
+aws_instance.ins[0]: Refreshing state... [id=i-0d3f6c0d891e4aa0b]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration and found no differences, so no
+changes are needed.
+[root@terra form]# terraform taint aws_instance.ins[1]
+Resource instance aws_instance.ins[1] has been marked as tainted.
+[root@terra form]# terraform plan
+aws_instance.ins[0]: Refreshing state... [id=i-0d3f6c0d891e4aa0b]
+aws_instance.ins[1]: Refreshing state... [id=i-03aaa3ae016e32af9]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins[1] is tainted, so must be replaced
+-/+ resource "aws_instance" "ins" {
+      ~ arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-03aaa3ae016e32af9" -> (known after apply)
+      ~ associate_public_ip_address          = true -> (known after apply)
+      ~ disable_api_stop                     = false -> (known after apply)
+      ~ disable_api_termination              = false -> (known after apply)
+      ~ ebs_optimized                        = false -> (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      - hibernation                          = false -> null
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      ~ id                                   = "i-03aaa3ae016e32af9" -> (known after apply)
+      ~ instance_initiated_shutdown_behavior = "stop" -> (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      ~ instance_state                       = "running" -> (known after apply)
+      ~ ipv6_address_count                   = 0 -> (known after apply)
+      ~ ipv6_addresses                       = [] -> (known after apply)
+      ~ monitoring                           = false -> (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      ~ placement_partition_number           = 0 -> (known after apply)
+      ~ primary_network_interface_id         = "eni-0db2c8a3b06d97cb9" -> (known after apply)
+      ~ private_dns                          = "ip-172-31-43-233.us-east-2.compute.internal" -> (known after apply)
+      ~ private_ip                           = "172.31.43.233" -> (known after apply)
+      ~ public_dns                           = "ec2-3-134-101-232.us-east-2.compute.amazonaws.com" -> (known after apply)
+      ~ public_ip                            = "3.134.101.232" -> (known after apply)
+      ~ secondary_private_ips                = [] -> (known after apply)
+      ~ security_groups                      = [
+          - "default",
+        ] -> (known after apply)
+      + spot_instance_request_id             = (known after apply)
+      ~ subnet_id                            = "subnet-0bfc50430744a1299" -> (known after apply)
+        tags                                 = {
+            "Name" = "dev-Inst"
+        }
+      ~ tenancy                              = "default" -> (known after apply)
+      + user_data_base64                     = (known after apply)
+      ~ vpc_security_group_ids               = [
+          - "sg-08c1450f2a2f83031",
+        ] -> (known after apply)
+        # (10 unchanged attributes hidden)
+
+      ~ capacity_reservation_specification (known after apply)
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      ~ cpu_options (known after apply)
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      ~ ebs_block_device (known after apply)
+
+      ~ enclave_options (known after apply)
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      ~ ephemeral_block_device (known after apply)
+
+      ~ instance_market_options (known after apply)
+
+      ~ maintenance_options (known after apply)
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      ~ metadata_options (known after apply)
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      ~ network_interface (known after apply)
+
+      ~ primary_network_interface (known after apply)
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0db2c8a3b06d97cb9" -> null
+        }
+
+      ~ private_dns_name_options (known after apply)
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      ~ root_block_device {
+          ~ device_name           = "/dev/xvda" -> (known after apply)
+          ~ encrypted             = false -> (known after apply)
+          ~ iops                  = 3000 -> (known after apply)
+          + kms_key_id            = (known after apply)
+          - tags                  = {} -> null
+          ~ tags_all              = {} -> (known after apply)
+          ~ throughput            = 125 -> (known after apply)
+          ~ volume_id             = "vol-0889c7f249924be4c" -> (known after apply)
+          ~ volume_type           = "gp3" -> (known after apply)
+            # (2 unchanged attributes hidden)
+        }
+
+      ~ secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 1 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these
+actions if you run "terraform apply" now.
+[root@terra form]# terraform apply --auto-approve
+aws_instance.ins[0]: Refreshing state... [id=i-0d3f6c0d891e4aa0b]
+aws_instance.ins[1]: Refreshing state... [id=i-03aaa3ae016e32af9]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins[1] is tainted, so must be replaced
+-/+ resource "aws_instance" "ins" {
+      ~ arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-03aaa3ae016e32af9" -> (known after apply)
+      ~ associate_public_ip_address          = true -> (known after apply)
+      ~ disable_api_stop                     = false -> (known after apply)
+      ~ disable_api_termination              = false -> (known after apply)
+      ~ ebs_optimized                        = false -> (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      - hibernation                          = false -> null
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      ~ id                                   = "i-03aaa3ae016e32af9" -> (known after apply)
+      ~ instance_initiated_shutdown_behavior = "stop" -> (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      ~ instance_state                       = "running" -> (known after apply)
+      ~ ipv6_address_count                   = 0 -> (known after apply)
+      ~ ipv6_addresses                       = [] -> (known after apply)
+      ~ monitoring                           = false -> (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      ~ placement_partition_number           = 0 -> (known after apply)
+      ~ primary_network_interface_id         = "eni-0db2c8a3b06d97cb9" -> (known after apply)
+      ~ private_dns                          = "ip-172-31-43-233.us-east-2.compute.internal" -> (known after apply)
+      ~ private_ip                           = "172.31.43.233" -> (known after apply)
+      ~ public_dns                           = "ec2-3-134-101-232.us-east-2.compute.amazonaws.com" -> (known after apply)
+      ~ public_ip                            = "3.134.101.232" -> (known after apply)
+      ~ secondary_private_ips                = [] -> (known after apply)
+      ~ security_groups                      = [
+          - "default",
+        ] -> (known after apply)
+      + spot_instance_request_id             = (known after apply)
+      ~ subnet_id                            = "subnet-0bfc50430744a1299" -> (known after apply)
+        tags                                 = {
+            "Name" = "dev-Inst"
+        }
+      ~ tenancy                              = "default" -> (known after apply)
+      + user_data_base64                     = (known after apply)
+      ~ vpc_security_group_ids               = [
+          - "sg-08c1450f2a2f83031",
+        ] -> (known after apply)
+        # (10 unchanged attributes hidden)
+
+      ~ capacity_reservation_specification (known after apply)
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      ~ cpu_options (known after apply)
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      ~ ebs_block_device (known after apply)
+
+      ~ enclave_options (known after apply)
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      ~ ephemeral_block_device (known after apply)
+
+      ~ instance_market_options (known after apply)
+
+      ~ maintenance_options (known after apply)
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      ~ metadata_options (known after apply)
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      ~ network_interface (known after apply)
+
+      ~ primary_network_interface (known after apply)
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0db2c8a3b06d97cb9" -> null
+        }
+
+      ~ private_dns_name_options (known after apply)
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      ~ root_block_device {
+          ~ device_name           = "/dev/xvda" -> (known after apply)
+          ~ encrypted             = false -> (known after apply)
+          ~ iops                  = 3000 -> (known after apply)
+          + kms_key_id            = (known after apply)
+          - tags                  = {} -> null
+          ~ tags_all              = {} -> (known after apply)
+          ~ throughput            = 125 -> (known after apply)
+          ~ volume_id             = "vol-0889c7f249924be4c" -> (known after apply)
+          ~ volume_type           = "gp3" -> (known after apply)
+            # (2 unchanged attributes hidden)
+        }
+
+      ~ secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 1 to destroy.
+aws_instance.ins[1]: Destroying... [id=i-03aaa3ae016e32af9]
+aws_instance.ins[1]: Still destroying... [id=i-03aaa3ae016e32af9, 00m10s elapsed]
+aws_instance.ins[1]: Still destroying... [id=i-03aaa3ae016e32af9, 00m20s elapsed]
+aws_instance.ins[1]: Destruction complete after 29s
+aws_instance.ins[1]: Creating...
+aws_instance.ins[1]: Still creating... [00m10s elapsed]
+aws_instance.ins[1]: Creation complete after 13s [id=i-0a921641441fe3dd9]
+
+Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
+[root@terra form]#
+
+###################################################################################
+
+##################		using replce in terraform 	###################
+
+###################################################################################
+
+[root@terra form]# terraform state list
+aws_instance.ins[0]
+aws_instance.ins[1]
+[root@terra form]# terraform apply --auto-approve -replace=aws_instance.ins[0]
+aws_instance.ins[1]: Refreshing state... [id=i-0a921641441fe3dd9]
+aws_instance.ins[0]: Refreshing state... [id=i-0d3f6c0d891e4aa0b]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins[0] will be replaced, as requested
+-/+ resource "aws_instance" "ins" {
+      ~ arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-0d3f6c0d891e4aa0b" -> (known after apply)
+      ~ associate_public_ip_address          = true -> (known after apply)
+      ~ disable_api_stop                     = false -> (known after apply)
+      ~ disable_api_termination              = false -> (known after apply)
+      ~ ebs_optimized                        = false -> (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      - hibernation                          = false -> null
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      ~ id                                   = "i-0d3f6c0d891e4aa0b" -> (known after apply)
+      ~ instance_initiated_shutdown_behavior = "stop" -> (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      ~ instance_state                       = "running" -> (known after apply)
+      ~ ipv6_address_count                   = 0 -> (known after apply)
+      ~ ipv6_addresses                       = [] -> (known after apply)
+      ~ monitoring                           = false -> (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      ~ placement_partition_number           = 0 -> (known after apply)
+      ~ primary_network_interface_id         = "eni-08585ebd6197572be" -> (known after apply)
+      ~ private_dns                          = "ip-172-31-41-198.us-east-2.compute.internal" -> (known after apply)
+      ~ private_ip                           = "172.31.41.198" -> (known after apply)
+      ~ public_dns                           = "ec2-18-217-134-23.us-east-2.compute.amazonaws.com" -> (known after apply)
+      ~ public_ip                            = "18.217.134.23" -> (known after apply)
+      ~ secondary_private_ips                = [] -> (known after apply)
+      ~ security_groups                      = [
+          - "default",
+        ] -> (known after apply)
+      + spot_instance_request_id             = (known after apply)
+      ~ subnet_id                            = "subnet-0bfc50430744a1299" -> (known after apply)
+        tags                                 = {
+            "Name" = "dev-Inst"
+        }
+      ~ tenancy                              = "default" -> (known after apply)
+      + user_data_base64                     = (known after apply)
+      ~ vpc_security_group_ids               = [
+          - "sg-08c1450f2a2f83031",
+        ] -> (known after apply)
+        # (10 unchanged attributes hidden)
+
+      ~ capacity_reservation_specification (known after apply)
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      ~ cpu_options (known after apply)
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      ~ ebs_block_device (known after apply)
+
+      ~ enclave_options (known after apply)
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      ~ ephemeral_block_device (known after apply)
+
+      ~ instance_market_options (known after apply)
+
+      ~ maintenance_options (known after apply)
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      ~ metadata_options (known after apply)
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      ~ network_interface (known after apply)
+
+      ~ primary_network_interface (known after apply)
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-08585ebd6197572be" -> null
+        }
+
+      ~ private_dns_name_options (known after apply)
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      ~ root_block_device {
+          ~ device_name           = "/dev/xvda" -> (known after apply)
+          ~ encrypted             = false -> (known after apply)
+          ~ iops                  = 3000 -> (known after apply)
+          + kms_key_id            = (known after apply)
+          - tags                  = {} -> null
+          ~ tags_all              = {} -> (known after apply)
+          ~ throughput            = 125 -> (known after apply)
+          ~ volume_id             = "vol-0473ef62bd61008cb" -> (known after apply)
+          ~ volume_type           = "gp3" -> (known after apply)
+            # (2 unchanged attributes hidden)
+        }
+
+      ~ secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 1 to destroy.
+aws_instance.ins[0]: Destroying... [id=i-0d3f6c0d891e4aa0b]
+aws_instance.ins[0]: Still destroying... [id=i-0d3f6c0d891e4aa0b, 00m10s elapsed]
+aws_instance.ins[0]: Still destroying... [id=i-0d3f6c0d891e4aa0b, 00m20s elapsed]
+aws_instance.ins[0]: Still destroying... [id=i-0d3f6c0d891e4aa0b, 00m30s elapsed]
+aws_instance.ins[0]: Still destroying... [id=i-0d3f6c0d891e4aa0b, 00m40s elapsed]
+aws_instance.ins[0]: Still destroying... [id=i-0d3f6c0d891e4aa0b, 00m50s elapsed]
+aws_instance.ins[0]: Still destroying... [id=i-0d3f6c0d891e4aa0b, 01m00s elapsed]
+aws_instance.ins[0]: Destruction complete after 1m1s
+aws_instance.ins[0]: Creating...
+aws_instance.ins[0]: Still creating... [00m10s elapsed]
+aws_instance.ins[0]: Creation complete after 12s [id=i-0e9c0412e29aea5a2]
+
+Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
+[root@terra form]#
+[root@terra form]# terraform state list
+aws_instance.ins[0]
+aws_instance.ins[1]
+[root@terra form]#
+
+###################################################################################
+
+##################		lifecycle  in terraform 	###################
+
+###################################################################################
+
+[root@terra form]# vi main.tf
+[root@terra form]# cat main.tf
+provider "aws" {
+  region = "us-east-2"
+}
+locals {
+  it = {
+    dev  = "t3.micro"
+    test = "t3.small"
+    uat  = "c7i-flex.large"
+    prod = "m7i-flex.large"
+  }
+}
+resource "aws_instance" "ins" {
+  tags = {
+    Name = "${terraform.workspace}-Inst"
+  }
+
+  count = 2
+  ami               = "ami-09256c524fab91d36"
+  instance_type     = local.it[terraform.workspace]
+  key_name          = "mykey1"
+  availability_zone = "us-east-2c"
+  lifecycle {
+    create_before_destroy = true
+  }
+  root_block_device {
+    volume_size = 9
+  }
+}
+[root@terra form]# terraform apply --auto-approve -replace=aws_instance.ins[0]
+aws_instance.ins[0]: Refreshing state... [id=i-0e9c0412e29aea5a2]
+aws_instance.ins[1]: Refreshing state... [id=i-0a921641441fe3dd9]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
++/- create replacement and then destroy
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins[0] will be replaced, as requested
++/- resource "aws_instance" "ins" {
+      ~ arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-0e9c0412e29aea5a2" -> (known after apply)
+      ~ associate_public_ip_address          = true -> (known after apply)
+      ~ disable_api_stop                     = false -> (known after apply)
+      ~ disable_api_termination              = false -> (known after apply)
+      ~ ebs_optimized                        = false -> (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      - hibernation                          = false -> null
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      ~ id                                   = "i-0e9c0412e29aea5a2" -> (known after apply)
+      ~ instance_initiated_shutdown_behavior = "stop" -> (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      ~ instance_state                       = "running" -> (known after apply)
+      ~ ipv6_address_count                   = 0 -> (known after apply)
+      ~ ipv6_addresses                       = [] -> (known after apply)
+      ~ monitoring                           = false -> (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      ~ placement_partition_number           = 0 -> (known after apply)
+      ~ primary_network_interface_id         = "eni-0c75bcc7bd6d8e84c" -> (known after apply)
+      ~ private_dns                          = "ip-172-31-35-168.us-east-2.compute.internal" -> (known after apply)
+      ~ private_ip                           = "172.31.35.168" -> (known after apply)
+      ~ public_dns                           = "ec2-18-220-59-143.us-east-2.compute.amazonaws.com" -> (known after apply)
+      ~ public_ip                            = "18.220.59.143" -> (known after apply)
+      ~ secondary_private_ips                = [] -> (known after apply)
+      ~ security_groups                      = [
+          - "default",
+        ] -> (known after apply)
+      + spot_instance_request_id             = (known after apply)
+      ~ subnet_id                            = "subnet-0bfc50430744a1299" -> (known after apply)
+        tags                                 = {
+            "Name" = "dev-Inst"
+        }
+      ~ tenancy                              = "default" -> (known after apply)
+      + user_data_base64                     = (known after apply)
+      ~ vpc_security_group_ids               = [
+          - "sg-08c1450f2a2f83031",
+        ] -> (known after apply)
+        # (10 unchanged attributes hidden)
+
+      ~ capacity_reservation_specification (known after apply)
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      ~ cpu_options (known after apply)
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      ~ ebs_block_device (known after apply)
+
+      ~ enclave_options (known after apply)
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      ~ ephemeral_block_device (known after apply)
+
+      ~ instance_market_options (known after apply)
+
+      ~ maintenance_options (known after apply)
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      ~ metadata_options (known after apply)
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      ~ network_interface (known after apply)
+
+      ~ primary_network_interface (known after apply)
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0c75bcc7bd6d8e84c" -> null
+        }
+
+      ~ private_dns_name_options (known after apply)
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      ~ root_block_device {
+          ~ device_name           = "/dev/xvda" -> (known after apply)
+          ~ encrypted             = false -> (known after apply)
+          ~ iops                  = 3000 -> (known after apply)
+          + kms_key_id            = (known after apply)
+          - tags                  = {} -> null
+          ~ tags_all              = {} -> (known after apply)
+          ~ throughput            = 125 -> (known after apply)
+          ~ volume_id             = "vol-04828ff0ec466147d" -> (known after apply)
+          ~ volume_type           = "gp3" -> (known after apply)
+            # (2 unchanged attributes hidden)
+        }
+
+      ~ secondary_network_interface (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 1 to destroy.
+aws_instance.ins[0]: Creating...
+aws_instance.ins[0]: Still creating... [00m10s elapsed]
+aws_instance.ins[0]: Creation complete after 13s [id=i-0531844ea6e5dbc6c]
+aws_instance.ins[0] (deposed object 710d169d): Destroying... [id=i-0e9c0412e29aea5a2]
+aws_instance.ins[0]: Still destroying... [id=i-0e9c0412e29aea5a2, 00m10s elapsed]
+aws_instance.ins[0]: Still destroying... [id=i-0e9c0412e29aea5a2, 00m20s elapsed]
+aws_instance.ins[0]: Still destroying... [id=i-0e9c0412e29aea5a2, 00m30s elapsed]
+aws_instance.ins[0]: Still destroying... [id=i-0e9c0412e29aea5a2, 00m40s elapsed]
+aws_instance.ins[0]: Destruction complete after 50s
+
+Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
+[root@terra form]#
+[root@terra form]# vi main.tf
+[root@terra form]# cat main.tf
+provider "aws" {
+  region = "us-east-2"
+}
+locals {
+  it = {
+    dev  = "t3.micro"
+    test = "t3.small"
+    uat  = "c7i-flex.large"
+    prod = "m7i-flex.large"
+  }
+}
+resource "aws_instance" "ins" {
+  tags = {
+    Name = "${terraform.workspace}-Inst"
+  }
+
+  count = 2
+  ami               = "ami-09256c524fab91d36"
+  instance_type     = local.it[terraform.workspace]
+  key_name          = "mykey1"
+  availability_zone = "us-east-2c"
+  lifecycle {
+    create_before_destroy = true
+    prevent_destroy = true
+  }
+  root_block_device {
+    volume_size = 9
+  }
+}
+[root@terra form]# terraform destroy --auto-approve
+aws_instance.ins[1]: Refreshing state... [id=i-0a921641441fe3dd9]
+aws_instance.ins[0]: Refreshing state... [id=i-0531844ea6e5dbc6c]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  - destroy
+
+Terraform planned the following actions, but then encountered a problem:
+
+  # aws_instance.ins[0] will be destroyed
+  - resource "aws_instance" "ins" {
+      - ami                                  = "ami-09256c524fab91d36" -> null
+      - arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-0531844ea6e5dbc6c" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-2c" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-0531844ea6e5dbc6c" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "mykey1" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-0618eeec349f5f548" -> null
+      - private_dns                          = "ip-172-31-40-200.us-east-2.compute.internal" -> null
+      - private_ip                           = "172.31.40.200" -> null
+      - public_dns                           = "ec2-18-191-185-25.us-east-2.compute.amazonaws.com" -> null
+      - public_ip                            = "18.191.185.25" -> null
+      - region                               = "us-east-2" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "default",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-0bfc50430744a1299" -> null
+      - tags                                 = {
+          - "Name" = "dev-Inst"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "dev-Inst"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-08c1450f2a2f83031",
+        ] -> null
+        # (8 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0618eeec349f5f548" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-0177f242ebe6ed751" -> null
+          - volume_size           = 9 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # aws_instance.ins[1] will be destroyed
+  - resource "aws_instance" "ins" {
+      - ami                                  = "ami-09256c524fab91d36" -> null
+      - arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-0a921641441fe3dd9" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-2c" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-0a921641441fe3dd9" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "mykey1" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-095c5a735a2b0db5e" -> null
+      - private_dns                          = "ip-172-31-34-43.us-east-2.compute.internal" -> null
+      - private_ip                           = "172.31.34.43" -> null
+      - public_dns                           = "ec2-13-59-50-3.us-east-2.compute.amazonaws.com" -> null
+      - public_ip                            = "13.59.50.3" -> null
+      - region                               = "us-east-2" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "default",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-0bfc50430744a1299" -> null
+      - tags                                 = {
+          - "Name" = "dev-Inst"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "dev-Inst"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-08c1450f2a2f83031",
+        ] -> null
+        # (8 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-095c5a735a2b0db5e" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-0a9474f364bb90a35" -> null
+          - volume_size           = 9 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+Plan: 0 to add, 0 to change, 2 to destroy.
+╷
+│ Error: Instance cannot be destroyed
+│
+│   on main.tf line 12:
+│   12: resource "aws_instance" "ins" {
+│
+│ Resource aws_instance.ins[0] has lifecycle.prevent_destroy set, but the plan calls for this resource to be
+│ destroyed. To avoid this error and continue with the plan, either disable lifecycle.prevent_destroy or
+│ reduce the scope of the plan using the -target option.
+╵
+╷
+│ Error: Instance cannot be destroyed
+│
+│   on main.tf line 12:
+│   12: resource "aws_instance" "ins" {
+│
+│ Resource aws_instance.ins[1] has lifecycle.prevent_destroy set, but the plan calls for this resource to be
+│ destroyed. To avoid this error and continue with the plan, either disable lifecycle.prevent_destroy or
+│ reduce the scope of the plan using the -target option.
+╵
+[root@terra form]#
+[root@terra form]# vi main.tf
+[root@terra form]# cat main.tf
+provider "aws" {
+  region = "us-east-2"
+}
+locals {
+  it = {
+    dev  = "t3.micro"
+    test = "t3.small"
+    uat  = "c7i-flex.large"
+    prod = "m7i-flex.large"
+  }
+}
+resource "aws_instance" "ins" {
+  tags = {
+    Name = "${terraform.workspace}-server"
+  }
+
+  count = 2
+  ami               = "ami-09256c524fab91d36"
+  instance_type     = local.it[terraform.workspace]
+  key_name          = "mykey1"
+  availability_zone = "us-east-2c"
+  lifecycle {
+    create_before_destroy = true
+    prevent_destroy = true
+    ignore_changes = [tags]
+  }
+  root_block_device {
+    volume_size = 9
+  }
+}
+[root@terra form]#
+[root@terra form]# terraform apply --auto-approve
+aws_instance.ins[1]: Refreshing state... [id=i-0a921641441fe3dd9]
+aws_instance.ins[0]: Refreshing state... [id=i-0531844ea6e5dbc6c]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration and found no differences, so no
+changes are needed.
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+[root@terra form]# 
+[root@terra form]# cat main.tf
+provider "aws" {
+  region = "us-east-2"
+}
+locals {
+  it = {
+    dev  = "t3.micro"
+    test = "t3.small"
+    uat  = "c7i-flex.large"
+    prod = "m7i-flex.large"
+  }
+}
+resource "aws_instance" "ins" {
+  tags = {
+    Name = "${terraform.workspace}-server"
+  }
+
+  count = 2
+  ami               = "ami-09256c524fab91d36"
+  instance_type     = local.it[terraform.workspace]
+  key_name          = "mykey1"
+  availability_zone = "us-east-2c"
+  lifecycle {
+    create_before_destroy = true
+  }
+  root_block_device {
+    volume_size = 9
+  }
+}
+[root@terra form]# terraform destroy --auto-approve
+aws_instance.ins[1]: Refreshing state... [id=i-0a921641441fe3dd9]
+aws_instance.ins[0]: Refreshing state... [id=i-0531844ea6e5dbc6c]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins[0] will be destroyed
+  - resource "aws_instance" "ins" {
+      - ami                                  = "ami-09256c524fab91d36" -> null
+      - arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-0531844ea6e5dbc6c" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-2c" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-0531844ea6e5dbc6c" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "mykey1" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-0618eeec349f5f548" -> null
+      - private_dns                          = "ip-172-31-40-200.us-east-2.compute.internal" -> null
+      - private_ip                           = "172.31.40.200" -> null
+      - public_dns                           = "ec2-18-191-185-25.us-east-2.compute.amazonaws.com" -> null
+      - public_ip                            = "18.191.185.25" -> null
+      - region                               = "us-east-2" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "default",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-0bfc50430744a1299" -> null
+      - tags                                 = {
+          - "Name" = "dev-Inst"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "dev-Inst"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-08c1450f2a2f83031",
+        ] -> null
+        # (8 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0618eeec349f5f548" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-0177f242ebe6ed751" -> null
+          - volume_size           = 9 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # aws_instance.ins[1] will be destroyed
+  - resource "aws_instance" "ins" {
+      - ami                                  = "ami-09256c524fab91d36" -> null
+      - arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-0a921641441fe3dd9" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-2c" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-0a921641441fe3dd9" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "mykey1" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-095c5a735a2b0db5e" -> null
+      - private_dns                          = "ip-172-31-34-43.us-east-2.compute.internal" -> null
+      - private_ip                           = "172.31.34.43" -> null
+      - public_dns                           = "ec2-13-59-50-3.us-east-2.compute.amazonaws.com" -> null
+      - public_ip                            = "13.59.50.3" -> null
+      - region                               = "us-east-2" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "default",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-0bfc50430744a1299" -> null
+      - tags                                 = {
+          - "Name" = "dev-Inst"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "dev-Inst"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-08c1450f2a2f83031",
+        ] -> null
+        # (8 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-095c5a735a2b0db5e" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-0a9474f364bb90a35" -> null
+          - volume_size           = 9 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+Plan: 0 to add, 0 to change, 2 to destroy.
+aws_instance.ins[0]: Destroying... [id=i-0531844ea6e5dbc6c]
+aws_instance.ins[1]: Destroying... [id=i-0a921641441fe3dd9]
+aws_instance.ins[1]: Still destroying... [id=i-0a921641441fe3dd9, 00m10s elapsed]
+aws_instance.ins[0]: Still destroying... [id=i-0531844ea6e5dbc6c, 00m10s elapsed]
+aws_instance.ins[0]: Still destroying... [id=i-0531844ea6e5dbc6c, 00m20s elapsed]
+aws_instance.ins[1]: Still destroying... [id=i-0a921641441fe3dd9, 00m20s elapsed]
+aws_instance.ins[1]: Still destroying... [id=i-0a921641441fe3dd9, 00m30s elapsed]
+aws_instance.ins[0]: Still destroying... [id=i-0531844ea6e5dbc6c, 00m30s elapsed]
+aws_instance.ins[0]: Destruction complete after 40s
+aws_instance.ins[1]: Still destroying... [id=i-0a921641441fe3dd9, 00m40s elapsed]
+aws_instance.ins[1]: Destruction complete after 50s
+
+Destroy complete! Resources: 2 destroyed.
+[root@terra form]# terraform state list
+[root@terra form]#
+
+###################################################################################
+
+##################	Import mannual instance in terraform 	###################
+
+###################################################################################
+
+[root@terra form]# terraform state list
+[root@terra form]# terraform state list
+[root@terra form]# vi main.tf
+[root@terra form]# terraform fmt
+main.tf
+[root@terra form]# cat main.tf
+provider "aws" {
+  region = "us-east-2"
+}
+
+resource "aws_instance" "ins" {
+  tags = {
+    Name = "srinu"
+  }
+  ami = "ami-09256c524fab91d36"
+}
+[root@terra form]# terraform import aws_instance.ins i-028adbc1b986f55da
+aws_instance.ins: Importing from ID "i-028adbc1b986f55da"...
+aws_instance.ins: Import prepared!
+  Prepared aws_instance for import
+aws_instance.ins: Refreshing state... [id=i-028adbc1b986f55da]
+
+Import successful!
+
+The resources that were imported are shown above. These resources are now in
+your Terraform state and will henceforth be managed by Terraform.
+
+[root@terra form]# terraform state list
+aws_instance.ins
+[root@terra form]# vi main.tf
+[root@terra form]# cat main.tf
+provider "aws" {
+  region = "us-east-2"
+}
+
+resource "aws_instance" "ins" {
+  tags = {
+    Name = "praise"
+  }
+  ami = "ami-09256c524fab91d36"
+}
+[root@terra form]# terraform apply --auto-approve
+╷
+│ Error: Missing required argument
+│
+│   with aws_instance.ins,
+│   on main.tf line 5, in resource "aws_instance" "ins":
+│    5: resource "aws_instance" "ins" {
+│
+│ "instance_type": one of `instance_type,launch_template` must be specified
+╵
+[root@terra form]# vi main.tf
+[root@terra form]# cat main.tf
+provider "aws" {
+  region = "us-east-2"
+}
+
+resource "aws_instance" "ins" {
+  tags = {
+    Name = "praise"
+  }
+  ami = "ami-09256c524fab91d36"
+  instance_type = "t3.micro"
+}
+[root@terra form]# terraform apply --auto-approve
+aws_instance.ins: Refreshing state... [id=i-028adbc1b986f55da]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins will be updated in-place
+  ~ resource "aws_instance" "ins" {
+        id                                   = "i-028adbc1b986f55da"
+      ~ tags                                 = {
+          ~ "Name" = "srinu" -> "praise"
+        }
+      ~ tags_all                             = {
+          ~ "Name" = "srinu" -> "praise"
+        }
+      + user_data_replace_on_change          = false
+        # (38 unchanged attributes hidden)
+
+        # (9 unchanged blocks hidden)
+    }
+
+Plan: 0 to add, 1 to change, 0 to destroy.
+aws_instance.ins: Modifying... [id=i-028adbc1b986f55da]
+aws_instance.ins: Modifications complete after 1s [id=i-028adbc1b986f55da]
+
+Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
+[root@terra form]#
+[root@terra form]# terraform state list
+aws_instance.ins
+[root@terra form]#
+[root@terra form]# terraform destroy --auto-approve
+aws_instance.ins: Refreshing state... [id=i-028adbc1b986f55da]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_instance.ins will be destroyed
+  - resource "aws_instance" "ins" {
+      - ami                                  = "ami-09256c524fab91d36" -> null
+      - arn                                  = "arn:aws:ec2:us-east-2:041878608675:instance/i-028adbc1b986f55da" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-2b" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = true -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-028adbc1b986f55da" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "mykey1" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-0aa5abeca6c3c7d4b" -> null
+      - private_dns                          = "ip-172-31-30-63.us-east-2.compute.internal" -> null
+      - private_ip                           = "172.31.30.63" -> null
+      - public_dns                           = "ec2-3-145-205-148.us-east-2.compute.amazonaws.com" -> null
+      - public_ip                            = "3.145.205.148" -> null
+      - region                               = "us-east-2" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "mysg-all",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-09822063ebd3763d0" -> null
+      - tags                                 = {
+          - "Name" = "praise"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "praise"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-0cb07ef17423f7232",
+        ] -> null
+        # (8 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0aa5abeca6c3c7d4b" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = true -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-0b37e3042bc716593" -> null
+          - volume_size           = 8 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+Plan: 0 to add, 0 to change, 1 to destroy.
+aws_instance.ins: Destroying... [id=i-028adbc1b986f55da]
+aws_instance.ins: Still destroying... [id=i-028adbc1b986f55da, 00m10s elapsed]
+aws_instance.ins: Still destroying... [id=i-028adbc1b986f55da, 00m20s elapsed]
+aws_instance.ins: Destruction complete after 29s
+
+Destroy complete! Resources: 1 destroyed.
+[root@terra form]# terraform state list
+[root@terra form]#
+
