@@ -4417,3 +4417,4 @@ aws_instance.mumbai_server: Destruction complete after 1m2s
 
 Destroy complete! Resources: 2 destroyed.
 [root@terra form]#
+
