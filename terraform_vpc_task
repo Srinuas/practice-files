@@ -1,0 +1,1993 @@
+Terraform_vpc_task
+
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@3.16.66.51
+The authenticity of host '3.16.66.51 (3.16.66.51)' can't be established.
+ED25519 key fingerprint is SHA256:eeSJTEQv+GxPd3yYYsNFumLHuGpcBlTz+05kK6FrfXU.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '3.16.66.51' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-4-43 ~]$ sudo -i
+ectl set-hostname Tehostnamectl set-hostname Ter[root@ip-172-31-4-43 ~]# hostnamectl set-hostname Terra
+[root@ip-172-31-4-43 ~]# exit
+logout
+[ec2-user@ip-172-31-4-43 ~]$ sudo -i
+yyu[root@Terra ~]# yum install git -y && mkdir /srinu && cd /srinu && git clone https://github.com/Srinuas/install.git && git clone https://github.com/Srinuas/practice-files.git && sh install/gitconfig.sh
+Amazon Linux 2023 Kernel Livepatch repository                                 261 kB/s |  31 kB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                    Architecture     Version                              Repository             Size
+==============================================================================================================
+Installing:
+ git
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64                       git-core-2.50.1-1.amzn2023.0.1.x86_64
+  git-core-doc-2.50.1-1.amzn2023.0.1.noarch              perl-Error-1:0.17029-5.amzn2023.0.2.noarch
+  perl-File-Find-1.37-477.amzn2023.0.7.noarch            perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64            perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 109, done.
+remote: Counting objects: 100% (109/109), done.
+remote: Compressing objects: 100% (103/103), done.
+remote: Total 109 (delta 51), reused 27 (delta 6), pack-reused 0 (from 0)
+Receiving objects: 100% (109/109), 33.12 KiB | 8.28 MiB/s, done.
+Resolving deltas: 100% (51/51), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 110, done.
+remote: Counting objects: 100% (110/110), done.
+remote: Compressing objects: 100% (100/100), done.
+remote: Total 110 (delta 45), reused 45 (delta 10), pack-reused 0 (from 0)
+Receiving objects: 100% (110/110), 168.45 KiB | 4.81 MiB/s, done.
+Resolving deltas: 100% (45/45), done.
+[root@Terra srinu]# sh install/terraform.sh
+Last metadata expiration check: 0:03:02 ago on Fri Feb 27 05:40:06 2026.
+Package dnf-utils-4.3.0-13.amzn2023.0.6.noarch is already installed.
+Package shadow-utils-2:4.9-12.amzn2023.0.4.x86_64 is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+Adding repo from: https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+Hashicorp Stable - x86_64                                                      37 MB/s | 2.0 MB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                   Architecture           Version                     Repository                 Size
+==============================================================================================================
+Installing:
+ terraform
+
+Installed:
+  terraform-1.14.6-1.x86_64
+
+Complete!
+[root@Terra srinu]#
+[root@Terra srinu]# cd
+[root@Terra ~]# mkdir task
+[root@Terra ~]#
+[root@Terra ~]# cd task
+[root@Terra task]# ll
+total 0
+[root@Terra task]#
+[root@Terra task]# vi vpc.tf
+[root@Terra task]#
+[root@Terra task]# terraform fmt
+vpc.tf
+[root@Terra task]# 
+[root@Terra task]# cat -n vpc.tf
+     1  provider "aws" {
+     2    region = "us-east-2"
+     3  }
+     4
+     5  # VPC - use private RFC1918 space
+     6  resource "aws_vpc" "vpc" {
+     7    cidr_block           = "6.0.0.0/22"
+     8    enable_dns_hostnames = true
+     9    tags = { Name = "tf-vpc" }
+    10  }
+    11
+    12  # -------- Subnets (each /26 = 64 IPs) --------
+    13  # Public: 2a
+    14  resource "aws_subnet" "pub_sub_2a" {
+    15    vpc_id                  = aws_vpc.vpc.id
+    16    cidr_block              = "6.0.0.0/26"
+    17    availability_zone       = "us-east-2a"
+    18    map_public_ip_on_launch = true
+    19    tags = { Name = "tf-pub-sub-2a" }
+    20  }
+    21
+    22  # Public: 2c
+    23  resource "aws_subnet" "pub_sub_2c" {
+    24    vpc_id                  = aws_vpc.vpc.id
+    25    cidr_block              = "6.0.0.64/26"
+    26    availability_zone       = "us-east-2c"
+    27    map_public_ip_on_launch = true
+    28    tags = { Name = "tf-pub-sub-2c" }
+    29  }
+    30
+    31  # Private: 2a
+    32  resource "aws_subnet" "pvt_sub_2a" {
+    33    vpc_id                  = aws_vpc.vpc.id
+    34    cidr_block              = "6.0.0.128/26"
+    35    availability_zone       = "us-east-2a"
+    36    map_public_ip_on_launch = false
+    37    tags = { Name = "tf-pvt-sub-2a" }
+    38  }
+    39
+    40  # Private: 2c
+    41  resource "aws_subnet" "pvt_sub_2c" {
+    42    vpc_id                  = aws_vpc.vpc.id
+    43    cidr_block              = "6.0.0.192/26"
+    44    availability_zone       = "us-east-2c"
+    45    map_public_ip_on_launch = false
+    46    tags = { Name = "tf-pvt-sub-2c" }
+    47  }
+    48
+    49  # -------- Internet Gateway --------
+    50  resource "aws_internet_gateway" "ig" {
+    51    vpc_id = aws_vpc.vpc.id
+    52    tags = { Name = "tf-ig" }
+    53  }
+    54
+    55  # -------- Route tables (Public) --------
+    56  resource "aws_route_table" "pub_rt_2a" {
+    57    vpc_id = aws_vpc.vpc.id
+    58    tags = { Name = "tf-pub-rt-2a" }
+    59  }
+    60
+    61  resource "aws_route_table" "pub_rt_2c" {
+    62    vpc_id = aws_vpc.vpc.id
+    63    tags = { Name = "tf-pub-rt-2c" }
+    64  }
+    65
+    66  # Default routes for public RTs → IGW
+    67  resource "aws_route" "pub_rt_ig_2a" {
+    68    route_table_id         = aws_route_table.pub_rt_2a.id
+    69    destination_cidr_block = "0.0.0.0/0"
+    70    gateway_id             = aws_internet_gateway.ig.id
+    71  }
+    72
+    73  resource "aws_route" "pub_rt_ig_2c" {
+    74    route_table_id         = aws_route_table.pub_rt_2c.id
+    75    destination_cidr_block = "0.0.0.0/0"
+    76    gateway_id             = aws_internet_gateway.ig.id
+    77  }
+    78
+    79  # Associate public subnets with public RTs
+    80  resource "aws_route_table_association" "pub_ass_2a" {
+    81    subnet_id      = aws_subnet.pub_sub_2a.id
+    82    route_table_id = aws_route_table.pub_rt_2a.id
+    83  }
+    84
+    85  resource "aws_route_table_association" "pub_ass_2c" {
+    86    subnet_id      = aws_subnet.pub_sub_2c.id
+    87    route_table_id = aws_route_table.pub_rt_2c.id
+    88  }
+    89
+    90  # -------- Private Route Tables --------
+    91  resource "aws_route_table" "pvt_rt_2a" {
+    92    vpc_id = aws_vpc.vpc.id
+    93    tags = { Name = "tf-pvt-rt-2a" }
+    94  }
+    95
+    96  resource "aws_route_table" "pvt_rt_2c" {
+    97    vpc_id = aws_vpc.vpc.id
+    98    tags = { Name = "tf-pvt-rt-2c" }
+    99  }
+   100
+   101  # Associate private subnets to private RTs
+   102  resource "aws_route_table_association" "pvt_ass_2a" {
+   103    subnet_id      = aws_subnet.pvt_sub_2a.id
+   104    route_table_id = aws_route_table.pvt_rt_2a.id
+   105  }
+   106
+   107  resource "aws_route_table_association" "pvt_ass_2c" {
+   108    subnet_id      = aws_subnet.pvt_sub_2c.id
+   109    route_table_id = aws_route_table.pvt_rt_2c.id
+   110  }
+   111
+   112  # -------- NAT Gateways (one per AZ) --------
+   113  resource "aws_eip" "e_ip_2a" {
+   114    domain = "vpc"
+   115    tags = { Name = "tf-nat-eip-2a" }
+   116  }
+   117
+   118  resource "aws_eip" "e_ip_2c" {
+   119    domain = "vpc"
+   120    tags = { Name = "tf-nat-eip-2c" }
+   121  }
+   122
+   123  resource "aws_nat_gateway" "nat_2a" {
+   124    allocation_id = aws_eip.e_ip_2a.id
+   125    subnet_id     = aws_subnet.pub_sub_2a.id
+   126    tags = { Name = "tf-nat-2a" }
+   127    depends_on = [aws_internet_gateway.ig]
+   128  }
+   129
+   130  resource "aws_nat_gateway" "nat_2c" {
+   131    allocation_id = aws_eip.e_ip_2c.id
+   132    subnet_id     = aws_subnet.pub_sub_2c.id
+   133    tags = { Name = "tf-nat-2c" }
+   134    depends_on = [aws_internet_gateway.ig]
+   135  }
+   136
+   137  # Private RTs default routes → NAT
+   138  resource "aws_route" "private_nat_gateway_a" {
+   139    route_table_id         = aws_route_table.pvt_rt_2a.id
+   140    destination_cidr_block = "0.0.0.0/0"
+   141    nat_gateway_id         = aws_nat_gateway.nat_2a.id
+   142  }
+   143
+   144  resource "aws_route" "private_nat_gateway_c" {
+   145    route_table_id         = aws_route_table.pvt_rt_2c.id
+   146    destination_cidr_block = "0.0.0.0/0"
+   147    nat_gateway_id         = aws_nat_gateway.nat_2c.id
+   148  }
+   149
+   150  # -------- Outputs --------
+   151  output "vpc_id" {
+   152    value = aws_vpc.vpc.id
+   153  }
+   154
+   155  output "public_subnet_2a_id" {
+   156    value = aws_subnet.pub_sub_2a.id
+   157  }
+   158
+   159  output "public_subnet_2c_id" {
+   160    value = aws_subnet.pub_sub_2c.id
+   161  }
+   162
+   163  output "private_subnet_2a_id" {
+   164    value = aws_subnet.pvt_sub_2a.id
+   165  }
+   166
+   167  output "private_subnet_2c_id" {
+   168    value = aws_subnet.pvt_sub_2c.id
+   169  }
+   170
+   171  output "internet_gateway_id" {
+   172    value = aws_internet_gateway.ig.id
+   173  }
+   174
+   175  output "nat_gateway_2a_id" {
+   176    value = aws_nat_gateway.nat_2a.id
+   177  }
+   178
+   179  output "nat_gateway_2c_id" {
+   180    value = aws_nat_gateway.nat_2c.id
+   181  }
+[root@Terra task]# terraform init
+Initializing the backend...
+Initializing provider plugins...
+- Reusing previous version of hashicorp/aws from the dependency lock file
+- Using previously-installed hashicorp/aws v6.34.0
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+[root@Terra task]#
+[root@Terra task]# terraform validate
+Success! The configuration is valid.
+
+[root@Terra task]# terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_eip.e_ip_2a will be created
+  + resource "aws_eip" "e_ip_2a" {
+      + allocation_id        = (known after apply)
+      + arn                  = (known after apply)
+      + association_id       = (known after apply)
+      + carrier_ip           = (known after apply)
+      + customer_owned_ip    = (known after apply)
+      + domain               = "vpc"
+      + id                   = (known after apply)
+      + instance             = (known after apply)
+      + ipam_pool_id         = (known after apply)
+      + network_border_group = (known after apply)
+      + network_interface    = (known after apply)
+      + private_dns          = (known after apply)
+      + private_ip           = (known after apply)
+      + ptr_record           = (known after apply)
+      + public_dns           = (known after apply)
+      + public_ip            = (known after apply)
+      + public_ipv4_pool     = (known after apply)
+      + region               = "us-east-2"
+      + tags                 = {
+          + "Name" = "tf-nat-eip-2a"
+        }
+      + tags_all             = {
+          + "Name" = "tf-nat-eip-2a"
+        }
+    }
+
+  # aws_eip.e_ip_2c will be created
+  + resource "aws_eip" "e_ip_2c" {
+      + allocation_id        = (known after apply)
+      + arn                  = (known after apply)
+      + association_id       = (known after apply)
+      + carrier_ip           = (known after apply)
+      + customer_owned_ip    = (known after apply)
+      + domain               = "vpc"
+      + id                   = (known after apply)
+      + instance             = (known after apply)
+      + ipam_pool_id         = (known after apply)
+      + network_border_group = (known after apply)
+      + network_interface    = (known after apply)
+      + private_dns          = (known after apply)
+      + private_ip           = (known after apply)
+      + ptr_record           = (known after apply)
+      + public_dns           = (known after apply)
+      + public_ip            = (known after apply)
+      + public_ipv4_pool     = (known after apply)
+      + region               = "us-east-2"
+      + tags                 = {
+          + "Name" = "tf-nat-eip-2c"
+        }
+      + tags_all             = {
+          + "Name" = "tf-nat-eip-2c"
+        }
+    }
+
+  # aws_internet_gateway.ig will be created
+  + resource "aws_internet_gateway" "ig" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + region   = "us-east-2"
+      + tags     = {
+          + "Name" = "tf-ig"
+        }
+      + tags_all = {
+          + "Name" = "tf-ig"
+        }
+      + vpc_id   = (known after apply)
+    }
+
+  # aws_nat_gateway.nat_2a will be created
+  + resource "aws_nat_gateway" "nat_2a" {
+      + allocation_id                      = (known after apply)
+      + association_id                     = (known after apply)
+      + auto_provision_zones               = (known after apply)
+      + auto_scaling_ips                   = (known after apply)
+      + availability_mode                  = (known after apply)
+      + connectivity_type                  = "public"
+      + id                                 = (known after apply)
+      + network_interface_id               = (known after apply)
+      + private_ip                         = (known after apply)
+      + public_ip                          = (known after apply)
+      + region                             = "us-east-2"
+      + regional_nat_gateway_address       = (known after apply)
+      + regional_nat_gateway_auto_mode     = (known after apply)
+      + route_table_id                     = (known after apply)
+      + secondary_allocation_ids           = (known after apply)
+      + secondary_private_ip_address_count = (known after apply)
+      + secondary_private_ip_addresses     = (known after apply)
+      + subnet_id                          = (known after apply)
+      + tags                               = {
+          + "Name" = "tf-nat-2a"
+        }
+      + tags_all                           = {
+          + "Name" = "tf-nat-2a"
+        }
+      + vpc_id                             = (known after apply)
+    }
+
+  # aws_nat_gateway.nat_2c will be created
+  + resource "aws_nat_gateway" "nat_2c" {
+      + allocation_id                      = (known after apply)
+      + association_id                     = (known after apply)
+      + auto_provision_zones               = (known after apply)
+      + auto_scaling_ips                   = (known after apply)
+      + availability_mode                  = (known after apply)
+      + connectivity_type                  = "public"
+      + id                                 = (known after apply)
+      + network_interface_id               = (known after apply)
+      + private_ip                         = (known after apply)
+      + public_ip                          = (known after apply)
+      + region                             = "us-east-2"
+      + regional_nat_gateway_address       = (known after apply)
+      + regional_nat_gateway_auto_mode     = (known after apply)
+      + route_table_id                     = (known after apply)
+      + secondary_allocation_ids           = (known after apply)
+      + secondary_private_ip_address_count = (known after apply)
+      + secondary_private_ip_addresses     = (known after apply)
+      + subnet_id                          = (known after apply)
+      + tags                               = {
+          + "Name" = "tf-nat-2c"
+        }
+      + tags_all                           = {
+          + "Name" = "tf-nat-2c"
+        }
+      + vpc_id                             = (known after apply)
+    }
+
+  # aws_route.private_nat_gateway_a will be created
+  + resource "aws_route" "private_nat_gateway_a" {
+      + destination_cidr_block = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + instance_id            = (known after apply)
+      + instance_owner_id      = (known after apply)
+      + nat_gateway_id         = (known after apply)
+      + network_interface_id   = (known after apply)
+      + origin                 = (known after apply)
+      + region                 = "us-east-2"
+      + route_table_id         = (known after apply)
+      + state                  = (known after apply)
+    }
+
+  # aws_route.private_nat_gateway_c will be created
+  + resource "aws_route" "private_nat_gateway_c" {
+      + destination_cidr_block = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + instance_id            = (known after apply)
+      + instance_owner_id      = (known after apply)
+      + nat_gateway_id         = (known after apply)
+      + network_interface_id   = (known after apply)
+      + origin                 = (known after apply)
+      + region                 = "us-east-2"
+      + route_table_id         = (known after apply)
+      + state                  = (known after apply)
+    }
+
+  # aws_route.pub_rt_ig_2a will be created
+  + resource "aws_route" "pub_rt_ig_2a" {
+      + destination_cidr_block = "0.0.0.0/0"
+      + gateway_id             = (known after apply)
+      + id                     = (known after apply)
+      + instance_id            = (known after apply)
+      + instance_owner_id      = (known after apply)
+      + network_interface_id   = (known after apply)
+      + origin                 = (known after apply)
+      + region                 = "us-east-2"
+      + route_table_id         = (known after apply)
+      + state                  = (known after apply)
+    }
+
+  # aws_route.pub_rt_ig_2c will be created
+  + resource "aws_route" "pub_rt_ig_2c" {
+      + destination_cidr_block = "0.0.0.0/0"
+      + gateway_id             = (known after apply)
+      + id                     = (known after apply)
+      + instance_id            = (known after apply)
+      + instance_owner_id      = (known after apply)
+      + network_interface_id   = (known after apply)
+      + origin                 = (known after apply)
+      + region                 = "us-east-2"
+      + route_table_id         = (known after apply)
+      + state                  = (known after apply)
+    }
+
+  # aws_route_table.pub_rt_2a will be created
+  + resource "aws_route_table" "pub_rt_2a" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-2"
+      + route            = (known after apply)
+      + tags             = {
+          + "Name" = "tf-pub-rt-2a"
+        }
+      + tags_all         = {
+          + "Name" = "tf-pub-rt-2a"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table.pub_rt_2c will be created
+  + resource "aws_route_table" "pub_rt_2c" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-2"
+      + route            = (known after apply)
+      + tags             = {
+          + "Name" = "tf-pub-rt-2c"
+        }
+      + tags_all         = {
+          + "Name" = "tf-pub-rt-2c"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table.pvt_rt_2a will be created
+  + resource "aws_route_table" "pvt_rt_2a" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-2"
+      + route            = (known after apply)
+      + tags             = {
+          + "Name" = "tf-pvt-rt-2a"
+        }
+      + tags_all         = {
+          + "Name" = "tf-pvt-rt-2a"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table.pvt_rt_2c will be created
+  + resource "aws_route_table" "pvt_rt_2c" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-2"
+      + route            = (known after apply)
+      + tags             = {
+          + "Name" = "tf-pvt-rt-2c"
+        }
+      + tags_all         = {
+          + "Name" = "tf-pvt-rt-2c"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table_association.pub_ass_2a will be created
+  + resource "aws_route_table_association" "pub_ass_2a" {
+      + id             = (known after apply)
+      + region         = "us-east-2"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_route_table_association.pub_ass_2c will be created
+  + resource "aws_route_table_association" "pub_ass_2c" {
+      + id             = (known after apply)
+      + region         = "us-east-2"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_route_table_association.pvt_ass_2a will be created
+  + resource "aws_route_table_association" "pvt_ass_2a" {
+      + id             = (known after apply)
+      + region         = "us-east-2"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_route_table_association.pvt_ass_2c will be created
+  + resource "aws_route_table_association" "pvt_ass_2c" {
+      + id             = (known after apply)
+      + region         = "us-east-2"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_subnet.pub_sub_2a will be created
+  + resource "aws_subnet" "pub_sub_2a" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-2a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "6.0.0.0/26"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-2"
+      + tags                                           = {
+          + "Name" = "tf-pub-sub-2a"
+        }
+      + tags_all                                       = {
+          + "Name" = "tf-pub-sub-2a"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_subnet.pub_sub_2c will be created
+  + resource "aws_subnet" "pub_sub_2c" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-2c"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "6.0.0.64/26"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-2"
+      + tags                                           = {
+          + "Name" = "tf-pub-sub-2c"
+        }
+      + tags_all                                       = {
+          + "Name" = "tf-pub-sub-2c"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_subnet.pvt_sub_2a will be created
+  + resource "aws_subnet" "pvt_sub_2a" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-2a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "6.0.0.128/26"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-2"
+      + tags                                           = {
+          + "Name" = "tf-pvt-sub-2a"
+        }
+      + tags_all                                       = {
+          + "Name" = "tf-pvt-sub-2a"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_subnet.pvt_sub_2c will be created
+  + resource "aws_subnet" "pvt_sub_2c" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-2c"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "6.0.0.192/26"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-2"
+      + tags                                           = {
+          + "Name" = "tf-pvt-sub-2c"
+        }
+      + tags_all                                       = {
+          + "Name" = "tf-pvt-sub-2c"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_vpc.vpc will be created
+  + resource "aws_vpc" "vpc" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "6.0.0.0/22"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_dns_hostnames                 = true
+      + enable_dns_support                   = true
+      + enable_network_address_usage_metrics = (known after apply)
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + region                               = "us-east-2"
+      + tags                                 = {
+          + "Name" = "tf-vpc"
+        }
+      + tags_all                             = {
+          + "Name" = "tf-vpc"
+        }
+    }
+
+Plan: 22 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + internet_gateway_id  = (known after apply)
+  + nat_gateway_2a_id    = (known after apply)
+  + nat_gateway_2c_id    = (known after apply)
+  + private_subnet_2a_id = (known after apply)
+  + private_subnet_2c_id = (known after apply)
+  + public_subnet_2a_id  = (known after apply)
+  + public_subnet_2c_id  = (known after apply)
+  + vpc_id               = (known after apply)
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these
+actions if you run "terraform apply" now.
+[root@Terra task]# terraform apply --auto-approve
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_eip.e_ip_2a will be created
+  + resource "aws_eip" "e_ip_2a" {
+      + allocation_id        = (known after apply)
+      + arn                  = (known after apply)
+      + association_id       = (known after apply)
+      + carrier_ip           = (known after apply)
+      + customer_owned_ip    = (known after apply)
+      + domain               = "vpc"
+      + id                   = (known after apply)
+      + instance             = (known after apply)
+      + ipam_pool_id         = (known after apply)
+      + network_border_group = (known after apply)
+      + network_interface    = (known after apply)
+      + private_dns          = (known after apply)
+      + private_ip           = (known after apply)
+      + ptr_record           = (known after apply)
+      + public_dns           = (known after apply)
+      + public_ip            = (known after apply)
+      + public_ipv4_pool     = (known after apply)
+      + region               = "us-east-2"
+      + tags                 = {
+          + "Name" = "tf-nat-eip-2a"
+        }
+      + tags_all             = {
+          + "Name" = "tf-nat-eip-2a"
+        }
+    }
+
+  # aws_eip.e_ip_2c will be created
+  + resource "aws_eip" "e_ip_2c" {
+      + allocation_id        = (known after apply)
+      + arn                  = (known after apply)
+      + association_id       = (known after apply)
+      + carrier_ip           = (known after apply)
+      + customer_owned_ip    = (known after apply)
+      + domain               = "vpc"
+      + id                   = (known after apply)
+      + instance             = (known after apply)
+      + ipam_pool_id         = (known after apply)
+      + network_border_group = (known after apply)
+      + network_interface    = (known after apply)
+      + private_dns          = (known after apply)
+      + private_ip           = (known after apply)
+      + ptr_record           = (known after apply)
+      + public_dns           = (known after apply)
+      + public_ip            = (known after apply)
+      + public_ipv4_pool     = (known after apply)
+      + region               = "us-east-2"
+      + tags                 = {
+          + "Name" = "tf-nat-eip-2c"
+        }
+      + tags_all             = {
+          + "Name" = "tf-nat-eip-2c"
+        }
+    }
+
+  # aws_internet_gateway.ig will be created
+  + resource "aws_internet_gateway" "ig" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + region   = "us-east-2"
+      + tags     = {
+          + "Name" = "tf-ig"
+        }
+      + tags_all = {
+          + "Name" = "tf-ig"
+        }
+      + vpc_id   = (known after apply)
+    }
+
+  # aws_nat_gateway.nat_2a will be created
+  + resource "aws_nat_gateway" "nat_2a" {
+      + allocation_id                      = (known after apply)
+      + association_id                     = (known after apply)
+      + auto_provision_zones               = (known after apply)
+      + auto_scaling_ips                   = (known after apply)
+      + availability_mode                  = (known after apply)
+      + connectivity_type                  = "public"
+      + id                                 = (known after apply)
+      + network_interface_id               = (known after apply)
+      + private_ip                         = (known after apply)
+      + public_ip                          = (known after apply)
+      + region                             = "us-east-2"
+      + regional_nat_gateway_address       = (known after apply)
+      + regional_nat_gateway_auto_mode     = (known after apply)
+      + route_table_id                     = (known after apply)
+      + secondary_allocation_ids           = (known after apply)
+      + secondary_private_ip_address_count = (known after apply)
+      + secondary_private_ip_addresses     = (known after apply)
+      + subnet_id                          = (known after apply)
+      + tags                               = {
+          + "Name" = "tf-nat-2a"
+        }
+      + tags_all                           = {
+          + "Name" = "tf-nat-2a"
+        }
+      + vpc_id                             = (known after apply)
+    }
+
+  # aws_nat_gateway.nat_2c will be created
+  + resource "aws_nat_gateway" "nat_2c" {
+      + allocation_id                      = (known after apply)
+      + association_id                     = (known after apply)
+      + auto_provision_zones               = (known after apply)
+      + auto_scaling_ips                   = (known after apply)
+      + availability_mode                  = (known after apply)
+      + connectivity_type                  = "public"
+      + id                                 = (known after apply)
+      + network_interface_id               = (known after apply)
+      + private_ip                         = (known after apply)
+      + public_ip                          = (known after apply)
+      + region                             = "us-east-2"
+      + regional_nat_gateway_address       = (known after apply)
+      + regional_nat_gateway_auto_mode     = (known after apply)
+      + route_table_id                     = (known after apply)
+      + secondary_allocation_ids           = (known after apply)
+      + secondary_private_ip_address_count = (known after apply)
+      + secondary_private_ip_addresses     = (known after apply)
+      + subnet_id                          = (known after apply)
+      + tags                               = {
+          + "Name" = "tf-nat-2c"
+        }
+      + tags_all                           = {
+          + "Name" = "tf-nat-2c"
+        }
+      + vpc_id                             = (known after apply)
+    }
+
+  # aws_route.private_nat_gateway_a will be created
+  + resource "aws_route" "private_nat_gateway_a" {
+      + destination_cidr_block = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + instance_id            = (known after apply)
+      + instance_owner_id      = (known after apply)
+      + nat_gateway_id         = (known after apply)
+      + network_interface_id   = (known after apply)
+      + origin                 = (known after apply)
+      + region                 = "us-east-2"
+      + route_table_id         = (known after apply)
+      + state                  = (known after apply)
+    }
+
+  # aws_route.private_nat_gateway_c will be created
+  + resource "aws_route" "private_nat_gateway_c" {
+      + destination_cidr_block = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + instance_id            = (known after apply)
+      + instance_owner_id      = (known after apply)
+      + nat_gateway_id         = (known after apply)
+      + network_interface_id   = (known after apply)
+      + origin                 = (known after apply)
+      + region                 = "us-east-2"
+      + route_table_id         = (known after apply)
+      + state                  = (known after apply)
+    }
+
+  # aws_route.pub_rt_ig_2a will be created
+  + resource "aws_route" "pub_rt_ig_2a" {
+      + destination_cidr_block = "0.0.0.0/0"
+      + gateway_id             = (known after apply)
+      + id                     = (known after apply)
+      + instance_id            = (known after apply)
+      + instance_owner_id      = (known after apply)
+      + network_interface_id   = (known after apply)
+      + origin                 = (known after apply)
+      + region                 = "us-east-2"
+      + route_table_id         = (known after apply)
+      + state                  = (known after apply)
+    }
+
+  # aws_route.pub_rt_ig_2c will be created
+  + resource "aws_route" "pub_rt_ig_2c" {
+      + destination_cidr_block = "0.0.0.0/0"
+      + gateway_id             = (known after apply)
+      + id                     = (known after apply)
+      + instance_id            = (known after apply)
+      + instance_owner_id      = (known after apply)
+      + network_interface_id   = (known after apply)
+      + origin                 = (known after apply)
+      + region                 = "us-east-2"
+      + route_table_id         = (known after apply)
+      + state                  = (known after apply)
+    }
+
+  # aws_route_table.pub_rt_2a will be created
+  + resource "aws_route_table" "pub_rt_2a" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-2"
+      + route            = (known after apply)
+      + tags             = {
+          + "Name" = "tf-pub-rt-2a"
+        }
+      + tags_all         = {
+          + "Name" = "tf-pub-rt-2a"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table.pub_rt_2c will be created
+  + resource "aws_route_table" "pub_rt_2c" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-2"
+      + route            = (known after apply)
+      + tags             = {
+          + "Name" = "tf-pub-rt-2c"
+        }
+      + tags_all         = {
+          + "Name" = "tf-pub-rt-2c"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table.pvt_rt_2a will be created
+  + resource "aws_route_table" "pvt_rt_2a" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-2"
+      + route            = (known after apply)
+      + tags             = {
+          + "Name" = "tf-pvt-rt-2a"
+        }
+      + tags_all         = {
+          + "Name" = "tf-pvt-rt-2a"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table.pvt_rt_2c will be created
+  + resource "aws_route_table" "pvt_rt_2c" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-2"
+      + route            = (known after apply)
+      + tags             = {
+          + "Name" = "tf-pvt-rt-2c"
+        }
+      + tags_all         = {
+          + "Name" = "tf-pvt-rt-2c"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table_association.pub_ass_2a will be created
+  + resource "aws_route_table_association" "pub_ass_2a" {
+      + id             = (known after apply)
+      + region         = "us-east-2"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_route_table_association.pub_ass_2c will be created
+  + resource "aws_route_table_association" "pub_ass_2c" {
+      + id             = (known after apply)
+      + region         = "us-east-2"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_route_table_association.pvt_ass_2a will be created
+  + resource "aws_route_table_association" "pvt_ass_2a" {
+      + id             = (known after apply)
+      + region         = "us-east-2"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_route_table_association.pvt_ass_2c will be created
+  + resource "aws_route_table_association" "pvt_ass_2c" {
+      + id             = (known after apply)
+      + region         = "us-east-2"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_subnet.pub_sub_2a will be created
+  + resource "aws_subnet" "pub_sub_2a" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-2a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "6.0.0.0/26"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-2"
+      + tags                                           = {
+          + "Name" = "tf-pub-sub-2a"
+        }
+      + tags_all                                       = {
+          + "Name" = "tf-pub-sub-2a"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_subnet.pub_sub_2c will be created
+  + resource "aws_subnet" "pub_sub_2c" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-2c"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "6.0.0.64/26"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-2"
+      + tags                                           = {
+          + "Name" = "tf-pub-sub-2c"
+        }
+      + tags_all                                       = {
+          + "Name" = "tf-pub-sub-2c"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_subnet.pvt_sub_2a will be created
+  + resource "aws_subnet" "pvt_sub_2a" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-2a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "6.0.0.128/26"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-2"
+      + tags                                           = {
+          + "Name" = "tf-pvt-sub-2a"
+        }
+      + tags_all                                       = {
+          + "Name" = "tf-pvt-sub-2a"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_subnet.pvt_sub_2c will be created
+  + resource "aws_subnet" "pvt_sub_2c" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-2c"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "6.0.0.192/26"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-2"
+      + tags                                           = {
+          + "Name" = "tf-pvt-sub-2c"
+        }
+      + tags_all                                       = {
+          + "Name" = "tf-pvt-sub-2c"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_vpc.vpc will be created
+  + resource "aws_vpc" "vpc" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "6.0.0.0/22"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_dns_hostnames                 = true
+      + enable_dns_support                   = true
+      + enable_network_address_usage_metrics = (known after apply)
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + region                               = "us-east-2"
+      + tags                                 = {
+          + "Name" = "tf-vpc"
+        }
+      + tags_all                             = {
+          + "Name" = "tf-vpc"
+        }
+    }
+
+Plan: 22 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + internet_gateway_id  = (known after apply)
+  + nat_gateway_2a_id    = (known after apply)
+  + nat_gateway_2c_id    = (known after apply)
+  + private_subnet_2a_id = (known after apply)
+  + private_subnet_2c_id = (known after apply)
+  + public_subnet_2a_id  = (known after apply)
+  + public_subnet_2c_id  = (known after apply)
+  + vpc_id               = (known after apply)
+aws_eip.e_ip_2a: Creating...
+aws_eip.e_ip_2c: Creating...
+aws_vpc.vpc: Creating...
+aws_eip.e_ip_2a: Creation complete after 0s [id=eipalloc-0edc4181d1f550937]
+aws_eip.e_ip_2c: Creation complete after 1s [id=eipalloc-0fdb6ca1273a0039c]
+aws_vpc.vpc: Still creating... [00m10s elapsed]
+aws_vpc.vpc: Creation complete after 11s [id=vpc-020258682610fe3e3]
+aws_subnet.pub_sub_2a: Creating...
+aws_route_table.pvt_rt_2c: Creating...
+aws_route_table.pub_rt_2a: Creating...
+aws_internet_gateway.ig: Creating...
+aws_route_table.pvt_rt_2a: Creating...
+aws_subnet.pvt_sub_2c: Creating...
+aws_route_table.pub_rt_2c: Creating...
+aws_subnet.pvt_sub_2a: Creating...
+aws_subnet.pub_sub_2c: Creating...
+aws_route_table.pub_rt_2c: Creation complete after 0s [id=rtb-0c1f512961178fa8e]
+aws_internet_gateway.ig: Creation complete after 0s [id=igw-04aa1c70d2776ce96]
+aws_route.pub_rt_ig_2c: Creating...
+aws_route_table.pub_rt_2a: Creation complete after 0s [id=rtb-00a2ccd2f89e7b9ad]
+aws_route.pub_rt_ig_2a: Creating...
+aws_route_table.pvt_rt_2a: Creation complete after 0s [id=rtb-01b385b3304c3737b]
+aws_route_table.pvt_rt_2c: Creation complete after 0s [id=rtb-0ff00d154bb2f8402]
+aws_subnet.pvt_sub_2c: Creation complete after 1s [id=subnet-020a64aec0194d264]
+aws_route_table_association.pvt_ass_2c: Creating...
+aws_subnet.pvt_sub_2a: Creation complete after 1s [id=subnet-08e564bc031a6bb53]
+aws_route_table_association.pvt_ass_2a: Creating...
+aws_route_table_association.pvt_ass_2c: Creation complete after 0s [id=rtbassoc-0f9e302d0024f1fdf]
+aws_route.pub_rt_ig_2c: Creation complete after 1s [id=r-rtb-0c1f512961178fa8e1080289494]
+aws_route_table_association.pvt_ass_2a: Creation complete after 0s [id=rtbassoc-0f87751fc47ca6ab6]
+aws_route.pub_rt_ig_2a: Creation complete after 1s [id=r-rtb-00a2ccd2f89e7b9ad1080289494]
+aws_subnet.pub_sub_2a: Still creating... [00m10s elapsed]
+aws_subnet.pub_sub_2c: Still creating... [00m10s elapsed]
+aws_subnet.pub_sub_2a: Creation complete after 14s [id=subnet-0387cc8ef04418214]
+aws_route_table_association.pub_ass_2a: Creating...
+aws_nat_gateway.nat_2a: Creating...
+aws_route_table_association.pub_ass_2a: Creation complete after 0s [id=rtbassoc-07eb681ce785cdc8b]
+aws_subnet.pub_sub_2c: Creation complete after 15s [id=subnet-05f779c7152abc7aa]
+aws_route_table_association.pub_ass_2c: Creating...
+aws_nat_gateway.nat_2c: Creating...
+aws_route_table_association.pub_ass_2c: Creation complete after 0s [id=rtbassoc-0376c1cb70dcafa51]
+aws_nat_gateway.nat_2a: Still creating... [00m10s elapsed]
+aws_nat_gateway.nat_2c: Still creating... [00m10s elapsed]
+aws_nat_gateway.nat_2a: Still creating... [00m20s elapsed]
+aws_nat_gateway.nat_2c: Still creating... [00m20s elapsed]
+aws_nat_gateway.nat_2a: Still creating... [00m30s elapsed]
+aws_nat_gateway.nat_2c: Still creating... [00m30s elapsed]
+aws_nat_gateway.nat_2a: Still creating... [00m40s elapsed]
+aws_nat_gateway.nat_2c: Still creating... [00m40s elapsed]
+aws_nat_gateway.nat_2a: Still creating... [00m50s elapsed]
+aws_nat_gateway.nat_2c: Still creating... [00m50s elapsed]
+aws_nat_gateway.nat_2a: Still creating... [01m00s elapsed]
+aws_nat_gateway.nat_2c: Still creating... [01m00s elapsed]
+aws_nat_gateway.nat_2a: Still creating... [01m10s elapsed]
+aws_nat_gateway.nat_2c: Still creating... [01m10s elapsed]
+aws_nat_gateway.nat_2a: Still creating... [01m20s elapsed]
+aws_nat_gateway.nat_2c: Still creating... [01m20s elapsed]
+aws_nat_gateway.nat_2a: Still creating... [01m30s elapsed]
+aws_nat_gateway.nat_2c: Still creating... [01m30s elapsed]
+aws_nat_gateway.nat_2a: Still creating... [01m40s elapsed]
+aws_nat_gateway.nat_2c: Still creating... [01m40s elapsed]
+aws_nat_gateway.nat_2a: Creation complete after 1m43s [id=nat-036aa56655f9731bc]
+aws_route.private_nat_gateway_a: Creating...
+aws_nat_gateway.nat_2c: Creation complete after 1m43s [id=nat-09a1ceb56e76a37ab]
+aws_route.private_nat_gateway_c: Creating...
+aws_route.private_nat_gateway_a: Creation complete after 1s [id=r-rtb-01b385b3304c3737b1080289494]
+aws_route.private_nat_gateway_c: Creation complete after 1s [id=r-rtb-0ff00d154bb2f84021080289494]
+
+Apply complete! Resources: 22 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+internet_gateway_id = "igw-04aa1c70d2776ce96"
+nat_gateway_2a_id = "nat-036aa56655f9731bc"
+nat_gateway_2c_id = "nat-09a1ceb56e76a37ab"
+private_subnet_2a_id = "subnet-08e564bc031a6bb53"
+private_subnet_2c_id = "subnet-020a64aec0194d264"
+public_subnet_2a_id = "subnet-0387cc8ef04418214"
+public_subnet_2c_id = "subnet-05f779c7152abc7aa"
+vpc_id = "vpc-020258682610fe3e3"
+[root@Terra task]# terraform state list
+aws_eip.e_ip_2a
+aws_eip.e_ip_2c
+aws_internet_gateway.ig
+aws_nat_gateway.nat_2a
+aws_nat_gateway.nat_2c
+aws_route.private_nat_gateway_a
+aws_route.private_nat_gateway_c
+aws_route.pub_rt_ig_2a
+aws_route.pub_rt_ig_2c
+aws_route_table.pub_rt_2a
+aws_route_table.pub_rt_2c
+aws_route_table.pvt_rt_2a
+aws_route_table.pvt_rt_2c
+aws_route_table_association.pub_ass_2a
+aws_route_table_association.pub_ass_2c
+aws_route_table_association.pvt_ass_2a
+aws_route_table_association.pvt_ass_2c
+aws_subnet.pub_sub_2a
+aws_subnet.pub_sub_2c
+aws_subnet.pvt_sub_2a
+aws_subnet.pvt_sub_2c
+aws_vpc.vpc
+[root@Terra task]#
+[root@Terra task]# terraform destroy --auto-approve
+aws_eip.e_ip_2c: Refreshing state... [id=eipalloc-0fdb6ca1273a0039c]
+aws_vpc.vpc: Refreshing state... [id=vpc-020258682610fe3e3]
+aws_eip.e_ip_2a: Refreshing state... [id=eipalloc-0edc4181d1f550937]
+aws_subnet.pub_sub_2c: Refreshing state... [id=subnet-05f779c7152abc7aa]
+aws_subnet.pvt_sub_2a: Refreshing state... [id=subnet-08e564bc031a6bb53]
+aws_internet_gateway.ig: Refreshing state... [id=igw-04aa1c70d2776ce96]
+aws_route_table.pub_rt_2a: Refreshing state... [id=rtb-00a2ccd2f89e7b9ad]
+aws_route_table.pvt_rt_2c: Refreshing state... [id=rtb-0ff00d154bb2f8402]
+aws_route_table.pvt_rt_2a: Refreshing state... [id=rtb-01b385b3304c3737b]
+aws_route_table.pub_rt_2c: Refreshing state... [id=rtb-0c1f512961178fa8e]
+aws_subnet.pvt_sub_2c: Refreshing state... [id=subnet-020a64aec0194d264]
+aws_subnet.pub_sub_2a: Refreshing state... [id=subnet-0387cc8ef04418214]
+aws_route.pub_rt_ig_2c: Refreshing state... [id=r-rtb-0c1f512961178fa8e1080289494]
+aws_route.pub_rt_ig_2a: Refreshing state... [id=r-rtb-00a2ccd2f89e7b9ad1080289494]
+aws_route_table_association.pvt_ass_2c: Refreshing state... [id=rtbassoc-0f9e302d0024f1fdf]
+aws_route_table_association.pvt_ass_2a: Refreshing state... [id=rtbassoc-0f87751fc47ca6ab6]
+aws_route_table_association.pub_ass_2a: Refreshing state... [id=rtbassoc-07eb681ce785cdc8b]
+aws_nat_gateway.nat_2c: Refreshing state... [id=nat-09a1ceb56e76a37ab]
+aws_route_table_association.pub_ass_2c: Refreshing state... [id=rtbassoc-0376c1cb70dcafa51]
+aws_nat_gateway.nat_2a: Refreshing state... [id=nat-036aa56655f9731bc]
+aws_route.private_nat_gateway_c: Refreshing state... [id=r-rtb-0ff00d154bb2f84021080289494]
+aws_route.private_nat_gateway_a: Refreshing state... [id=r-rtb-01b385b3304c3737b1080289494]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are
+indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_eip.e_ip_2a will be destroyed
+  - resource "aws_eip" "e_ip_2a" {
+      - allocation_id            = "eipalloc-0edc4181d1f550937" -> null
+      - arn                      = "arn:aws:ec2:us-east-2:041878608675:elastic-ip/eipalloc-0edc4181d1f550937" -> null
+      - association_id           = "eipassoc-057d4333a8299c4b0" -> null
+      - domain                   = "vpc" -> null
+      - id                       = "eipalloc-0edc4181d1f550937" -> null
+      - network_border_group     = "us-east-2" -> null
+      - network_interface        = "eni-00f9772ab9a10fb60" -> null
+      - private_dns              = "ip-6-0-0-52.us-east-2.compute.internal" -> null
+      - private_ip               = "6.0.0.52" -> null
+      - public_dns               = "ec2-3-19-114-132.us-east-2.compute.amazonaws.com" -> null
+      - public_ip                = "3.19.114.132" -> null
+      - public_ipv4_pool         = "amazon" -> null
+      - region                   = "us-east-2" -> null
+      - tags                     = {
+          - "Name" = "tf-nat-eip-2a"
+        } -> null
+      - tags_all                 = {
+          - "Name" = "tf-nat-eip-2a"
+        } -> null
+        # (5 unchanged attributes hidden)
+    }
+
+  # aws_eip.e_ip_2c will be destroyed
+  - resource "aws_eip" "e_ip_2c" {
+      - allocation_id            = "eipalloc-0fdb6ca1273a0039c" -> null
+      - arn                      = "arn:aws:ec2:us-east-2:041878608675:elastic-ip/eipalloc-0fdb6ca1273a0039c" -> null
+      - association_id           = "eipassoc-097b3534d7dc0410c" -> null
+      - domain                   = "vpc" -> null
+      - id                       = "eipalloc-0fdb6ca1273a0039c" -> null
+      - network_border_group     = "us-east-2" -> null
+      - network_interface        = "eni-0ba882fa356a9b7f1" -> null
+      - private_dns              = "ip-6-0-0-107.us-east-2.compute.internal" -> null
+      - private_ip               = "6.0.0.107" -> null
+      - public_dns               = "ec2-3-139-51-111.us-east-2.compute.amazonaws.com" -> null
+      - public_ip                = "3.139.51.111" -> null
+      - public_ipv4_pool         = "amazon" -> null
+      - region                   = "us-east-2" -> null
+      - tags                     = {
+          - "Name" = "tf-nat-eip-2c"
+        } -> null
+      - tags_all                 = {
+          - "Name" = "tf-nat-eip-2c"
+        } -> null
+        # (5 unchanged attributes hidden)
+    }
+
+  # aws_internet_gateway.ig will be destroyed
+  - resource "aws_internet_gateway" "ig" {
+      - arn      = "arn:aws:ec2:us-east-2:041878608675:internet-gateway/igw-04aa1c70d2776ce96" -> null
+      - id       = "igw-04aa1c70d2776ce96" -> null
+      - owner_id = "041878608675" -> null
+      - region   = "us-east-2" -> null
+      - tags     = {
+          - "Name" = "tf-ig"
+        } -> null
+      - tags_all = {
+          - "Name" = "tf-ig"
+        } -> null
+      - vpc_id   = "vpc-020258682610fe3e3" -> null
+    }
+
+  # aws_nat_gateway.nat_2a will be destroyed
+  - resource "aws_nat_gateway" "nat_2a" {
+      - allocation_id                      = "eipalloc-0edc4181d1f550937" -> null
+      - association_id                     = "eipassoc-057d4333a8299c4b0" -> null
+      - availability_mode                  = "zonal" -> null
+      - connectivity_type                  = "public" -> null
+      - id                                 = "nat-036aa56655f9731bc" -> null
+      - network_interface_id               = "eni-00f9772ab9a10fb60" -> null
+      - private_ip                         = "6.0.0.52" -> null
+      - public_ip                          = "3.19.114.132" -> null
+      - region                             = "us-east-2" -> null
+      - regional_nat_gateway_address       = [] -> null
+      - secondary_allocation_ids           = [] -> null
+      - secondary_private_ip_address_count = 0 -> null
+      - secondary_private_ip_addresses     = [] -> null
+      - subnet_id                          = "subnet-0387cc8ef04418214" -> null
+      - tags                               = {
+          - "Name" = "tf-nat-2a"
+        } -> null
+      - tags_all                           = {
+          - "Name" = "tf-nat-2a"
+        } -> null
+      - vpc_id                             = "vpc-020258682610fe3e3" -> null
+    }
+
+  # aws_nat_gateway.nat_2c will be destroyed
+  - resource "aws_nat_gateway" "nat_2c" {
+      - allocation_id                      = "eipalloc-0fdb6ca1273a0039c" -> null
+      - association_id                     = "eipassoc-097b3534d7dc0410c" -> null
+      - availability_mode                  = "zonal" -> null
+      - connectivity_type                  = "public" -> null
+      - id                                 = "nat-09a1ceb56e76a37ab" -> null
+      - network_interface_id               = "eni-0ba882fa356a9b7f1" -> null
+      - private_ip                         = "6.0.0.107" -> null
+      - public_ip                          = "3.139.51.111" -> null
+      - region                             = "us-east-2" -> null
+      - regional_nat_gateway_address       = [] -> null
+      - secondary_allocation_ids           = [] -> null
+      - secondary_private_ip_address_count = 0 -> null
+      - secondary_private_ip_addresses     = [] -> null
+      - subnet_id                          = "subnet-05f779c7152abc7aa" -> null
+      - tags                               = {
+          - "Name" = "tf-nat-2c"
+        } -> null
+      - tags_all                           = {
+          - "Name" = "tf-nat-2c"
+        } -> null
+      - vpc_id                             = "vpc-020258682610fe3e3" -> null
+    }
+
+  # aws_route.private_nat_gateway_a will be destroyed
+  - resource "aws_route" "private_nat_gateway_a" {
+      - destination_cidr_block      = "0.0.0.0/0" -> null
+      - id                          = "r-rtb-01b385b3304c3737b1080289494" -> null
+      - nat_gateway_id              = "nat-036aa56655f9731bc" -> null
+      - origin                      = "CreateRoute" -> null
+      - region                      = "us-east-2" -> null
+      - route_table_id              = "rtb-01b385b3304c3737b" -> null
+      - state                       = "active" -> null
+        # (13 unchanged attributes hidden)
+    }
+
+  # aws_route.private_nat_gateway_c will be destroyed
+  - resource "aws_route" "private_nat_gateway_c" {
+      - destination_cidr_block      = "0.0.0.0/0" -> null
+      - id                          = "r-rtb-0ff00d154bb2f84021080289494" -> null
+      - nat_gateway_id              = "nat-09a1ceb56e76a37ab" -> null
+      - origin                      = "CreateRoute" -> null
+      - region                      = "us-east-2" -> null
+      - route_table_id              = "rtb-0ff00d154bb2f8402" -> null
+      - state                       = "active" -> null
+        # (13 unchanged attributes hidden)
+    }
+
+  # aws_route.pub_rt_ig_2a will be destroyed
+  - resource "aws_route" "pub_rt_ig_2a" {
+      - destination_cidr_block      = "0.0.0.0/0" -> null
+      - gateway_id                  = "igw-04aa1c70d2776ce96" -> null
+      - id                          = "r-rtb-00a2ccd2f89e7b9ad1080289494" -> null
+      - origin                      = "CreateRoute" -> null
+      - region                      = "us-east-2" -> null
+      - route_table_id              = "rtb-00a2ccd2f89e7b9ad" -> null
+      - state                       = "active" -> null
+        # (13 unchanged attributes hidden)
+    }
+
+  # aws_route.pub_rt_ig_2c will be destroyed
+  - resource "aws_route" "pub_rt_ig_2c" {
+      - destination_cidr_block      = "0.0.0.0/0" -> null
+      - gateway_id                  = "igw-04aa1c70d2776ce96" -> null
+      - id                          = "r-rtb-0c1f512961178fa8e1080289494" -> null
+      - origin                      = "CreateRoute" -> null
+      - region                      = "us-east-2" -> null
+      - route_table_id              = "rtb-0c1f512961178fa8e" -> null
+      - state                       = "active" -> null
+        # (13 unchanged attributes hidden)
+    }
+
+  # aws_route_table.pub_rt_2a will be destroyed
+  - resource "aws_route_table" "pub_rt_2a" {
+      - arn              = "arn:aws:ec2:us-east-2:041878608675:route-table/rtb-00a2ccd2f89e7b9ad" -> null
+      - id               = "rtb-00a2ccd2f89e7b9ad" -> null
+      - owner_id         = "041878608675" -> null
+      - propagating_vgws = [] -> null
+      - region           = "us-east-2" -> null
+      - route            = [
+          - {
+              - cidr_block                 = "0.0.0.0/0"
+              - gateway_id                 = "igw-04aa1c70d2776ce96"
+                # (11 unchanged attributes hidden)
+            },
+        ] -> null
+      - tags             = {
+          - "Name" = "tf-pub-rt-2a"
+        } -> null
+      - tags_all         = {
+          - "Name" = "tf-pub-rt-2a"
+        } -> null
+      - vpc_id           = "vpc-020258682610fe3e3" -> null
+    }
+
+  # aws_route_table.pub_rt_2c will be destroyed
+  - resource "aws_route_table" "pub_rt_2c" {
+      - arn              = "arn:aws:ec2:us-east-2:041878608675:route-table/rtb-0c1f512961178fa8e" -> null
+      - id               = "rtb-0c1f512961178fa8e" -> null
+      - owner_id         = "041878608675" -> null
+      - propagating_vgws = [] -> null
+      - region           = "us-east-2" -> null
+      - route            = [
+          - {
+              - cidr_block                 = "0.0.0.0/0"
+              - gateway_id                 = "igw-04aa1c70d2776ce96"
+                # (11 unchanged attributes hidden)
+            },
+        ] -> null
+      - tags             = {
+          - "Name" = "tf-pub-rt-2c"
+        } -> null
+      - tags_all         = {
+          - "Name" = "tf-pub-rt-2c"
+        } -> null
+      - vpc_id           = "vpc-020258682610fe3e3" -> null
+    }
+
+  # aws_route_table.pvt_rt_2a will be destroyed
+  - resource "aws_route_table" "pvt_rt_2a" {
+      - arn              = "arn:aws:ec2:us-east-2:041878608675:route-table/rtb-01b385b3304c3737b" -> null
+      - id               = "rtb-01b385b3304c3737b" -> null
+      - owner_id         = "041878608675" -> null
+      - propagating_vgws = [] -> null
+      - region           = "us-east-2" -> null
+      - route            = [
+          - {
+              - cidr_block                 = "0.0.0.0/0"
+              - nat_gateway_id             = "nat-036aa56655f9731bc"
+                # (11 unchanged attributes hidden)
+            },
+        ] -> null
+      - tags             = {
+          - "Name" = "tf-pvt-rt-2a"
+        } -> null
+      - tags_all         = {
+          - "Name" = "tf-pvt-rt-2a"
+        } -> null
+      - vpc_id           = "vpc-020258682610fe3e3" -> null
+    }
+
+  # aws_route_table.pvt_rt_2c will be destroyed
+  - resource "aws_route_table" "pvt_rt_2c" {
+      - arn              = "arn:aws:ec2:us-east-2:041878608675:route-table/rtb-0ff00d154bb2f8402" -> null
+      - id               = "rtb-0ff00d154bb2f8402" -> null
+      - owner_id         = "041878608675" -> null
+      - propagating_vgws = [] -> null
+      - region           = "us-east-2" -> null
+      - route            = [
+          - {
+              - cidr_block                 = "0.0.0.0/0"
+              - nat_gateway_id             = "nat-09a1ceb56e76a37ab"
+                # (11 unchanged attributes hidden)
+            },
+        ] -> null
+      - tags             = {
+          - "Name" = "tf-pvt-rt-2c"
+        } -> null
+      - tags_all         = {
+          - "Name" = "tf-pvt-rt-2c"
+        } -> null
+      - vpc_id           = "vpc-020258682610fe3e3" -> null
+    }
+
+  # aws_route_table_association.pub_ass_2a will be destroyed
+  - resource "aws_route_table_association" "pub_ass_2a" {
+      - id             = "rtbassoc-07eb681ce785cdc8b" -> null
+      - region         = "us-east-2" -> null
+      - route_table_id = "rtb-00a2ccd2f89e7b9ad" -> null
+      - subnet_id      = "subnet-0387cc8ef04418214" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_route_table_association.pub_ass_2c will be destroyed
+  - resource "aws_route_table_association" "pub_ass_2c" {
+      - id             = "rtbassoc-0376c1cb70dcafa51" -> null
+      - region         = "us-east-2" -> null
+      - route_table_id = "rtb-0c1f512961178fa8e" -> null
+      - subnet_id      = "subnet-05f779c7152abc7aa" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_route_table_association.pvt_ass_2a will be destroyed
+  - resource "aws_route_table_association" "pvt_ass_2a" {
+      - id             = "rtbassoc-0f87751fc47ca6ab6" -> null
+      - region         = "us-east-2" -> null
+      - route_table_id = "rtb-01b385b3304c3737b" -> null
+      - subnet_id      = "subnet-08e564bc031a6bb53" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_route_table_association.pvt_ass_2c will be destroyed
+  - resource "aws_route_table_association" "pvt_ass_2c" {
+      - id             = "rtbassoc-0f9e302d0024f1fdf" -> null
+      - region         = "us-east-2" -> null
+      - route_table_id = "rtb-0ff00d154bb2f8402" -> null
+      - subnet_id      = "subnet-020a64aec0194d264" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_subnet.pub_sub_2a will be destroyed
+  - resource "aws_subnet" "pub_sub_2a" {
+      - arn                                            = "arn:aws:ec2:us-east-2:041878608675:subnet/subnet-0387cc8ef04418214" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-2a" -> null
+      - availability_zone_id                           = "use2-az1" -> null
+      - cidr_block                                     = "6.0.0.0/26" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-0387cc8ef04418214" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "041878608675" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - region                                         = "us-east-2" -> null
+      - tags                                           = {
+          - "Name" = "tf-pub-sub-2a"
+        } -> null
+      - tags_all                                       = {
+          - "Name" = "tf-pub-sub-2a"
+        } -> null
+      - vpc_id                                         = "vpc-020258682610fe3e3" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_subnet.pub_sub_2c will be destroyed
+  - resource "aws_subnet" "pub_sub_2c" {
+      - arn                                            = "arn:aws:ec2:us-east-2:041878608675:subnet/subnet-05f779c7152abc7aa" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-2c" -> null
+      - availability_zone_id                           = "use2-az3" -> null
+      - cidr_block                                     = "6.0.0.64/26" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-05f779c7152abc7aa" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "041878608675" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - region                                         = "us-east-2" -> null
+      - tags                                           = {
+          - "Name" = "tf-pub-sub-2c"
+        } -> null
+      - tags_all                                       = {
+          - "Name" = "tf-pub-sub-2c"
+        } -> null
+      - vpc_id                                         = "vpc-020258682610fe3e3" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_subnet.pvt_sub_2a will be destroyed
+  - resource "aws_subnet" "pvt_sub_2a" {
+      - arn                                            = "arn:aws:ec2:us-east-2:041878608675:subnet/subnet-08e564bc031a6bb53" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-2a" -> null
+      - availability_zone_id                           = "use2-az1" -> null
+      - cidr_block                                     = "6.0.0.128/26" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-08e564bc031a6bb53" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = false -> null
+      - owner_id                                       = "041878608675" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - region                                         = "us-east-2" -> null
+      - tags                                           = {
+          - "Name" = "tf-pvt-sub-2a"
+        } -> null
+      - tags_all                                       = {
+          - "Name" = "tf-pvt-sub-2a"
+        } -> null
+      - vpc_id                                         = "vpc-020258682610fe3e3" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_subnet.pvt_sub_2c will be destroyed
+  - resource "aws_subnet" "pvt_sub_2c" {
+      - arn                                            = "arn:aws:ec2:us-east-2:041878608675:subnet/subnet-020a64aec0194d264" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-2c" -> null
+      - availability_zone_id                           = "use2-az3" -> null
+      - cidr_block                                     = "6.0.0.192/26" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-020a64aec0194d264" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = false -> null
+      - owner_id                                       = "041878608675" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - region                                         = "us-east-2" -> null
+      - tags                                           = {
+          - "Name" = "tf-pvt-sub-2c"
+        } -> null
+      - tags_all                                       = {
+          - "Name" = "tf-pvt-sub-2c"
+        } -> null
+      - vpc_id                                         = "vpc-020258682610fe3e3" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_vpc.vpc will be destroyed
+  - resource "aws_vpc" "vpc" {
+      - arn                                  = "arn:aws:ec2:us-east-2:041878608675:vpc/vpc-020258682610fe3e3" -> null
+      - assign_generated_ipv6_cidr_block     = false -> null
+      - cidr_block                           = "6.0.0.0/22" -> null
+      - default_network_acl_id               = "acl-0b74834d62a073685" -> null
+      - default_route_table_id               = "rtb-0d6377f32b8120a96" -> null
+      - default_security_group_id            = "sg-0c84a6a22e5f5091b" -> null
+      - dhcp_options_id                      = "dopt-0c2f9f1d874c84970" -> null
+      - enable_dns_hostnames                 = true -> null
+      - enable_dns_support                   = true -> null
+      - enable_network_address_usage_metrics = false -> null
+      - id                                   = "vpc-020258682610fe3e3" -> null
+      - instance_tenancy                     = "default" -> null
+      - ipv6_netmask_length                  = 0 -> null
+      - main_route_table_id                  = "rtb-0d6377f32b8120a96" -> null
+      - owner_id                             = "041878608675" -> null
+      - region                               = "us-east-2" -> null
+      - tags                                 = {
+          - "Name" = "tf-vpc"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "tf-vpc"
+        } -> null
+        # (4 unchanged attributes hidden)
+    }
+
+Plan: 0 to add, 0 to change, 22 to destroy.
+
+Changes to Outputs:
+  - internet_gateway_id  = "igw-04aa1c70d2776ce96" -> null
+  - nat_gateway_2a_id    = "nat-036aa56655f9731bc" -> null
+  - nat_gateway_2c_id    = "nat-09a1ceb56e76a37ab" -> null
+  - private_subnet_2a_id = "subnet-08e564bc031a6bb53" -> null
+  - private_subnet_2c_id = "subnet-020a64aec0194d264" -> null
+  - public_subnet_2a_id  = "subnet-0387cc8ef04418214" -> null
+  - public_subnet_2c_id  = "subnet-05f779c7152abc7aa" -> null
+  - vpc_id               = "vpc-020258682610fe3e3" -> null
+aws_route_table_association.pvt_ass_2a: Destroying... [id=rtbassoc-0f87751fc47ca6ab6]
+aws_route.private_nat_gateway_c: Destroying... [id=r-rtb-0ff00d154bb2f84021080289494]
+aws_route_table_association.pvt_ass_2c: Destroying... [id=rtbassoc-0f9e302d0024f1fdf]
+aws_route.private_nat_gateway_a: Destroying... [id=r-rtb-01b385b3304c3737b1080289494]
+aws_route.pub_rt_ig_2c: Destroying... [id=r-rtb-0c1f512961178fa8e1080289494]
+aws_route_table_association.pub_ass_2c: Destroying... [id=rtbassoc-0376c1cb70dcafa51]
+aws_route_table_association.pub_ass_2a: Destroying... [id=rtbassoc-07eb681ce785cdc8b]
+aws_route.pub_rt_ig_2a: Destroying... [id=r-rtb-00a2ccd2f89e7b9ad1080289494]
+aws_route_table_association.pvt_ass_2c: Destruction complete after 0s
+aws_route_table_association.pub_ass_2a: Destruction complete after 0s
+aws_route_table_association.pvt_ass_2a: Destruction complete after 0s
+aws_subnet.pvt_sub_2c: Destroying... [id=subnet-020a64aec0194d264]
+aws_subnet.pvt_sub_2a: Destroying... [id=subnet-08e564bc031a6bb53]
+aws_route_table_association.pub_ass_2c: Destruction complete after 0s
+aws_route.private_nat_gateway_c: Destruction complete after 0s
+aws_route_table.pvt_rt_2c: Destroying... [id=rtb-0ff00d154bb2f8402]
+aws_nat_gateway.nat_2c: Destroying... [id=nat-09a1ceb56e76a37ab]
+aws_route.private_nat_gateway_a: Destruction complete after 0s
+aws_route.pub_rt_ig_2c: Destruction complete after 0s
+aws_nat_gateway.nat_2a: Destroying... [id=nat-036aa56655f9731bc]
+aws_route_table.pvt_rt_2a: Destroying... [id=rtb-01b385b3304c3737b]
+aws_route_table.pub_rt_2c: Destroying... [id=rtb-0c1f512961178fa8e]
+aws_route.pub_rt_ig_2a: Destruction complete after 0s
+aws_route_table.pub_rt_2a: Destroying... [id=rtb-00a2ccd2f89e7b9ad]
+aws_subnet.pvt_sub_2c: Destruction complete after 1s
+aws_subnet.pvt_sub_2a: Destruction complete after 1s
+aws_route_table.pvt_rt_2c: Destruction complete after 1s
+aws_route_table.pvt_rt_2a: Destruction complete after 1s
+aws_route_table.pub_rt_2c: Destruction complete after 1s
+aws_route_table.pub_rt_2a: Destruction complete after 1s
+aws_nat_gateway.nat_2c: Still destroying... [id=nat-09a1ceb56e76a37ab, 00m10s elapsed]
+aws_nat_gateway.nat_2a: Still destroying... [id=nat-036aa56655f9731bc, 00m10s elapsed]
+aws_nat_gateway.nat_2c: Still destroying... [id=nat-09a1ceb56e76a37ab, 00m20s elapsed]
+aws_nat_gateway.nat_2a: Still destroying... [id=nat-036aa56655f9731bc, 00m20s elapsed]
+aws_nat_gateway.nat_2c: Still destroying... [id=nat-09a1ceb56e76a37ab, 00m30s elapsed]
+aws_nat_gateway.nat_2a: Still destroying... [id=nat-036aa56655f9731bc, 00m30s elapsed]
+aws_nat_gateway.nat_2c: Still destroying... [id=nat-09a1ceb56e76a37ab, 00m40s elapsed]
+aws_nat_gateway.nat_2a: Still destroying... [id=nat-036aa56655f9731bc, 00m40s elapsed]
+aws_nat_gateway.nat_2c: Still destroying... [id=nat-09a1ceb56e76a37ab, 00m50s elapsed]
+aws_nat_gateway.nat_2a: Still destroying... [id=nat-036aa56655f9731bc, 00m50s elapsed]
+aws_nat_gateway.nat_2c: Still destroying... [id=nat-09a1ceb56e76a37ab, 01m00s elapsed]
+aws_nat_gateway.nat_2a: Still destroying... [id=nat-036aa56655f9731bc, 01m00s elapsed]
+aws_nat_gateway.nat_2c: Still destroying... [id=nat-09a1ceb56e76a37ab, 01m10s elapsed]
+aws_nat_gateway.nat_2a: Still destroying... [id=nat-036aa56655f9731bc, 01m10s elapsed]
+aws_nat_gateway.nat_2c: Destruction complete after 1m11s
+aws_eip.e_ip_2c: Destroying... [id=eipalloc-0fdb6ca1273a0039c]
+aws_subnet.pub_sub_2c: Destroying... [id=subnet-05f779c7152abc7aa]
+aws_subnet.pub_sub_2c: Destruction complete after 0s
+aws_eip.e_ip_2c: Destruction complete after 1s
+aws_nat_gateway.nat_2a: Still destroying... [id=nat-036aa56655f9731bc, 01m20s elapsed]
+aws_nat_gateway.nat_2a: Destruction complete after 1m21s
+aws_internet_gateway.ig: Destroying... [id=igw-04aa1c70d2776ce96]
+aws_eip.e_ip_2a: Destroying... [id=eipalloc-0edc4181d1f550937]
+aws_subnet.pub_sub_2a: Destroying... [id=subnet-0387cc8ef04418214]
+aws_internet_gateway.ig: Destruction complete after 0s
+aws_subnet.pub_sub_2a: Destruction complete after 0s
+aws_vpc.vpc: Destroying... [id=vpc-020258682610fe3e3]
+aws_vpc.vpc: Destruction complete after 1s
+aws_eip.e_ip_2a: Destruction complete after 1s
+
+Destroy complete! Resources: 22 destroyed.
+[root@Terra task]#
+[root@Terra task]# terraform state list
+[root@Terra task]#[root@Terra task]# cat vpc.tf
+provider "aws" {
+  region = "us-east-2"
+}
+
+# VPC - use private RFC1918 space
+resource "aws_vpc" "vpc" {
+  cidr_block           = "6.0.0.0/22"
+  enable_dns_hostnames = true
+  tags = { Name = "tf-vpc" }
+}
+
+# -------- Subnets (each /26 = 64 IPs) --------
+# Public: 2a
+resource "aws_subnet" "pub_sub_2a" {
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = "6.0.0.0/26"
+  availability_zone       = "us-east-2a"
+  map_public_ip_on_launch = true
+  tags = { Name = "tf-pub-sub-2a" }
+}
+
+# Public: 2c
+resource "aws_subnet" "pub_sub_2c" {
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = "6.0.0.64/26"
+  availability_zone       = "us-east-2c"
+  map_public_ip_on_launch = true
+  tags = { Name = "tf-pub-sub-2c" }
+}
+
+# Private: 2a
+resource "aws_subnet" "pvt_sub_2a" {
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = "6.0.0.128/26"
+  availability_zone       = "us-east-2a"
+  map_public_ip_on_launch = false
+  tags = { Name = "tf-pvt-sub-2a" }
+}
+
+# Private: 2c
+resource "aws_subnet" "pvt_sub_2c" {
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = "6.0.0.192/26"
+  availability_zone       = "us-east-2c"
+  map_public_ip_on_launch = false
+  tags = { Name = "tf-pvt-sub-2c" }
+}
+
+# -------- Internet Gateway --------
+resource "aws_internet_gateway" "ig" {
+  vpc_id = aws_vpc.vpc.id
+  tags = { Name = "tf-ig" }
+}
+
+# -------- Route tables (Public) --------
+resource "aws_route_table" "pub_rt_2a" {
+  vpc_id = aws_vpc.vpc.id
+  tags = { Name = "tf-pub-rt-2a" }
+}
+
+resource "aws_route_table" "pub_rt_2c" {
+  vpc_id = aws_vpc.vpc.id
+  tags = { Name = "tf-pub-rt-2c" }
+}
+
+# Default routes for public RTs → IGW
+resource "aws_route" "pub_rt_ig_2a" {
+  route_table_id         = aws_route_table.pub_rt_2a.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.ig.id
+}
+
+resource "aws_route" "pub_rt_ig_2c" {
+  route_table_id         = aws_route_table.pub_rt_2c.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.ig.id
+}
+
+# Associate public subnets with public RTs
+resource "aws_route_table_association" "pub_ass_2a" {
+  subnet_id      = aws_subnet.pub_sub_2a.id
+  route_table_id = aws_route_table.pub_rt_2a.id
+}
+
+resource "aws_route_table_association" "pub_ass_2c" {
+  subnet_id      = aws_subnet.pub_sub_2c.id
+  route_table_id = aws_route_table.pub_rt_2c.id
+}
+
+# -------- Private Route Tables --------
+resource "aws_route_table" "pvt_rt_2a" {
+  vpc_id = aws_vpc.vpc.id
+  tags = { Name = "tf-pvt-rt-2a" }
+}
+
+resource "aws_route_table" "pvt_rt_2c" {
+  vpc_id = aws_vpc.vpc.id
+  tags = { Name = "tf-pvt-rt-2c" }
+}
+
+# Associate private subnets to private RTs
+resource "aws_route_table_association" "pvt_ass_2a" {
+  subnet_id      = aws_subnet.pvt_sub_2a.id
+  route_table_id = aws_route_table.pvt_rt_2a.id
+}
+
+resource "aws_route_table_association" "pvt_ass_2c" {
+  subnet_id      = aws_subnet.pvt_sub_2c.id
+  route_table_id = aws_route_table.pvt_rt_2c.id
+}
+
+# -------- NAT Gateways (one per AZ) --------
+resource "aws_eip" "e_ip_2a" {
+  domain = "vpc"
+  tags = { Name = "tf-nat-eip-2a" }
+}
+
+resource "aws_eip" "e_ip_2c" {
+  domain = "vpc"
+  tags = { Name = "tf-nat-eip-2c" }
+}
+
+resource "aws_nat_gateway" "nat_2a" {
+  allocation_id = aws_eip.e_ip_2a.id
+  subnet_id     = aws_subnet.pub_sub_2a.id
+  tags = { Name = "tf-nat-2a" }
+  depends_on = [aws_internet_gateway.ig]
+}
+
+resource "aws_nat_gateway" "nat_2c" {
+  allocation_id = aws_eip.e_ip_2c.id
+  subnet_id     = aws_subnet.pub_sub_2c.id
+  tags = { Name = "tf-nat-2c" }
+  depends_on = [aws_internet_gateway.ig]
+}
+
+# Private RTs default routes → NAT
+resource "aws_route" "private_nat_gateway_a" {
+  route_table_id         = aws_route_table.pvt_rt_2a.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.nat_2a.id
+}
+
+resource "aws_route" "private_nat_gateway_c" {
+  route_table_id         = aws_route_table.pvt_rt_2c.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.nat_2c.id
+}
+
+# -------- Outputs --------
+output "vpc_id" {
+  value = aws_vpc.vpc.id
+}
+
+output "public_subnet_2a_id" {
+  value = aws_subnet.pub_sub_2a.id
+}
+
+output "public_subnet_2c_id" {
+  value = aws_subnet.pub_sub_2c.id
+}
+
+output "private_subnet_2a_id" {
+  value = aws_subnet.pvt_sub_2a.id
+}
+
+output "private_subnet_2c_id" {
+  value = aws_subnet.pvt_sub_2c.id
+}
+
+output "internet_gateway_id" {
+  value = aws_internet_gateway.ig.id
+}
+
+output "nat_gateway_2a_id" {
+  value = aws_nat_gateway.nat_2a.id
+}
+
+output "nat_gateway_2c_id" {
+  value = aws_nat_gateway.nat_2c.id
+}
+[root@Terra task]#
+
+
+
+
