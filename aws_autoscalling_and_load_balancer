@@ -1,0 +1,237 @@
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@3.145.10.156
+The authenticity of host '3.145.10.156 (3.145.10.156)' can't be established.
+ED25519 key fingerprint is SHA256:ZXspDHjVZbMOD26GMT9Zd/cjxDo8WY3modOxWR3DIPg.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '3.145.10.156' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-13-20 ~]$ sudo -i
+[root@ip-172-31-13-20 ~]# hostnamectl set-hostname food
+[root@ip-172-31-13-20 ~]# exit
+logout
+[ec2-user@ip-172-31-13-20 ~]$ sudo -i
+[root@food ~]#
+[root@food ~]# ll
+total 0
+[root@food ~]# mkdir server1
+[root@food ~]# cd server1/
+[root@food server1]#
+[root@food server1]#
+[root@food server1]# yum install httpd -y && systemctl start httpd
+Last metadata expiration check: 0:14:52 ago on Mon Mar  2 05:52:09 2026.
+Dependencies resolved.
+==============================================================================================================
+ Package                       Architecture     Version                           Repository             Size
+==============================================================================================================
+Installing:
+ httpd
+
+Installed:
+  apr-1.7.5-1.amzn2023.0.4.x86_64                         apr-util-1.6.3-1.amzn2023.0.2.x86_64
+  apr-util-lmdb-1.6.3-1.amzn2023.0.2.x86_64               apr-util-openssl-1.6.3-1.amzn2023.0.2.x86_64
+  generic-logos-httpd-18.0.0-12.amzn2023.0.3.noarch       httpd-2.4.66-1.amzn2023.0.1.x86_64
+  httpd-core-2.4.66-1.amzn2023.0.1.x86_64                 httpd-filesystem-2.4.66-1.amzn2023.0.1.noarch
+  httpd-tools-2.4.66-1.amzn2023.0.1.x86_64                libbrotli-1.0.9-4.amzn2023.0.2.x86_64
+  mailcap-2.1.49-3.amzn2023.0.3.noarch                    mod_http2-2.0.27-1.amzn2023.0.3.x86_64
+  mod_lua-2.4.66-1.amzn2023.0.1.x86_64
+
+Complete!
+[root@food server1]#
+[root@food server1]# systemctl status httpd
+● httpd.service - The Apache HTTP Server
+     Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; preset: disabled)
+     Active: active (running) since Mon 2026-03-02 06:07:04 UTC; 1min 23s ago
+       Docs: man:httpd.service(8)
+   Main PID: 27026 (httpd)
+     Status: "Total requests: 0; Idle/Busy workers 100/0;Requests/sec: 0; Bytes served/sec:   0 B/sec"
+      Tasks: 177 (limit: 1067)
+     Memory: 13.4M
+        CPU: 133ms
+     CGroup: /system.slice/httpd.service
+             ├─27026 /usr/sbin/httpd -DFOREGROUND
+             ├─27028 /usr/sbin/httpd -DFOREGROUND
+             ├─27029 /usr/sbin/httpd -DFOREGROUND
+             ├─27030 /usr/sbin/httpd -DFOREGROUND
+             └─27043 /usr/sbin/httpd -DFOREGROUND
+
+Mar 02 06:07:03 food systemd[1]: Starting httpd.service - The Apache HTTP Server...
+Mar 02 06:07:04 food httpd[27026]: AH00558: httpd: Could not reliably determine the server's fully qualified >
+Mar 02 06:07:04 food systemd[1]: Started httpd.service - The Apache HTTP Server.
+Mar 02 06:07:04 food httpd[27026]: Server configured, listening on: port 80
+[root@food server1]#
+[root@food server1]# vi index.html
+[root@food server1]# "index.html" [New] 218L, 7937B written
+[root@food server1]# ll
+total 8
+-rw-r--r--. 1 root root 7937 Mar  2 06:09 index.html
+[root@food server1]# mv index.html /var/www/html/
+[root@food server1]# ll /var/www/html/
+total 8
+-rw-r--r--. 1 root root 7937 Mar  2 06:09 index.html
+[root@food server1]# 
+
+==============================================================
+Server - 2
+
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey1.pem" ec2-user@18.117.244.16
+The authenticity of host '18.117.244.16 (18.117.244.16)' can't be established.
+ED25519 key fingerprint is SHA256:ZrGaAP5lFWOC4AqmR+ptXlABdu0/xZwGZ0tyZec/WhM.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '18.117.244.16' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-24-148 ~]$ sudo -i
+[root@ip-172-31-24-148 ~]# hostnamectl set-hostname instamart
+[root@ip-172-31-24-148 ~]# exit
+logout
+[ec2-user@ip-172-31-24-148 ~]$ sudo -i
+[root@instamart ~]#
+[root@instamart ~]# yum install httpd -y && systemctl start httpd && systemctl status httpd
+Amazon Linux 2023 Kernel Livepatch repository                                 261 kB/s |  31 kB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                       Architecture     Version                           Repository             Size
+==============================================================================================================
+Installing:
+ httpd
+
+Installed:
+  apr-1.7.5-1.amzn2023.0.4.x86_64                         apr-util-1.6.3-1.amzn2023.0.2.x86_64
+  apr-util-lmdb-1.6.3-1.amzn2023.0.2.x86_64               apr-util-openssl-1.6.3-1.amzn2023.0.2.x86_64
+  generic-logos-httpd-18.0.0-12.amzn2023.0.3.noarch       httpd-2.4.66-1.amzn2023.0.1.x86_64
+  httpd-core-2.4.66-1.amzn2023.0.1.x86_64                 httpd-filesystem-2.4.66-1.amzn2023.0.1.noarch
+  httpd-tools-2.4.66-1.amzn2023.0.1.x86_64                libbrotli-1.0.9-4.amzn2023.0.2.x86_64
+  mailcap-2.1.49-3.amzn2023.0.3.noarch                    mod_http2-2.0.27-1.amzn2023.0.3.x86_64
+  mod_lua-2.4.66-1.amzn2023.0.1.x86_64
+
+Complete!
+● httpd.service - The Apache HTTP Server
+     Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; preset: disabled)
+     Active: active (running) since Mon 2026-03-02 06:20:29 UTC; 25ms ago
+       Docs: man:httpd.service(8)
+   Main PID: 4042 (httpd)
+     Status: "Started, listening on: port 80"
+      Tasks: 177 (limit: 1067)
+     Memory: 13.5M
+        CPU: 78ms
+     CGroup: /system.slice/httpd.service
+             ├─4042 /usr/sbin/httpd -DFOREGROUND
+             ├─4214 /usr/sbin/httpd -DFOREGROUND
+             ├─4218 /usr/sbin/httpd -DFOREGROUND
+             ├─4219 /usr/sbin/httpd -DFOREGROUND
+             └─4221 /usr/sbin/httpd -DFOREGROUND
+
+Mar 02 06:20:29 instamart systemd[1]: Starting httpd.service - The Apache HTTP Server...
+Mar 02 06:20:29 instamart httpd[4042]: AH00558: httpd: Could not reliably determine the server's fully qualif>
+Mar 02 06:20:29 instamart systemd[1]: Started httpd.service - The Apache HTTP Server.
+Mar 02 06:20:29 instamart httpd[4042]: Server configured, listening on: port 80
+[root@instamart ~]#
+[root@instamart ~]# mkdir server2
+[root@instamart ~]# cd server2/
+[root@instamart server2]# vi index.html
+[root@instamart server2]# ll
+total 8
+-rw-r--r--. 1 root root 6697 Mar  2 06:23 index.html
+[root@instamart server2]# mv index.html /var/www/html/
+[root@instamart server2]# ll /var/www/html/
+total 8
+-rw-r--r--. 1 root root 6697 Mar  2 06:23 index.html
+[root@instamart server2]#
+
+==========================================
+
+Server -3 adding
+
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey2.pem" ec2-user@13.48.131.183
+The authenticity of host '13.48.131.183 (13.48.131.183)' can't be established.
+ED25519 key fingerprint is SHA256:XzKtYnOB4EmUVcLWGn+tcGTiS1W6Tb03nXrGgscv0qw.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '13.48.131.183' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-0-113 ~]$ sudo -i
+[root@ip-172-31-0-113 ~]# hostnamectl set-hostname genie
+[root@ip-172-31-0-113 ~]#
+logout
+[ec2-user@ip-172-31-0-113 ~]$ sudo -i
+[root@genie ~]# yum install httpd -y && systemctl start httpd && systemctl status httpd
+Amazon Linux 2023 Kernel Livepatch repository                                 256 kB/s |  31 kB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                       Architecture     Version                           Repository             Size
+==============================================================================================================
+Installing:
+ httpd
+
+Installed:
+  apr-1.7.5-1.amzn2023.0.4.x86_64                         apr-util-1.6.3-1.amzn2023.0.2.x86_64
+  apr-util-lmdb-1.6.3-1.amzn2023.0.2.x86_64               apr-util-openssl-1.6.3-1.amzn2023.0.2.x86_64
+  generic-logos-httpd-18.0.0-12.amzn2023.0.3.noarch       httpd-2.4.66-1.amzn2023.0.1.x86_64
+  httpd-core-2.4.66-1.amzn2023.0.1.x86_64                 httpd-filesystem-2.4.66-1.amzn2023.0.1.noarch
+  httpd-tools-2.4.66-1.amzn2023.0.1.x86_64                libbrotli-1.0.9-4.amzn2023.0.2.x86_64
+  mailcap-2.1.49-3.amzn2023.0.3.noarch                    mod_http2-2.0.27-1.amzn2023.0.3.x86_64
+  mod_lua-2.4.66-1.amzn2023.0.1.x86_64
+
+Complete!
+● httpd.service - The Apache HTTP Server
+     Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; preset: disabled)
+     Active: active (running) since Mon 2026-03-02 07:25:42 UTC; 19ms ago
+       Docs: man:httpd.service(8)
+   Main PID: 3199 (httpd)
+     Status: "Started, listening on: port 80"
+      Tasks: 172 (limit: 1067)
+     Memory: 13.2M
+        CPU: 56ms
+     CGroup: /system.slice/httpd.service
+             ├─3199 /usr/sbin/httpd -DFOREGROUND
+             ├─3321 /usr/sbin/httpd -DFOREGROUND
+             ├─3328 /usr/sbin/httpd -DFOREGROUND
+             ├─3329 /usr/sbin/httpd -DFOREGROUND
+             └─3330 /usr/sbin/httpd -DFOREGROUND
+
+Mar 02 07:25:42 genie systemd[1]: Starting httpd.service - The Apache HTTP Server...
+Mar 02 07:25:42 genie httpd[3199]: AH00558: httpd: Could not reliably determine the server's fully qualified >
+Mar 02 07:25:42 genie systemd[1]: Started httpd.service - The Apache HTTP Server.
+Mar 02 07:25:42 genie httpd[3199]: Server configured, listening on: port 80
+[root@genie ~]# mkdir genie
+[root@genie ~]# cd genie/
+[root@genie genie]# vi index.html
+[root@genie genie]# ll
+total 8
+-rw-r--r--. 1 root root 5964 Mar  2 07:26 index.html
+[root@genie genie]# mv index.html /var/www/html/
+[root@genie genie]# ll /var/www/html/
+total 8
+-rw-r--r--. 1 root root 5964 Mar  2 07:26 index.html
+[root@genie genie]#
+
+
+
+

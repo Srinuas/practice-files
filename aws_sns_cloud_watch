@@ -1,0 +1,771 @@
+aws_sns_cloud_watch
+
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey.pem" ec2-user@16.171.237.31
+The authenticity of host '16.171.237.31 (16.171.237.31)' can't be established.
+ED25519 key fingerprint is SHA256:uImoP1Ipqc4uEKaonA6/n5dOkLUwtAhfqYRl+UzhPvQ.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '16.171.237.31' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-30-172 ~]$ sudo -i
+[root@ip-172-31-30-172 ~]#
+[root@ip-172-31-30-172 ~]# hostnamectl set-hostname sns_cw
+[1]+  Done                    hostnamectl set-hostname sns
+[root@ip-172-31-30-172 ~]#
+logout
+[ec2-user@ip-172-31-30-172 ~]$ sudo -i
+[root@snscw ~]#
+[root@snscw ~]# yum install git -y && mkdir /srinu && cd /srinu && git clone https://github.com/Srinuas/install.git && git clone https://github.com/Srinuas/practice-files.git && sh install/gitconfig.sh
+Amazon Linux 2023 Kernel Livepatch repository                                 252 kB/s |  31 kB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                    Architecture     Version                              Repository             Size
+==============================================================================================================
+Installing:
+ git
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64                       git-core-2.50.1-1.amzn2023.0.1.x86_64
+  git-core-doc-2.50.1-1.amzn2023.0.1.noarch              perl-Error-1:0.17029-5.amzn2023.0.2.noarch
+  perl-File-Find-1.37-477.amzn2023.0.7.noarch            perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64            perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 109, done.
+remote: Counting objects: 100% (109/109), done.
+remote: Compressing objects: 100% (103/103), done.
+remote: Total 109 (delta 51), reused 27 (delta 6), pack-reused 0 (from 0)
+Receiving objects: 100% (109/109), 33.12 KiB | 1.95 MiB/s, done.
+Resolving deltas: 100% (51/51), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 115, done.
+remote: Counting objects: 100% (115/115), done.
+remote: Compressing objects: 100% (102/102), done.
+remote: Total 115 (delta 49), reused 50 (delta 13), pack-reused 0 (from 0)
+Receiving objects: 100% (115/115), 187.67 KiB | 7.82 MiB/s, done.
+Resolving deltas: 100% (49/49), done.
+[root@snscw srinu]#
+
+
+[root@snscw srinu]# yum install stress -y
+Last metadata expiration check: 1:36:35 ago on Thu Mar  5 05:21:29 2026.
+Dependencies resolved.
+==============================================================================================================
+ Package              Architecture         Version                            Repository                 Size
+==============================================================================================================
+Installing:
+ stress               x86_64               1.0.7-2.amzn2023.0.1               amazonlinux                34 k
+
+Transaction Summary
+==============================================================================================================
+Install  1 Package
+
+Total download size: 34 k
+Installed size: 68 k
+Downloading Packages:
+stress-1.0.7-2.amzn2023.0.1.x86_64.rpm                                        651 kB/s |  34 kB     00:00
+--------------------------------------------------------------------------------------------------------------
+Total                                                                         361 kB/s |  34 kB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                      1/1
+  Installing       : stress-1.0.7-2.amzn2023.0.1.x86_64                                                   1/1
+  Running scriptlet: stress-1.0.7-2.amzn2023.0.1.x86_64                                                   1/1
+  Verifying        : stress-1.0.7-2.amzn2023.0.1.x86_64                                                   1/1
+
+Installed:
+  stress-1.0.7-2.amzn2023.0.1.x86_64
+
+Complete!
+[root@snscw srinu]# stress -c 1 -t 600
+stress: info: [28913] dispatching hogs: 1 cpu, 0 io, 0 vm, 0 hdd
+
+^C
+[root@snscw srinu]# stress -c 2 -t 600
+stress: info: [29215] dispatching hogs: 2 cpu, 0 io, 0 vm, 0 hdd
+
+^C
+[root@snscw srinu]#
+
+=====================================================
+Store the logs in cloud watch: 
+Let's launch an EC2 Ubuntu instance: 
+=====================================================
+
+PS C:\Users\2242395>  ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey.pem" ubuntu@13.49.246.142
+The authenticity of host '13.49.246.142 (13.49.246.142)' can't be established.
+ED25519 key fingerprint is SHA256:SMxE9PONEXcHVNVWTPRax6iTFCKPHriN/TbTgFDA5JQ.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '13.49.246.142' (ED25519) to the list of known hosts.
+Welcome to Ubuntu 22.04.5 LTS (GNU/Linux 6.8.0-1044-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Thu Mar  5 09:59:33 UTC 2026
+
+  System load:  0.13              Processes:             111
+  Usage of /:   22.8% of 7.57GB   Users logged in:       0
+  Memory usage: 23%               IPv4 address for ens5: 172.31.18.52
+  Swap usage:   0%
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+ubuntu@ip-172-31-18-52:~$ sudo -i
+root@ip-172-31-18-52:~# hostnamectl set-hostname ubuntu
+root@ip-172-31-18-52:~#
+logout
+ubuntu@ip-172-31-18-52:~$ sudo -i
+root@ubuntu:~# apt update -y
+Hit:1 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy InRelease
+Get:2 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+Get:3 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+Get:4 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+Get:5 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages [14.1 MB]
+Get:6 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy/universe Translation-en [5652 kB]
+Get:7 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy/universe amd64 c-n-f Metadata [286 kB]
+Get:8 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages [217 kB]
+Get:9 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy/multiverse Translation-en [112 kB]
+Get:10 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy/multiverse amd64 c-n-f Metadata [8372 B]
+Get:11 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [3285 kB]
+Get:12 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/main Translation-en [499 kB]
+Get:13 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 c-n-f Metadata [19.2 kB]
+Get:14 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [5413 kB]
+Get:15 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [3017 kB]
+Get:16 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/restricted Translation-en [1028 kB]
+Get:17 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 c-n-f Metadata [676 B]
+Get:18 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1256 kB]
+Get:19 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe Translation-en [314 kB]
+Get:20 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 c-n-f Metadata [30.4 kB]
+Get:21 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [59.0 kB]
+Get:22 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/multiverse Translation-en [13.5 kB]
+Get:23 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 c-n-f Metadata [612 B]
+Get:24 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [69.4 kB]
+Get:25 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-backports/main Translation-en [11.5 kB]
+Get:26 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-backports/main amd64 c-n-f Metadata [412 B]
+Get:27 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-backports/restricted amd64 c-n-f Metadata [116 B]
+Get:28 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [31.7 kB]
+Get:29 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-backports/universe Translation-en [16.9 kB]
+Get:30 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-backports/universe amd64 c-n-f Metadata [672 B]
+Get:31 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-backports/multiverse amd64 c-n-f Metadata [116 B]
+Get:32 http://security.ubuntu.com/ubuntu jammy-security/main Translation-en [430 kB]
+Get:33 http://security.ubuntu.com/ubuntu jammy-security/main amd64 c-n-f Metadata [14.1 kB]
+Get:34 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [5238 kB]
+Get:35 http://security.ubuntu.com/ubuntu jammy-security/restricted Translation-en [998 kB]
+Get:36 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 c-n-f Metadata [680 B]
+Get:37 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1018 kB]
+Get:38 http://security.ubuntu.com/ubuntu jammy-security/universe Translation-en [225 kB]
+Get:39 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 c-n-f Metadata [22.7 kB]
+Get:40 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 Packages [51.9 kB]
+Get:41 http://security.ubuntu.com/ubuntu jammy-security/multiverse Translation-en [10.6 kB]
+Get:42 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 c-n-f Metadata [388 B]
+Fetched 43.8 MB in 7s (6538 kB/s)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+59 packages can be upgraded. Run 'apt list --upgradable' to see them.
+root@ubuntu:~# apt install python2.7 -y
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  libpython2.7-minimal libpython2.7-stdlib python2.7-minimal
+Suggested packages:
+  python2.7-doc binfmt-support
+The following NEW packages will be installed:
+  libpython2.7-minimal libpython2.7-stdlib python2.7 python2.7-minimal
+0 upgraded, 4 newly installed, 0 to remove and 59 not upgraded.
+Need to get 3974 kB of archives.
+After this operation, 16.0 MB of additional disk space will be used.
+Get:1 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 libpython2.7-minimal amd64 2.7.18-13ubuntu1.5 [347 kB]
+Get:2 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python2.7-minimal amd64 2.7.18-13ubuntu1.5 [1400 kB]
+Get:3 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 libpython2.7-stdlib amd64 2.7.18-13ubuntu1.5 [1977 kB]
+Get:4 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python2.7 amd64 2.7.18-13ubuntu1.5 [250 kB]
+Fetched 3974 kB in 0s (47.2 MB/s)
+Selecting previously unselected package libpython2.7-minimal:amd64.
+(Reading database ... 65997 files and directories currently installed.)
+Preparing to unpack .../libpython2.7-minimal_2.7.18-13ubuntu1.5_amd64.deb ...
+Unpacking libpython2.7-minimal:amd64 (2.7.18-13ubuntu1.5) ...
+Selecting previously unselected package python2.7-minimal.
+Preparing to unpack .../python2.7-minimal_2.7.18-13ubuntu1.5_amd64.deb ...
+Unpacking python2.7-minimal (2.7.18-13ubuntu1.5) ...
+Selecting previously unselected package libpython2.7-stdlib:amd64.
+Preparing to unpack .../libpython2.7-stdlib_2.7.18-13ubuntu1.5_amd64.deb ...
+Unpacking libpython2.7-stdlib:amd64 (2.7.18-13ubuntu1.5) ...
+Selecting previously unselected package python2.7.
+Preparing to unpack .../python2.7_2.7.18-13ubuntu1.5_amd64.deb ...
+Unpacking python2.7 (2.7.18-13ubuntu1.5) ...
+Setting up libpython2.7-minimal:amd64 (2.7.18-13ubuntu1.5) ...
+Setting up python2.7-minimal (2.7.18-13ubuntu1.5) ...
+Linking and byte-compiling packages for runtime python2.7...
+Setting up libpython2.7-stdlib:amd64 (2.7.18-13ubuntu1.5) ...
+Setting up python2.7 (2.7.18-13ubuntu1.5) ...
+Processing triggers for man-db (2.10.2-1) ...
+Scanning processes...
+Scanning linux images...
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+root@ubuntu:~# ll
+total 28
+drwx------  4 root root 4096 Mar  5 10:00 ./
+drwxr-xr-x 19 root root 4096 Mar  5 09:58 ../
+-rw-------  1 root root   32 Mar  5 10:00 .bash_history
+-rw-r--r--  1 root root 3106 Oct 15  2021 .bashrc
+-rw-r--r--  1 root root  161 Jul  9  2019 .profile
+drwx------  2 root root 4096 Mar  5 09:58 .ssh/
+drwx------  4 root root 4096 Mar  5 09:58 snap/
+root@ubuntu:~# mkdir srinu
+root@ubuntu:~# cd s
+snap/  srinu/
+root@ubuntu:~# cd srinu/
+root@ubuntu:~/srinu# curl https://s3.amazonaws.com/awscloudwatch/downloads/latest/awslogs-agent-setup.py -O
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   263    0   263    0     0    642      0 --:--:-- --:--:-- --:--:--   643
+root@ubuntu:~/srinu# ll
+total 12
+drwxr-xr-x 2 root root 4096 Mar  5 10:04 ./
+drwx------ 5 root root 4096 Mar  5 10:04 ../
+-rw-r--r-- 1 root root  263 Mar  5 10:04 awslogs-agent-setup.py
+root@ubuntu:~/srinu# python2.7 awslogs-agent-setup.py
+  File "awslogs-agent-setup.py", line 1
+    <?xml version="1.0" encoding="UTF-8"?>
+    ^
+SyntaxError: invalid syntax
+root@ubuntu:~/srinu# apt install apache2 -y
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  apache2-bin apache2-data apache2-utils bzip2 libapr1 libaprutil1 libaprutil1-dbd-sqlite3 libaprutil1-ldap
+  liblua5.3-0 mailcap mime-support ssl-cert
+Suggested packages:
+  apache2-doc apache2-suexec-pristine | apache2-suexec-custom www-browser bzip2-doc
+The following NEW packages will be installed:
+  apache2 apache2-bin apache2-data apache2-utils bzip2 libapr1 libaprutil1 libaprutil1-dbd-sqlite3
+  libaprutil1-ldap liblua5.3-0 mailcap mime-support ssl-cert
+0 upgraded, 13 newly installed, 0 to remove and 59 not upgraded.
+Need to get 2153 kB of archives.
+After this operation, 8556 kB of additional disk space will be used.
+Get:1 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libapr1 amd64 1.7.0-8ubuntu0.22.04.2 [108 kB]
+Get:2 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libaprutil1 amd64 1.6.1-5ubuntu4.22.04.2 [92.8 kB]
+Get:3 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libaprutil1-dbd-sqlite3 amd64 1.6.1-5ubuntu4.22.04.2 [11.3 kB]
+Get:4 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libaprutil1-ldap amd64 1.6.1-5ubuntu4.22.04.2 [9170 B]
+Get:5 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy/main amd64 liblua5.3-0 amd64 5.3.6-1build1 [140 kB]
+Get:6 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 apache2-bin amd64 2.4.52-1ubuntu4.18 [1360 kB]
+Get:7 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 apache2-data all 2.4.52-1ubuntu4.18 [165 kB]
+Get:8 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 apache2-utils amd64 2.4.52-1ubuntu4.18 [89.5 kB]
+Get:9 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy/main amd64 mailcap all 3.70+nmu1ubuntu1 [23.8 kB]
+Get:10 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy/main amd64 mime-support all 3.66 [3696 B]
+Get:11 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 apache2 amd64 2.4.52-1ubuntu4.18 [97.9 kB]
+Get:12 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy/main amd64 bzip2 amd64 1.0.8-5build1 [34.8 kB]
+Get:13 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu jammy/main amd64 ssl-cert all 1.1.2 [17.4 kB]
+Fetched 2153 kB in 0s (16.8 MB/s)
+Preconfiguring packages ...
+Selecting previously unselected package libapr1:amd64.
+(Reading database ... 66714 files and directories currently installed.)
+Preparing to unpack .../00-libapr1_1.7.0-8ubuntu0.22.04.2_amd64.deb ...
+Unpacking libapr1:amd64 (1.7.0-8ubuntu0.22.04.2) ...
+Selecting previously unselected package libaprutil1:amd64.
+Preparing to unpack .../01-libaprutil1_1.6.1-5ubuntu4.22.04.2_amd64.deb ...
+Unpacking libaprutil1:amd64 (1.6.1-5ubuntu4.22.04.2) ...
+Selecting previously unselected package libaprutil1-dbd-sqlite3:amd64.
+Preparing to unpack .../02-libaprutil1-dbd-sqlite3_1.6.1-5ubuntu4.22.04.2_amd64.deb ...
+Unpacking libaprutil1-dbd-sqlite3:amd64 (1.6.1-5ubuntu4.22.04.2) ...
+Selecting previously unselected package libaprutil1-ldap:amd64.
+Preparing to unpack .../03-libaprutil1-ldap_1.6.1-5ubuntu4.22.04.2_amd64.deb ...
+Unpacking libaprutil1-ldap:amd64 (1.6.1-5ubuntu4.22.04.2) ...
+Selecting previously unselected package liblua5.3-0:amd64.
+Preparing to unpack .../04-liblua5.3-0_5.3.6-1build1_amd64.deb ...
+Unpacking liblua5.3-0:amd64 (5.3.6-1build1) ...
+Selecting previously unselected package apache2-bin.
+Preparing to unpack .../05-apache2-bin_2.4.52-1ubuntu4.18_amd64.deb ...
+Unpacking apache2-bin (2.4.52-1ubuntu4.18) ...
+Selecting previously unselected package apache2-data.
+Preparing to unpack .../06-apache2-data_2.4.52-1ubuntu4.18_all.deb ...
+Unpacking apache2-data (2.4.52-1ubuntu4.18) ...
+Selecting previously unselected package apache2-utils.
+Preparing to unpack .../07-apache2-utils_2.4.52-1ubuntu4.18_amd64.deb ...
+Unpacking apache2-utils (2.4.52-1ubuntu4.18) ...
+Selecting previously unselected package mailcap.
+Preparing to unpack .../08-mailcap_3.70+nmu1ubuntu1_all.deb ...
+Unpacking mailcap (3.70+nmu1ubuntu1) ...
+Selecting previously unselected package mime-support.
+Preparing to unpack .../09-mime-support_3.66_all.deb ...
+Unpacking mime-support (3.66) ...
+Selecting previously unselected package apache2.
+Preparing to unpack .../10-apache2_2.4.52-1ubuntu4.18_amd64.deb ...
+Unpacking apache2 (2.4.52-1ubuntu4.18) ...
+Selecting previously unselected package bzip2.
+Preparing to unpack .../11-bzip2_1.0.8-5build1_amd64.deb ...
+Unpacking bzip2 (1.0.8-5build1) ...
+Selecting previously unselected package ssl-cert.
+Preparing to unpack .../12-ssl-cert_1.1.2_all.deb ...
+Unpacking ssl-cert (1.1.2) ...
+Setting up libapr1:amd64 (1.7.0-8ubuntu0.22.04.2) ...
+Setting up bzip2 (1.0.8-5build1) ...
+Setting up ssl-cert (1.1.2) ...
+Setting up liblua5.3-0:amd64 (5.3.6-1build1) ...
+Setting up apache2-data (2.4.52-1ubuntu4.18) ...
+Setting up mailcap (3.70+nmu1ubuntu1) ...
+Setting up libaprutil1:amd64 (1.6.1-5ubuntu4.22.04.2) ...
+Setting up mime-support (3.66) ...
+Setting up libaprutil1-ldap:amd64 (1.6.1-5ubuntu4.22.04.2) ...
+Setting up libaprutil1-dbd-sqlite3:amd64 (1.6.1-5ubuntu4.22.04.2) ...
+Setting up apache2-utils (2.4.52-1ubuntu4.18) ...
+Setting up apache2-bin (2.4.52-1ubuntu4.18) ...
+Setting up apache2 (2.4.52-1ubuntu4.18) ...
+Enabling module mpm_event.
+Enabling module authz_core.
+Enabling module authz_host.
+Enabling module authn_core.
+Enabling module auth_basic.
+Enabling module access_compat.
+Enabling module authn_file.
+Enabling module authz_user.
+Enabling module alias.
+Enabling module dir.
+Enabling module autoindex.
+Enabling module env.
+Enabling module mime.
+Enabling module negotiation.
+Enabling module setenvif.
+Enabling module filter.
+Enabling module deflate.
+Enabling module status.
+Enabling module reqtimeout.
+Enabling conf charset.
+Enabling conf localized-error-pages.
+Enabling conf other-vhosts-access-log.
+Enabling conf security.
+Enabling conf serve-cgi-bin.
+Enabling site 000-default.
+Created symlink /etc/systemd/system/multi-user.target.wants/apache2.service → /lib/systemd/system/apache2.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/apache-htcacheclean.service → /lib/systemd/system/apache-htcacheclean.service.
+Processing triggers for ufw (0.36.1-4ubuntu0.1) ...
+Processing triggers for man-db (2.10.2-1) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.11) ...
+Scanning processes...
+Scanning linux images...
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+root@ubuntu:~/srinu# systemctl status apache2
+● apache2.service - The Apache HTTP Server
+     Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)
+     Active: active (running) since Thu 2026-03-05 10:06:00 UTC; 26s ago
+       Docs: https://httpd.apache.org/docs/2.4/
+   Main PID: 2445 (apache2)
+      Tasks: 55 (limit: 1073)
+     Memory: 5.3M
+        CPU: 34ms
+     CGroup: /system.slice/apache2.service
+             ├─2445 /usr/sbin/apache2 -k start
+             ├─2447 /usr/sbin/apache2 -k start
+             └─2448 /usr/sbin/apache2 -k start
+
+Mar 05 10:06:00 ubuntu systemd[1]: Starting The Apache HTTP Server...
+Mar 05 10:06:00 ubuntu systemd[1]: Started The Apache HTTP Server.
+root@ubuntu:~/srinu# systemctl enable apache2
+Synchronizing state of apache2.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable apache2
+root@ubuntu:~/srinu#
+root@ubuntu:~/srinu# ll /var/www/html/
+total 20
+drwxr-xr-x 2 root root  4096 Mar  5 10:05 ./
+drwxr-xr-x 3 root root  4096 Mar  5 10:05 ../
+-rw-r--r-- 1 root root 10671 Mar  5 10:05 index.html
+root@ubuntu:~/srinu# rm -rf /var/www/html/index.html
+root@ubuntu:~/srinu# vi /var/www/html/index.html
+root@ubuntu:~/srinu# ll /var/www/html/
+total 16
+drwxr-xr-x 2 root root 4096 Mar  5 10:10 ./
+drwxr-xr-x 3 root root 4096 Mar  5 10:05 ../
+-rw-r--r-- 1 root root 6182 Mar  5 10:10 index.html
+root@ubuntu:~/srinu#
+root@ubuntu:~/srinu# ll /var/log/apache2/
+total 16
+drwxr-x---  2 root adm    4096 Mar  5 10:05 ./
+drwxrwxr-x 11 root syslog 4096 Mar  5 10:05 ../
+-rw-r-----  1 root adm    1043 Mar  5 10:10 access.log
+-rw-r-----  1 root adm     279 Mar  5 10:06 error.log
+-rw-r-----  1 root adm       0 Mar  5 10:05 other_vhosts_access.log
+root@ubuntu:~/srinu# cat /var/log/apache2/access.log
+167.103.20.254 - - [05/Mar/2026:10:08:10 +0000] "GET / HTTP/1.1" 200 3460 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:08:10 +0000] "GET /icons/ubuntu-logo.png HTTP/1.1" 200 3607 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:08:10 +0000] "GET /favicon.ico HTTP/1.1" 404 491 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+45.12.2.211 - - [05/Mar/2026:10:08:59 +0000] "GET / HTTP/1.1" 200 3423 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0"
+167.103.20.254 - - [05/Mar/2026:10:10:14 +0000] "GET / HTTP/1.1" 200 2735 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+root@ubuntu:~/srinu#
+root@ubuntu:~/srinu# ll /var/log/apache2/
+total 24
+drwxr-x---  2 root adm     4096 Mar  5 10:05 ./
+drwxrwxr-x 11 root syslog  4096 Mar  5 10:05 ../
+-rw-r-----  1 root adm    12167 Mar  5 10:15 access.log
+-rw-r-----  1 root adm      279 Mar  5 10:06 error.log
+-rw-r-----  1 root adm        0 Mar  5 10:05 other_vhosts_access.log
+root@ubuntu:~/srinu# cat /var/log/apache2/access.log
+167.103.20.254 - - [05/Mar/2026:10:08:10 +0000] "GET / HTTP/1.1" 200 3460 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:08:10 +0000] "GET /icons/ubuntu-logo.png HTTP/1.1" 200 3607 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:08:10 +0000] "GET /favicon.ico HTTP/1.1" 404 491 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+45.12.2.211 - - [05/Mar/2026:10:08:59 +0000] "GET / HTTP/1.1" 200 3423 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0"
+167.103.20.254 - - [05/Mar/2026:10:10:14 +0000] "GET / HTTP/1.1" 200 2735 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:07 +0000] "GET / HTTP/1.1" 200 2735 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:07 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:08 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:08 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:09 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:10 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:10 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:11 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:11 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:12 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:12 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:13 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:14 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:17 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:18 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:18 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:19 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:19 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:20 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:20 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:21 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:21 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:22 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:22 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:23 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:23 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:24 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:24 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:25 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:25 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:26 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:27 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:29 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:30 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:30 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:31 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:31 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:32 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:34 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:34 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:35 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:36 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:37 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:37 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:38 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:38 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:39 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:39 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:40 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:40 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:41 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:41 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:42 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:42 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+root@ubuntu:~/srinu#
+root@ubuntu:~/srinu# ll
+total 12
+drwxr-xr-x 2 root root 4096 Mar  5 10:22 ./
+drwx------ 5 root root 4096 Mar  5 10:19 ../
+-rw-r--r-- 1 root root  243 Mar  5 10:22 awslogs-agent-setup.py
+root@ubuntu:~/srinu# rm -rf awslogs-agent-setup.py
+root@ubuntu:~/srinu# ll
+total 8
+drwxr-xr-x 2 root root 4096 Mar  5 10:24 ./
+drwx------ 5 root root 4096 Mar  5 10:19 ../
+root@ubuntu:~/srinu# curl https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py -O
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 58225  100 58225    0     0   108k      0 --:--:-- --:--:-- --:--:--  109k
+root@ubuntu:~/srinu# 
+root@ubuntu:~/srinu# python2.7 awslogs-agent-setup.py --region eu-north-1
+Launching interactive setup of CloudWatch Logs agent ...
+downloading AgentDependencies.tar.gz with urllib
+AgentDependencies/
+AgentDependencies/awslogscli/
+AgentDependencies/awslogscli/urllib3-1.25.6.tar.gz
+AgentDependencies/awslogscli/jmespath-0.9.2.tar.gz
+AgentDependencies/awslogscli/colorama-0.3.7.zip
+AgentDependencies/awslogscli/idna-2.8.tar.gz
+AgentDependencies/awslogscli/awscli-1.11.41.tar.gz
+AgentDependencies/awslogscli/argparse-1.2.1.tar.gz
+AgentDependencies/awslogscli/botocore-1.13.9.tar.gz
+AgentDependencies/awslogscli/docutils-0.15.2.tar.gz
+AgentDependencies/awslogscli/pyasn1-0.2.3.tar.gz
+AgentDependencies/awslogscli/python-dateutil-2.6.0.tar.gz
+AgentDependencies/awslogscli/botocore-1.5.4.tar.gz
+AgentDependencies/awslogscli/jmespath-0.9.4.tar.gz
+AgentDependencies/awslogscli/awscli-cwlogs-1.4.6.tar.gz
+AgentDependencies/awslogscli/ordereddict-1.1.tar.gz
+AgentDependencies/awslogscli/futures-3.3.0.tar.gz
+AgentDependencies/awslogscli/futures-3.0.5.tar.gz
+AgentDependencies/awslogscli/certifi-2019.9.11.tar.gz
+AgentDependencies/awslogscli/six-1.12.0.tar.gz
+AgentDependencies/awslogscli/s3transfer-0.1.10.tar.gz
+AgentDependencies/awslogscli/six-1.10.0.tar.gz
+AgentDependencies/awslogscli/requests-2.18.4.tar.gz
+AgentDependencies/awslogscli/rsa-3.4.2.tar.gz
+AgentDependencies/awslogscli/s3transfer-0.2.1.tar.gz
+AgentDependencies/awslogscli/docutils-0.13.1.tar.gz
+AgentDependencies/awslogscli/urllib3-1.22.tar.gz
+AgentDependencies/awslogscli/awscli-1.16.273.tar.gz
+AgentDependencies/awslogscli/PyYAML-5.1.2.tar.gz
+AgentDependencies/awslogscli/idna-2.5.tar.gz
+AgentDependencies/awslogscli/PyYAML-3.12.tar.gz
+AgentDependencies/awslogscli/pyasn1-0.4.7.tar.gz
+AgentDependencies/awslogscli/colorama-0.4.1.tar.gz
+AgentDependencies/awslogscli/simplejson-3.3.0.tar.gz
+AgentDependencies/awslogscli/chardet-3.0.4.tar.gz
+AgentDependencies/virtualenv-15.1.0/
+AgentDependencies/virtualenv-15.1.0/setup.cfg
+AgentDependencies/virtualenv-15.1.0/tests/
+AgentDependencies/virtualenv-15.1.0/tests/__init__.py
+AgentDependencies/virtualenv-15.1.0/tests/test_cmdline.py
+AgentDependencies/virtualenv-15.1.0/tests/test_virtualenv.py
+AgentDependencies/virtualenv-15.1.0/tests/test_activate_output.expected
+AgentDependencies/virtualenv-15.1.0/tests/test_activate.sh
+AgentDependencies/virtualenv-15.1.0/scripts/
+AgentDependencies/virtualenv-15.1.0/scripts/virtualenv
+AgentDependencies/virtualenv-15.1.0/virtualenv.py
+AgentDependencies/virtualenv-15.1.0/MANIFEST.in
+AgentDependencies/virtualenv-15.1.0/README.rst
+AgentDependencies/virtualenv-15.1.0/AUTHORS.txt
+AgentDependencies/virtualenv-15.1.0/setup.py
+AgentDependencies/virtualenv-15.1.0/LICENSE.txt
+AgentDependencies/virtualenv-15.1.0/virtualenv_support/
+AgentDependencies/virtualenv-15.1.0/virtualenv_support/__init__.py
+AgentDependencies/virtualenv-15.1.0/virtualenv_support/wheel-0.29.0-py2.py3-none-any.whl
+AgentDependencies/virtualenv-15.1.0/virtualenv_support/argparse-1.4.0-py2.py3-none-any.whl
+AgentDependencies/virtualenv-15.1.0/virtualenv_support/pip-9.0.1-py2.py3-none-any.whl
+AgentDependencies/virtualenv-15.1.0/virtualenv_support/setuptools-28.8.0-py2.py3-none-any.whl
+AgentDependencies/virtualenv-15.1.0/PKG-INFO
+AgentDependencies/virtualenv-15.1.0/bin/
+AgentDependencies/virtualenv-15.1.0/bin/rebuild-script.py
+AgentDependencies/virtualenv-15.1.0/virtualenv.egg-info/
+AgentDependencies/virtualenv-15.1.0/virtualenv.egg-info/not-zip-safe
+AgentDependencies/virtualenv-15.1.0/virtualenv.egg-info/SOURCES.txt
+AgentDependencies/virtualenv-15.1.0/virtualenv.egg-info/entry_points.txt
+AgentDependencies/virtualenv-15.1.0/virtualenv.egg-info/top_level.txt
+AgentDependencies/virtualenv-15.1.0/virtualenv.egg-info/PKG-INFO
+AgentDependencies/virtualenv-15.1.0/virtualenv.egg-info/dependency_links.txt
+AgentDependencies/virtualenv-15.1.0/virtualenv_embedded/
+AgentDependencies/virtualenv-15.1.0/virtualenv_embedded/activate.ps1
+AgentDependencies/virtualenv-15.1.0/virtualenv_embedded/activate.csh
+AgentDependencies/virtualenv-15.1.0/virtualenv_embedded/deactivate.bat
+AgentDependencies/virtualenv-15.1.0/virtualenv_embedded/activate_this.py
+AgentDependencies/virtualenv-15.1.0/virtualenv_embedded/activate.fish
+AgentDependencies/virtualenv-15.1.0/virtualenv_embedded/python-config
+AgentDependencies/virtualenv-15.1.0/virtualenv_embedded/activate.bat
+AgentDependencies/virtualenv-15.1.0/virtualenv_embedded/distutils.cfg
+AgentDependencies/virtualenv-15.1.0/virtualenv_embedded/site.py
+AgentDependencies/virtualenv-15.1.0/virtualenv_embedded/activate.sh
+AgentDependencies/virtualenv-15.1.0/virtualenv_embedded/distutils-init.py
+AgentDependencies/virtualenv-15.1.0/docs/
+AgentDependencies/virtualenv-15.1.0/docs/userguide.rst
+AgentDependencies/virtualenv-15.1.0/docs/index.rst
+AgentDependencies/virtualenv-15.1.0/docs/development.rst
+AgentDependencies/virtualenv-15.1.0/docs/reference.rst
+AgentDependencies/virtualenv-15.1.0/docs/Makefile
+AgentDependencies/virtualenv-15.1.0/docs/conf.py
+AgentDependencies/virtualenv-15.1.0/docs/changes.rst
+AgentDependencies/virtualenv-15.1.0/docs/installation.rst
+AgentDependencies/virtualenv-15.1.0/docs/make.bat
+AgentDependencies/pip-6.1.1.tar.gz
+
+Step 1 of 5: Installing pip ...libyaml-dev does not exist in system python-dev does not exist in system DONE
+
+Step 2 of 5: Downloading the latest CloudWatch Logs agent bits ... DONE
+
+Step 3 of 5: Configuring AWS CLI ...
+AWS Access Key ID [****************XXW3]: AKIAQTQBI3MRXJQ2PL6A
+AWS Secret Access Key [****************A8qu]: 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
+Default region name [eu-north-1]:
+Default output format [None]:
+
+Step 4 of 5: Configuring the CloudWatch Logs Agent ...
+Path of log file to upload [/var/log/syslog]: /var/log/apache2/access.log
+Destination Log Group name [/var/log/apache2/access.log]: dineoutlog
+
+Choose Log Stream name:
+  1. Use EC2 instance id.
+  2. Use hostname.
+  3. Custom.
+Enter choice [1]: 1
+
+Choose Log Event timestamp format:
+  1. %b %d %H:%M:%S    (Dec 31 23:59:59)
+  2. %d/%b/%Y:%H:%M:%S (10/Oct/2000:13:55:36)
+  3. %Y-%m-%d %H:%M:%S (2008-09-08 11:52:54)
+  4. Custom
+Enter choice [1]: 1
+
+Choose initial position of upload:
+  1. From start of file.
+  2. From end of file.
+Enter choice [1]: 1
+More log files to configure? [Y]: N
+
+Step 5 of 5: Setting up agent as a daemon ...DONE
+
+
+------------------------------------------------------
+- Configuration file successfully saved at: /var/awslogs/etc/awslogs.conf
+- You can begin accessing new log events after a few moments at https://console.aws.amazon.com/cloudwatch/home?region=eu-north-1#logs:
+- You can use 'sudo service awslogs start|stop|status|restart' to control the daemon.
+- To see diagnostic information for the CloudWatch Logs Agent, see /var/log/awslogs.log
+- You can rerun interactive setup using 'sudo python ./awslogs-agent-setup.py --region eu-north-1 --only-generate-config'
+------------------------------------------------------
+root@ubuntu:~/srinu#
+root@ubuntu:~/srinu# cat /var/log/apache2/access.log
+167.103.20.254 - - [05/Mar/2026:10:08:10 +0000] "GET / HTTP/1.1" 200 3460 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:08:10 +0000] "GET /icons/ubuntu-logo.png HTTP/1.1" 200 3607 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:08:10 +0000] "GET /favicon.ico HTTP/1.1" 404 491 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+45.12.2.211 - - [05/Mar/2026:10:08:59 +0000] "GET / HTTP/1.1" 200 3423 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0"
+167.103.20.254 - - [05/Mar/2026:10:10:14 +0000] "GET / HTTP/1.1" 200 2735 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:07 +0000] "GET / HTTP/1.1" 200 2735 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:07 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:08 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:08 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:09 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:10 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:10 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:11 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:11 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:12 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:12 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:13 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:14 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:17 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:18 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:18 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:19 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:19 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:20 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:20 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:21 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:21 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:22 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:22 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:23 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:23 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:24 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:24 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:25 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:25 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:26 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:27 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:29 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:30 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:30 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:31 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:31 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:32 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:34 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:34 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:35 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:36 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:37 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:37 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:38 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:38 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:39 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:39 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:40 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:40 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:41 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:41 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:42 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:15:42 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+211.218.91.85 - - [05/Mar/2026:10:28:41 +0000] "GET / HTTP/1.0" 200 6455 "-" "-"
+167.103.20.254 - - [05/Mar/2026:10:50:04 +0000] "GET / HTTP/1.1" 200 2735 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:27 +0000] "GET / HTTP/1.1" 200 2735 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:27 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:28 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:28 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:28 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:29 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:29 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:30 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:30 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:30 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:31 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:31 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.254 - - [05/Mar/2026:10:50:31 +0000] "GET / HTTP/1.1" 200 2734 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.126 - - [05/Mar/2026:10:53:09 +0000] "GET / HTTP/1.1" 200 2735 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.126 - - [05/Mar/2026:10:53:09 +0000] "GET /favicon.ico HTTP/1.1" 404 491 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+35.200.233.226 - - [05/Mar/2026:10:53:09 +0000] "GET / HTTP/1.1" 200 6492 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+35.200.233.226 - - [05/Mar/2026:10:53:10 +0000] "GET /favicon.ico HTTP/1.1" 404 492 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.22.113 - - [05/Mar/2026:10:53:16 +0000] "GET / HTTP/1.1" 200 2679 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+167.103.22.113 - - [05/Mar/2026:10:53:16 +0000] "GET /favicon.ico HTTP/1.1" 404 436 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+66.249.66.160 - - [05/Mar/2026:10:53:16 +0000] "GET /robots.txt HTTP/1.1" 404 492 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+66.249.66.7 - - [05/Mar/2026:10:53:17 +0000] "GET / HTTP/1.1" 200 2735 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+66.249.66.6 - - [05/Mar/2026:10:53:18 +0000] "GET / HTTP/1.1" 200 2735 "-" "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+66.249.66.200 - - [05/Mar/2026:10:53:18 +0000] "GET /favicon.ico HTTP/1.1" 404 492 "-" "Googlebot-Image/1.0"
+167.103.20.126 - - [05/Mar/2026:10:53:26 +0000] "GET / HTTP/1.1" 200 2735 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.126 - - [05/Mar/2026:10:53:27 +0000] "GET /favicon.ico HTTP/1.1" 404 491 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.22.113 - - [05/Mar/2026:10:53:28 +0000] "GET / HTTP/1.1" 200 2679 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+167.103.20.126 - - [05/Mar/2026:10:53:31 +0000] "GET / HTTP/1.1" 200 2734 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.126 - - [05/Mar/2026:10:53:31 +0000] "GET /favicon.ico HTTP/1.1" 404 491 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.22.113 - - [05/Mar/2026:10:53:32 +0000] "GET / HTTP/1.1" 200 2679 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+167.103.22.113 - - [05/Mar/2026:10:53:33 +0000] "GET / HTTP/1.1" 200 2679 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+167.103.20.126 - - [05/Mar/2026:10:53:38 +0000] "GET / HTTP/1.1" 200 2735 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.126 - - [05/Mar/2026:10:53:38 +0000] "GET /favicon.ico HTTP/1.1" 404 491 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.22.113 - - [05/Mar/2026:10:53:39 +0000] "GET / HTTP/1.1" 200 2679 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+167.103.20.126 - - [05/Mar/2026:10:53:42 +0000] "GET / HTTP/1.1" 200 2734 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.20.126 - - [05/Mar/2026:10:53:42 +0000] "GET /favicon.ico HTTP/1.1" 404 491 "http://13.49.246.142/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
+167.103.22.113 - - [05/Mar/2026:10:53:43 +0000] "GET / HTTP/1.1" 200 2679 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+root@ubuntu:~/srinu#
+
+
