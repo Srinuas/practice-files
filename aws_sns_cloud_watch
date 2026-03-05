@@ -629,8 +629,8 @@ Step 1 of 5: Installing pip ...libyaml-dev does not exist in system python-dev d
 Step 2 of 5: Downloading the latest CloudWatch Logs agent bits ... DONE
 
 Step 3 of 5: Configuring AWS CLI ...
-AWS Access Key ID [****************XXW3]: subcusjydbsy
-AWS Secret Access Key [****************A8qu]: sebcwyuvewebuqiebcwuidc
+AWS Access Key ID [****************XXW3]: (your access key)
+AWS Secret Access Key [****************A8qu]: (your secret key)
 Default region name [eu-north-1]:
 Default output format [None]:
 
