@@ -1,0 +1,411 @@
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey.pem" ec2-user@13.62.225.228
+The authenticity of host '13.62.225.228 (13.62.225.228)' can't be established.
+ED25519 key fingerprint is SHA256:I5Lx+P9r/+g+qkfil4TwaWay/Sj3U0BuGXCdn1nnhFU.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '13.62.225.228' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-27-126 ~]$ sudo -i
+hoshos[root@ip-172-31-27-126 ~]# hostnamectl set-hostname ins1
+[root@ip-172-31-27-126 ~]# exit
+logout
+[ec2-user@ip-172-31-27-126 ~]$ sudo -i
+yyu[root@ins1 ~]# yum install git -y && mkdir /srinu && cd /srinu && git clone https://github.com/Srinuas/inst.git && git clone https://github.com/Srinuas/practice-files.git && sh install/gitconfig.sh
+Amazon Linux 2023 Kernel Livepatch repository                                 254 kB/s |  30 kB     00:00
+Dependencies resolved.
+==============================================================================================================
+ Package                    Architecture     Version                              Repository             Size
+==============================================================================================================
+Installing:
+ git                        x86_64           2.50.1-1.amzn2023.0.1                amazonlinux            53 k
+Installing dependencies:
+ git-core                   x86_64           2.50.1-1.amzn2023.0.1                amazonlinux           4.9 M
+ git-core-doc               noarch           2.50.1-1.amzn2023.0.1                amazonlinux           2.8 M
+ perl-Error                 noarch           1:0.17029-5.amzn2023.0.2             amazonlinux            41 k
+ perl-File-Find             noarch           1.37-477.amzn2023.0.7                amazonlinux            25 k
+ perl-Git                   noarch           2.50.1-1.amzn2023.0.1                amazonlinux            41 k
+ perl-TermReadKey           x86_64           2.38-9.amzn2023.0.2                  amazonlinux            36 k
+ perl-lib                   x86_64           0.65-477.amzn2023.0.7                amazonlinux            15 k
+
+Transaction Summary
+==============================================================================================================
+Install  8 Packages
+
+Total download size: 7.9 M
+Installed size: 41 M
+Downloading Packages:
+(1/8): git-2.50.1-1.amzn2023.0.1.x86_64.rpm                                   1.4 MB/s |  53 kB     00:00
+(2/8): git-core-doc-2.50.1-1.amzn2023.0.1.noarch.rpm                           41 MB/s | 2.8 MB     00:00
+(3/8): perl-Error-0.17029-5.amzn2023.0.2.noarch.rpm                           1.2 MB/s |  41 kB     00:00
+(4/8): git-core-2.50.1-1.amzn2023.0.1.x86_64.rpm                               50 MB/s | 4.9 MB     00:00
+(5/8): perl-File-Find-1.37-477.amzn2023.0.7.noarch.rpm                        803 kB/s |  25 kB     00:00
+(6/8): perl-Git-2.50.1-1.amzn2023.0.1.noarch.rpm                              1.3 MB/s |  41 kB     00:00
+(7/8): perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64.rpm                        1.5 MB/s |  36 kB     00:00
+(8/8): perl-lib-0.65-477.amzn2023.0.7.x86_64.rpm                              525 kB/s |  15 kB     00:00
+--------------------------------------------------------------------------------------------------------------
+Total                                                                          47 MB/s | 7.9 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                      1/1
+  Installing       : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                1/8
+  Installing       : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            2/8
+  Installing       : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                3/8
+  Installing       : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          4/8
+  Installing       : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Installing       : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           6/8
+  Installing       : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                7/8
+  Installing       : git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Running scriptlet: git-2.50.1-1.amzn2023.0.1.x86_64                                                     8/8
+  Verifying        : git-2.50.1-1.amzn2023.0.1.x86_64                                                     1/8
+  Verifying        : git-core-2.50.1-1.amzn2023.0.1.x86_64                                                2/8
+  Verifying        : git-core-doc-2.50.1-1.amzn2023.0.1.noarch                                            3/8
+  Verifying        : perl-Error-1:0.17029-5.amzn2023.0.2.noarch                                           4/8
+  Verifying        : perl-File-Find-1.37-477.amzn2023.0.7.noarch                                          5/8
+  Verifying        : perl-Git-2.50.1-1.amzn2023.0.1.noarch                                                6/8
+  Verifying        : perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64                                          7/8
+  Verifying        : perl-lib-0.65-477.amzn2023.0.7.x86_64                                                8/8
+==============================================================================================================
+WARNING:
+  A newer release of "Amazon Linux" is available.
+
+  Available Versions:
+
+  Version 2023.10.20260302:
+    Run the following command to upgrade to 2023.10.20260302:
+
+      dnf upgrade --releasever=2023.10.20260302
+
+    Release notes:
+     https://docs.aws.amazon.com/linux/al2023/release-notes/relnotes-2023.10.20260302.html
+
+==============================================================================================================
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64                       git-core-2.50.1-1.amzn2023.0.1.x86_64
+  git-core-doc-2.50.1-1.amzn2023.0.1.noarch              perl-Error-1:0.17029-5.amzn2023.0.2.noarch
+  perl-File-Find-1.37-477.amzn2023.0.7.noarch            perl-Git-2.50.1-1.amzn2023.0.1.noarch
+  perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64            perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+Cloning into 'install'...
+remote: Enumerating objects: 109, done.
+remote: Counting objects: 100% (109/109), done.
+remote: Compressing objects: 100% (103/103), done.
+remote: Total 109 (delta 51), reused 27 (delta 6), pack-reused 0 (from 0)
+Receiving objects: 100% (109/109), 33.12 KiB | 3.68 MiB/s, done.
+Resolving deltas: 100% (51/51), done.
+Cloning into 'practice-files'...
+remote: Enumerating objects: 127, done.
+remote: Counting objects: 100% (127/127), done.
+remote: Compressing objects: 100% (110/110), done.
+remote: Total 127 (delta 54), reused 61 (delta 17), pack-reused 0 (from 0)
+Receiving objects: 100% (127/127), 213.30 KiB | 6.88 MiB/s, done.
+Resolving deltas: 100% (54/54), done.
+[root@ins1 srinu]#
+[root@ins1 srinu]# cd
+[root@ins1 ~]# mkdir vol
+[root@ins1 vol]# fdisk -l
+Disk /dev/nvme0n1: 8 GiB, 8589934592 bytes, 16777216 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disklabel type: gpt
+Disk identifier: 25324CB4-23B0-44F1-A88D-F0EFE521DBE0
+
+Device           Start      End  Sectors Size Type
+/dev/nvme0n1p1   24576 16777182 16752607   8G Linux filesystem
+/dev/nvme0n1p127 22528    24575     2048   1M BIOS boot
+/dev/nvme0n1p128  2048    22527    20480  10M EFI System
+
+Partition table entries are not in disk order.
+[root@ins1 vol]#
+===========================================
+After attaching the ebs volume
+===========================================
+[root@ins1 vol]# fdisk -l
+Disk /dev/nvme0n1: 8 GiB, 8589934592 bytes, 16777216 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disklabel type: gpt
+Disk identifier: 25324CB4-23B0-44F1-A88D-F0EFE521DBE0
+
+Device           Start      End  Sectors Size Type
+/dev/nvme0n1p1   24576 16777182 16752607   8G Linux filesystem
+/dev/nvme0n1p127 22528    24575     2048   1M BIOS boot
+/dev/nvme0n1p128  2048    22527    20480  10M EFI System
+
+Partition table entries are not in disk order.
+
+
+Disk /dev/nvme1n1: 9 GiB, 9663676416 bytes, 18874368 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+[root@ins1 vol]#
+[root@ins1 vol]# file -s /dev/nvme1n1
+/dev/nvme1n1: data
+[root@ins1 vol]# mkfs -t xfs /dev/nvme1n1
+meta-data=/dev/nvme1n1           isize=512    agcount=16, agsize=147456 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1    bigtime=1 inobtcount=1 nrext64=0
+         =                       exchange=0
+data     =                       bsize=4096   blocks=2359296, imaxpct=25
+         =                       sunit=1      swidth=1 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1, parent=0
+log      =internal log           bsize=4096   blocks=16384, version=2
+         =                       sectsz=512   sunit=1 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+[root@ins1 vol]# mount /dev/nvme1n1 .
+[root@ins1 vol]# fdisk -l
+Disk /dev/nvme0n1: 8 GiB, 8589934592 bytes, 16777216 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disklabel type: gpt
+Disk identifier: 25324CB4-23B0-44F1-A88D-F0EFE521DBE0
+
+Device           Start      End  Sectors Size Type
+/dev/nvme0n1p1   24576 16777182 16752607   8G Linux filesystem
+/dev/nvme0n1p127 22528    24575     2048   1M BIOS boot
+/dev/nvme0n1p128  2048    22527    20480  10M EFI System
+
+Partition table entries are not in disk order.
+
+
+Disk /dev/nvme1n1: 9 GiB, 9663676416 bytes, 18874368 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+[root@ins1 vol]# df -h
+Filesystem        Size  Used Avail Use% Mounted on
+devtmpfs          4.0M     0  4.0M   0% /dev
+tmpfs             459M     0  459M   0% /dev/shm
+tmpfs             184M  468K  183M   1% /run
+/dev/nvme0n1p1    8.0G  1.7G  6.3G  21% /
+tmpfs             459M     0  459M   0% /tmp
+/dev/nvme0n1p128   10M  1.3M  8.7M  13% /boot/efi
+tmpfs              92M     0   92M   0% /run/user/1000
+/dev/nvme1n1      9.0G   97M  8.9G   2% /root/vol
+[root@ins1 vol]# ls
+[root@ins1 vol]# touch aws{1..6}
+[root@ins1 vol]# ls
+aws1  aws2  aws3  aws4  aws5  aws6
+[root@ins1 vol]# mkdir azu{1..6}
+[root@ins1 vol]# ls
+aws1  aws2  aws3  aws4  aws5  aws6  azu1  azu2  azu3  azu4  azu5  azu6
+[root@ins1 vol]#
+[root@ins1 vol]# ll
+total 0
+-rw-r--r--. 1 root root 0 Mar  6 16:30 aws1
+-rw-r--r--. 1 root root 0 Mar  6 16:30 aws2
+-rw-r--r--. 1 root root 0 Mar  6 16:30 aws3
+-rw-r--r--. 1 root root 0 Mar  6 16:30 aws4
+-rw-r--r--. 1 root root 0 Mar  6 16:30 aws5
+-rw-r--r--. 1 root root 0 Mar  6 16:30 aws6
+drwxr-xr-x. 2 root root 6 Mar  6 16:31 azu1
+drwxr-xr-x. 2 root root 6 Mar  6 16:31 azu2
+drwxr-xr-x. 2 root root 6 Mar  6 16:31 azu3
+drwxr-xr-x. 2 root root 6 Mar  6 16:31 azu4
+drwxr-xr-x. 2 root root 6 Mar  6 16:31 azu5
+drwxr-xr-x. 2 root root 6 Mar  6 16:31 azu6
+[root@ins1 vol]#
+
+===============================================
+Lets launch instance 3 and connect
+===============================================
+
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey.pem" ec2-user@13.60.190.153
+The authenticity of host '13.60.190.153 (13.60.190.153)' can't be established.
+ED25519 key fingerprint is SHA256:iQV/xw0+iwqlXi5+2lIbEeBRHBcudcxj64gUJ6GsRsA.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '13.60.190.153' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-40-43 ~]$ sudo -i
+[root@ip-172-31-40-43 ~]# hostnamectl set-hostname ins3
+[root@ip-172-31-40-43 ~]#
+logout
+[ec2-user@ip-172-31-40-43 ~]$ sudo -i
+[root@ins3 ~]# fdisk -l
+Disk /dev/nvme0n1: 8 GiB, 8589934592 bytes, 16777216 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disklabel type: gpt
+Disk identifier: 25324CB4-23B0-44F1-A88D-F0EFE521DBE0
+
+Device           Start      End  Sectors Size Type
+/dev/nvme0n1p1   24576 16777182 16752607   8G Linux filesystem
+/dev/nvme0n1p127 22528    24575     2048   1M BIOS boot
+/dev/nvme0n1p128  2048    22527    20480  10M EFI System
+
+Partition table entries are not in disk order.
+
+
+Disk /dev/nvme1n1: 9 GiB, 9663676416 bytes, 18874368 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+[root@ins3 ~]# file -s /dev/nvme1n1
+/dev/nvme1n1: SGI XFS filesystem data (blksz 4096, inosz 512, v2 dirs)
+[root@ins3 ~]# mkfs -t xfs /dev/nvme1n1
+mkfs.xfs: /dev/nvme1n1 appears to contain an existing filesystem (xfs).
+mkfs.xfs: Use the -f option to force overwrite.
+[root@ins3 ~]# mkdir clone
+[root@ins3 ~]# ll clone/
+total 0
+[root@ins3 ~]# mount /dev/nvme1n1 clone
+[root@ins3 ~]# ll clone/
+total 0
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws1
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws2
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws3
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws4
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws5
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws6
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu1
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu2
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu3
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu4
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu5
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu6
+[root@ins3 ~]#
+
+=====================================================
+Lets Check on instance 2
+=====================================================
+
+PS C:\Users\2242395> ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -i "C:\Users\2242395\Downloads\mykey.pem" ec2-user@13.60.60.152
+The authenticity of host '13.60.60.152 (13.60.60.152)' can't be established.
+ED25519 key fingerprint is SHA256:4KESn1iNK7XgajOqor3W3F8lQZaD1UTwfng3HJ3zm8U.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '13.60.60.152' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-17-212 ~]$ sudo -i
+[root@ip-172-31-17-212 ~]# hostnamectl set-hostname ins2
+[root@ip-172-31-17-212 ~]#
+logout
+[ec2-user@ip-172-31-17-212 ~]$ sudo -i
+[root@ins2 ~]# mkdir clone
+[root@ins2 ~]# ll clone/
+total 0
+[root@ins2 ~]# 
+[root@ins2 ~]# fdisk -l
+Disk /dev/nvme0n1: 8 GiB, 8589934592 bytes, 16777216 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disklabel type: gpt
+Disk identifier: 25324CB4-23B0-44F1-A88D-F0EFE521DBE0
+
+Device           Start      End  Sectors Size Type
+/dev/nvme0n1p1   24576 16777182 16752607   8G Linux filesystem
+/dev/nvme0n1p127 22528    24575     2048   1M BIOS boot
+/dev/nvme0n1p128  2048    22527    20480  10M EFI System
+
+Partition table entries are not in disk order.
+[root@ins2 ~]# fdisk -l
+Disk /dev/nvme0n1: 8 GiB, 8589934592 bytes, 16777216 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disklabel type: gpt
+Disk identifier: 25324CB4-23B0-44F1-A88D-F0EFE521DBE0
+
+Device           Start      End  Sectors Size Type
+/dev/nvme0n1p1   24576 16777182 16752607   8G Linux filesystem
+/dev/nvme0n1p127 22528    24575     2048   1M BIOS boot
+/dev/nvme0n1p128  2048    22527    20480  10M EFI System
+
+Partition table entries are not in disk order.
+
+
+Disk /dev/nvme1n1: 9 GiB, 9663676416 bytes, 18874368 sectors
+Disk model: Amazon Elastic Block Store
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+[root@ins2 ~]#
+[root@ins2 ~]# mkfs -t xfs /dev/nvme1n1
+mkfs.xfs: /dev/nvme1n1 appears to contain an existing filesystem (xfs).
+mkfs.xfs: Use the -f option to force overwrite.
+[root@ins2 ~]# ll clone/
+total 0
+[root@ins2 ~]# mount /dev/nvme1n1 clone/
+[root@ins2 ~]# ll clone/
+total 0
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws1
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws2
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws3
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws4
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws5
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws6
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu1
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu2
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu3
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu4
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu5
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu6
+[root@ins2 ~]#
+[root@ins2 ~]# umount /dev/nvme1n1
+[root@ins2 ~]# ll clone/
+total 0
+[root@ins2 ~]# mount /dev/nvme1n1 clone/
+[root@ins2 ~]# ll clone/
+total 0
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws1
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws2
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws3
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws4
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws5
+-rw-r--r--. 1 root root 0 Mar  6 17:11 aws6
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu1
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu2
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu3
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu4
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu5
+drwxr-xr-x. 2 root root 6 Mar  6 17:11 azu6
+[root@ins2 ~]#
+
