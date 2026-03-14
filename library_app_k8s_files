@@ -42,8 +42,8 @@ spec:
   hard:
     pods: "10"
     requests.cpu: "2"
-    requests.memory: 2Gi
-    limits.cpu: "4"
+    requests.memory: 4Gi
+    limits.cpu: "2"
     limits.memory: 4Gi
 
 ---
@@ -54,7 +54,7 @@ metadata:
   name: lib-db
   namespace: srinu
 spec:
-  serviceName: "lib-db"
+  serviceName: "db"
   replicas: 1
   selector:
     matchLabels:
@@ -65,28 +65,39 @@ spec:
         app: lib-db
     spec:
       containers:
-      - name: lib-db
-        image: srinuas/mylib:db
-        ports:
-        - containerPort: 3306
-          name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: app-sc
-              key: DB_PASSWORD
-        volumeMounts:
-        - name: db-pvc
-          mountPath: /usr/share/nginx/html
+        - name: lib-db
+          image: srinuas/mylib:db
+          ports:
+            - containerPort: 3306
+              name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-sc
+                  key: DB_PASSWORD
+          # ✅ resources MUST be here (under the container)
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "128Mi"
+            limits:
+              cpu: "400m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: db-pvc
+              # ⚠️ సాధారణ MySQL data-dir: /var/lib/mysql  (lowercase)
+              # నీ ఇమేజ్ నిజంగా /var/lib/MySQL అయితే అదే ఉంచు. లేదంటే క్రిందలాగే ఉంచు:
+              mountPath: /var/lib/mysql
+
   volumeClaimTemplates:
-  - metadata:
-      name: db-pvc
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 1Gi
+    - metadata:
+        name: db-pvc
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
 
 ---
 # 6. DB Service
@@ -126,23 +137,24 @@ spec:
           image: srinuas/mylib:au
           ports:
             - containerPort: 5001
-        - configMapRef:
-            name: app-cm
-        - secretRef: # Secret reference add chesanu
-            name: app-sc
-        resources:
-          requests:
-            cpu: "100m"
-            memory: "128Mi"
-          limits:
-            cpu: "500m"
-            memory: "256Mi"
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 45 # Time koncham penchanu start avvadaniki
-          periodSeconds: 10
+          envFrom:
+            - configMapRef:
+                name: app-cm
+            - secretRef:
+                name: app-sc
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5001
+            initialDelaySeconds: 30
+            periodSeconds: 10
 
 ---
 # 8. Auth Service
@@ -185,6 +197,19 @@ spec:
                 name: app-cm
             - secretRef:
                 name: app-sc
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5002
+            initialDelaySeconds: 30
+            periodSeconds: 10
 
 ---
 # 10. Book Service
@@ -227,6 +252,19 @@ spec:
                 name: app-cm
             - secretRef:
                 name: app-sc
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5003
+            initialDelaySeconds: 30
+            periodSeconds: 10
        
 ---
 # 12. Borrow Service
@@ -272,10 +310,10 @@ spec:
           resources:
             requests:
               cpu: "100m"
-              memory: "128Mi"
+              memory: "64Mi"
             limits:
-              cpu: "500m"
-              memory: "256Mi"
+              cpu: "200m"
+              memory: "128Mi"
           livenessProbe:
             httpGet:
               path: /
@@ -316,7 +354,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: app-svc
+            name: lib
             port:
               number: 80
 
@@ -326,6 +364,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: lib-app-hpa
+  namespace: srinu
 spec: 
   scaleTargetRef:
     apiVersion: apps/v1
@@ -347,6 +386,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: lib-app-network-policy
+  namespace: srinu
 spec:
   podSelector:
     matchLabels:
@@ -392,9 +432,10 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: lib-app-pdb
-  namespace: default
+  namespace: srinu
 spec:
   minAvailable: 2
   selector:
     matchLabels:
       app: lib-app
+
