@@ -1,0 +1,400 @@
+# 1. Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: srinu
+
+---
+# 2. ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-cm
+  namespace: srinu
+data:
+  DB_HOST: "db"
+  DB_PORT: "3306"
+  app_version: "1.0"
+
+---
+# 3. Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-sc
+  namespace: srinu
+type: Opaque
+data:
+  # Base64 encoded values
+  MYSQL_ROOT_PASSWORD: cm9vdA== 
+  DB_USER: cm9vdA==
+  DB_PASSWORD: cm9vdA==
+  DB_NAME: ZGlnaXRhbF9saWJyYXJ5
+
+---
+# 4. Resource Quota
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: app-svc-rq
+  namespace: srinu
+spec:
+  hard:
+    pods: "10"
+    requests.cpu: "2"
+    requests.memory: 2Gi
+    limits.cpu: "4"
+    limits.memory: 4Gi
+
+---
+# 5. DB StatefulSet
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: lib-db
+  namespace: srinu
+spec:
+  serviceName: "lib-db"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lib-db
+  template:
+    metadata:
+      labels:
+        app: lib-db
+    spec:
+      containers:
+      - name: lib-db
+        image: srinuas/mylib:db
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-sc
+              key: DB_PASSWORD
+        volumeMounts:
+        - name: db-pvc
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: db-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+
+---
+# 6. DB Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: srinu
+spec:
+  clusterIP: None
+  selector:
+    app: lib-db
+  ports:
+    - port: 3306
+      targetPort: 3306
+
+
+---
+# 7. Auth Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lib-auth
+  namespace: srinu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lib-auth
+  template:
+    metadata:
+      labels:
+        app: lib-auth
+    spec:
+      containers:
+        - name: lib-auth
+          image: srinuas/mylib:au
+          ports:
+            - containerPort: 5001
+        - configMapRef:
+            name: app-cm
+        - secretRef: # Secret reference add chesanu
+            name: app-sc
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 45 # Time koncham penchanu start avvadaniki
+          periodSeconds: 10
+
+---
+# 8. Auth Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth
+  namespace: srinu
+spec:
+  selector:
+    app: lib-auth
+  ports:
+    - port: 5001
+      targetPort: 5001
+
+---
+# 9. Book Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lib-book
+  namespace: srinu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lib-book
+  template:
+    metadata:
+      labels:
+        app: lib-book
+    spec:
+      containers:
+        - name: lib-book
+          image: srinuas/mylib:bk
+          ports:
+            - containerPort: 5002
+          envFrom:
+            - configMapRef:
+                name: app-cm
+            - secretRef:
+                name: app-sc
+
+---
+# 10. Book Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: book
+  namespace: srinu
+spec:
+  selector:
+    app: lib-book
+  ports:
+    - port: 5002
+      targetPort: 5002
+
+---
+# 11. Borrow Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lib-borrow
+  namespace: srinu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lib-borrow
+  template:
+    metadata:
+      labels:
+        app: lib-borrow
+    spec:
+      containers:
+        - name: lib-borrow
+          image: srinuas/mylib:br
+          ports:
+            - containerPort: 5003
+          envFrom:
+            - configMapRef:
+                name: app-cm
+            - secretRef:
+                name: app-sc
+       
+---
+# 12. Borrow Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: lib-borrow
+  namespace: srinu
+spec:
+  selector:
+    app: lib-borrow
+  ports:
+    - port: 5003
+      targetPort: 5003
+
+---
+# 13. Frontend Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lib-app
+  namespace: srinu
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lib-app
+  template:
+    metadata:
+      labels:
+        app: lib-app
+    spec:
+      containers:
+        - name: lib-app
+          image: srinuas/mylib:fe
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: app-cm
+            - secretRef:
+                name: app-sc
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+---
+# 14. Frontend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: lib
+  namespace: srinu
+spec:
+  selector:
+    app: lib-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+
+---
+# 15. Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lib-ing
+  namespace: srinu
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app-svc
+            port:
+              number: 80
+
+---
+# 16. Horizontal Pod Autoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: lib-app-hpa
+spec: 
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: lib-app
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
+
+---
+# 17. Network Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lib-app-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: lib-app
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    # Allow ingress-nginx controller pods
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ingress-nginx
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/component: controller
+    ports:
+    - protocol: TCP
+      port: 80
+
+  egress:
+  # Allow DB access
+  - to:
+    - podSelector:
+        matchLabels:
+          app: lib-db
+    ports:
+    - protocol: TCP
+      port: 3306
+
+  # Allow DNS (VERY IMPORTANT)
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+
+---
+# 18. Pod Disruption Budget
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: lib-app-pdb
+  namespace: default
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: lib-app
