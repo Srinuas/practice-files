@@ -1,0 +1,560 @@
+# ---------------------------------------------
+# Namespace
+# ---------------------------------------------
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: srinu
+
+# ---------------------------------------------
+# Ingress
+# ---------------------------------------------
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: libapp-ingress
+  namespace: srinu
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80
+
+# ---------------------------------------------
+# Resource Quota
+# ---------------------------------------------
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: libapp-rq
+  namespace: srinu
+spec:
+  hard:
+    pods: "8"
+    requests.cpu: "1000m"
+    requests.memory: 1Gi
+    limits.cpu: "2000m"
+    limits.memory: 2Gi
+
+# ---------------------------------------------
+# ConfigMap
+# ---------------------------------------------
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: libapp-cm
+  namespace: srinu
+data:
+  DB_HOST: "db"
+  DB_PORT: "3306"
+  Name: "Srinu_Config"
+  NameCon: "SrinuCM"
+  IPL1: "RCB vs SRH"
+  IPL2: "MI vs KKR"
+  IPL3: "RR vs CSK"
+
+# ---------------------------------------------
+# Secrets
+# ---------------------------------------------
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: libapp-sc
+  namespace: srinu
+type: Opaque
+data:
+  DB_USERNAME: cm9vdA==
+  DB_PASSWORD: cm9vdA==
+  DB_NAME: ZGlnaXRhbF9saWJyYXJ5
+  Name: U3JpbnU=
+  NameSec: U3JpbnVTQw==
+  IPL4: "UkNCIHZzIFNSSA=="
+  IPL5: "TUkgdnMgS0tS"
+  IPL6: "UlIgdnMgQ1NL"
+
+# ---------------------------------------------
+# Deploy
+# ---------------------------------------------
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  namespace: srinu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: srinuas/mylib:au
+        # imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5001
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          env:
+            - name: confcon
+              valueFrom:
+                configMapKeyRef:
+                  name: libapp-cm
+                  key: NameCon
+            - name: confipl2
+              valueFrom:
+                configMapKeyRef:
+                  name: libapp-cm
+                  key: IPL2
+            - name: secrcon
+              valueFrom:
+                secretKeyRef:
+                  name: libapp-sc
+                  key: NameSec
+            - name: secripl
+              valueFrom:
+                secretKeyRef:
+                  name: libapp-sc
+                  key: IPL6
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book
+  namespace: srinu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book
+  template:
+    metadata:
+      labels:
+        app: book
+    spec:
+      containers:
+        - name: book
+          image: srinuas/mylib:bk
+          # imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5002
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: borrow
+  namespace: srinu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: borrow
+  template:
+    metadata:
+      labels:
+        app: borrow
+    spec:
+      containers:
+        - name: borrow
+          image: srinuas/mylib:br
+        # imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5003
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: srinu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: srinuas/mylib:fe
+      # imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: libapp-cm
+        - secretRef:
+            name: libapp-sc
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        livenessProbe:
+          exec:
+            command:
+            - cat
+            - /app/app.py
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          timeoutSeconds: 20
+        readinessProbe:
+          tcpSocket:
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 5
+
+# ---------------------------------------------
+# Statefulset
+# ---------------------------------------------
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db
+  namespace: srinu
+spec:
+  serviceName: db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+        - name: db
+          image: srinuas/mylib:db
+          ports:
+            - containerPort: 3306
+          envFrom:
+            - configMapRef:
+                name: libapp-cm
+            - secretRef:
+                name: libapp-sc
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: data
+              mountPath: /usr/share/nginx/html/
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+# ---------------------------------------------
+# Service
+# ---------------------------------------------
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: srinu
+spec:
+  selector:
+    app: db
+  ports:
+    - port: 3306
+      targetPort: 3306
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: srinu
+spec:
+  selector:
+    app: auth
+  ports:
+    - port: 5001
+      targetPort: 5001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: book-service
+  namespace: srinu
+spec:
+  selector:
+    app: book
+  ports:
+    - port: 5002
+      targetPort: 5002
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: borrow-service
+  namespace: srinu
+spec:
+  selector:
+    app: borrow
+  ports:
+    - port: 5003
+      targetPort: 5003
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: srinu
+spec:
+  selector:
+    app: frontend
+  ports:
+    - port: 80
+      targetPort: 5000
+
+# ---------------------------------------------
+# Network Policy
+# ---------------------------------------------
+# np-deny-all-egress.yml
+# By default no pod can call anywhere.
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-egress
+  namespace: srinu
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+
+# __________________________________
+# np-allow-dns.yml
+# Without this → services won’t resolve
+# ✅ All pods can talk to kube‑dns only.
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns
+  namespace: srinu
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+
+# __________________________________
+# frontend-egress-backend.yml
+# ✅ Frontend ➝ Backend (Egress)
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: frontend-egress-backend
+  namespace: srinu
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - podSelector:
+        matchExpressions:
+        - key: app
+          operator: In
+          values:
+          - auth
+          - book
+          - borrow
+    ports:
+    - protocol: TCP
+      port: 5001
+    - protocol: TCP
+      port: 5002
+    - protocol: TCP
+      port: 5003
+
+# __________________________________
+# backend-ingress-frontend.yml
+# ✅ Backend Ingress (from Frontend)
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backend-ingress-frontend
+  namespace: srinu
+spec:
+  podSelector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - auth
+      - book
+      - borrow
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: frontend
+    ports:
+    - protocol: TCP
+      port: 5001
+    - protocol: TCP
+      port: 5002
+    - protocol: TCP
+      port: 5003
+
+# __________________________________
+# backend-egress-db.yml
+# ✅ Backend ➝ DB (Egress)
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backend-egress-db
+  namespace: srinu
+spec:
+  podSelector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - auth
+      - book
+      - borrow
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: db
+    ports:
+    - protocol: TCP
+      port: 3306
+
+# __________________________________
+# db-ingress-backend.yml
+# ✅ DB Ingress (from Backend only)
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-ingress-backend
+  namespace: srinu
+spec:
+  podSelector:
+    matchLabels:
+      app: db
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchExpressions:
+        - key: app
+          operator: In
+          values:
+          - auth
+          - book
+          - borrow
+    ports:
+    - protocol: TCP
+      port: 3306
+
+# ✅ FINAL TRAFFIC MATRIX (After All Policies)
+
+# =====================================================================
+# | From             | To                    | Result                  |
+# =====================================================================
+# | frontend         | auth                  | ALLOWED ✅              |
+# | frontend         | book                  | ALLOWED ✅              |
+# | frontend         | borrow                | ALLOWED ✅              |
+# ---------------------------------------------------------------------
+# | auth             | db                    | ALLOWED ✅              |
+# | book             | db                    | ALLOWED ✅              |
+# | borrow           | db                    | ALLOWED ✅              |
+# ---------------------------------------------------------------------
+# | frontend         | db                    | BLOCKED ❌              |
+# ---------------------------------------------------------------------
+# | any pod          | internet (0.0.0.0/0)  | BLOCKED ❌              |
+# ---------------------------------------------------------------------
+# | any pod          | kube-dns (53)         | ALLOWED ✅              |
+# =====================================================================
+
+# frontend  -> auth/book/borrow   : ALLOWED
+# auth/book/borrow -> db          : ALLOWED
+# frontend  -> db                 : BLOCKED
+# any pod   -> internet           : BLOCKED
+# any pod   -> kube-dns (53)      : ALLOWED
+
