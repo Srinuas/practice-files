@@ -1,0 +1,537 @@
+root@ubuntu:~$ whoami
+root
+root@ubuntu:~$ useradd srinu
+root@ubuntu:~$ getent passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin
+_apt:x:42:65534::/nonexistent:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
+systemd-timesync:x:996:996:systemd Time Synchronization:/:/usr/sbin/nologin
+dhcpcd:x:100:65534:DHCP Client Daemon,,,:/usr/lib/dhcpcd:/bin/false
+messagebus:x:101:101::/nonexistent:/usr/sbin/nologin
+syslog:x:102:102::/nonexistent:/usr/sbin/nologin
+systemd-resolve:x:991:991:systemd Resolver:/:/usr/sbin/nologin
+uuidd:x:103:103::/run/uuidd:/usr/sbin/nologin
+tss:x:104:104:TPM software stack,,,:/var/lib/tpm:/bin/false
+sshd:x:105:65534::/run/sshd:/usr/sbin/nologin
+pollinate:x:106:1::/var/cache/pollinate:/bin/false
+tcpdump:x:107:108::/nonexistent:/usr/sbin/nologin
+landscape:x:108:109::/var/lib/landscape:/usr/sbin/nologin
+fwupd-refresh:x:990:990:Firmware update daemon:/var/lib/fwupd:/usr/sbin/nologin
+polkitd:x:989:989:User for polkitd:/:/usr/sbin/nologin
+ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+kc-internal:x:0:0::/root:/bin/bash
+dnsmasq:x:999:65534:dnsmasq:/var/lib/misc:/usr/sbin/nologin
+srinu:x:1001:1001::/home/srinu:/bin/sh
+root@ubuntu:~$ su - srinu
+su: warning: cannot change directory to /home/srinu: No such file or directory
+$
+$
+$ whoami
+srinu
+$ exit
+root@ubuntu:~$ cat /etc/shells
+# /etc/shells: valid login shells
+/bin/sh
+/usr/bin/sh
+/bin/bash
+/usr/bin/bash
+/bin/rbash
+/usr/bin/rbash
+/usr/bin/dash
+/usr/bin/screen
+/usr/bin/tmux
+root@ubuntu:~$ ps -p $$
+    PID TTY          TIME CMD
+   1746 pts/0    00:00:00 bash
+root@ubuntu:~$ ls
+filesystem  merge  rebase
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$ sh srinu.sh
+Your Name is Srinu and your are not ready for this!!!
+root@ubuntu:~$
+root@ubuntu:~$
+root@ubuntu:~$ bash srinu.sh
+Your Name is Srinu and your are not ready for this!!!
+root@ubuntu:~$
+root@ubuntu:~$
+root@ubuntu:~$ ./srinu.sh
+bash: ./srinu.sh: Permission denied
+root@ubuntu:~$ ll
+total 56
+drwx------  6 root root 4096 May  6 07:08 ./
+drwxr-xr-x 22 root root 4096 Apr 24 20:09 ../
+-rw-------  1 root root   10 Feb 10  2025 .bash_history
+-rw-r--r--  1 root root 3234 Apr 24 20:09 .bashrc
+-rw-r--r--  1 root root  108 May  6 06:59 .gitconfig
+-rw-r--r--  1 root root  161 Apr 22  2024 .profile
+drwx------  2 root root 4096 Apr 24 20:08 .ssh/
+drwxr-xr-x  5 root root 4096 May  6 06:59 .theia/
+-rw-------  1 root root  798 May  6 07:08 .viminfo
+-rw-r--r--  1 root root  109 Apr 24 20:09 .vimrc
+-rw-r--r--  1 root root  165 Apr 24 20:09 .wget-hsts
+lrwxrwxrwx  1 root root    1 Apr 24 20:09 filesystem -> //
+drwxr-xr-x  3 root root 4096 May  6 06:59 merge/
+drwxr-xr-x  3 root root 4096 May  6 06:59 rebase/
+-rw-r--r--  1 root root   84 May  6 07:08 srinu.sh
+root@ubuntu:~$ ls -l
+total 12
+lrwxrwxrwx 1 root root    1 Apr 24 20:09 filesystem -> /
+drwxr-xr-x 3 root root 4096 May  6 06:59 merge
+drwxr-xr-x 3 root root 4096 May  6 06:59 rebase
+-rw-r--r-- 1 root root   84 May  6 07:08 srinu.sh
+root@ubuntu:~$ chmod +x srinu.sh
+root@ubuntu:~$
+root@ubuntu:~$ ls -l
+total 12
+lrwxrwxrwx 1 root root    1 Apr 24 20:09 filesystem -> /
+drwxr-xr-x 3 root root 4096 May  6 06:59 merge
+drwxr-xr-x 3 root root 4096 May  6 06:59 rebase
+-rwxr-xr-x 1 root root   84 May  6 07:08 srinu.sh
+root@ubuntu:~$ ./srinu.sh
+/bin/bash: #shebang: No such file or directory
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$ ./srinu.sh
+Your Name is Srinu and your are not ready for this!!!
+root@ubuntu:~$
+root@ubuntu:~$
+root@ubuntu:~$ cat srinu.sh
+#! /bin/bash
+echo "Your Name is Srinu and your are not ready for this!!!"
+
+root@ubuntu:~$
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$
+root@ubuntu:~$ cat srinu.sh
+#! /bin/bash
+echo -e "Your Name is Srinu\nyour are not\tready for this!!!"
+
+root@ubuntu:~$ ./srinu.sh
+Your Name is Srinu
+your are not    ready for this!!!
+root@ubuntu:~$
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$
+root@ubuntu:~$ ./srinu.sh
+Your Name is Srinu\nyour are not\tready for this!!!
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$ ./srinu.sh
+Your Name is Srinu
+your are not    ready for this!!!
+root@ubuntu:~$
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$
+root@ubuntu:~$ cat srinu.sh
+#! /bin/bash
+name = "Srinu"
+role = "DevOps"
+echo -e "Your Name is $name\nYour are not\tready for $role!!!"
+root@ubuntu:~$
+root@ubuntu:~$ ./srinu.sh
+./srinu.sh: line 2: name: command not found
+./srinu.sh: line 3: role: command not found
+Your Name is
+Your are not    ready for !!!
+root@ubuntu:~$
+root@ubuntu:~$ sh srinu.sh
+srinu.sh: 2: name: not found
+srinu.sh: 3: role: not found
+-e Your Name is
+Your are not    ready for !!!
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$
+root@ubuntu:~$ cat srinu.sh
+#! /bin/bash
+name="Srinu"
+role="DevOps"
+echo -e "Your Name is $name\nYour are not\tready for $role!!!"
+root@ubuntu:~$
+root@ubuntu:~$ ./srinu.sh
+Your Name is Srinu
+Your are not    ready for DevOps!!!
+root@ubuntu:~$
+root@ubuntu:~$
+root@ubuntu:~$
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$ ./srinu.sh
+Please enter your name!
+Srinu
+Please enter your password!
+Srinu@123
+Your name is Srinu
+Your Password is Srinu@123
+root@ubuntu:~$
+root@ubuntu:~$
+root@ubuntu:~$ cat srinu.sh
+#! /bin/bash
+echo "Please enter your name!"
+read a
+echo "Please enter your password!"
+read b
+echo -e "Your name is $a\nYour Password is $b"
+root@ubuntu:~$
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$
+root@ubuntu:~$ cat srinu.sh
+#! /bin/bash
+echo "Please enter your name: "
+read a
+echo "Please enter your password: "
+read -s b
+echo
+echo -e "\nYour name is $a\nYour Password is $b"
+root@ubuntu:~$
+root@ubuntu:~$ ./srinu.sh
+Please enter your name:
+Sreeleela
+Please enter your password:
+
+
+Your name is Sreeleela
+Your Password is Sreeleela@123
+root@ubuntu:~$
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$
+root@ubuntu:~$ cat srinu.sh
+#! /bin/bash
+
+echo "Your Name is "$1
+echo "Your Age is "$2
+echo "Your Qualification is "$3
+echo "Your Job is "$4
+
+echo "My full details are "$@
+echo "My all details presented in $0 file"
+root@ubuntu:~$
+root@ubuntu:~$ ./srinu.sh Srinu 22 B.Tech Support
+Your Name is Srinu
+Your Age is 22
+Your Qualification is B.Tech
+Your Job is Support
+My full details are Srinu 22 B.Tech Support
+My all details presented in ./srinu.sh file
+root@ubuntu:~$
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$
+root@ubuntu:~$ cat srinu.sh
+#! /bin/bash
+
+echo "Enter your age: "
+read a
+if [[ $a -lt 18 ]];
+then
+  echo "You are not eligible for vote!"
+fi
+root@ubuntu:~$ ./srinu.sh
+Enter your age:
+15
+You are not eligible for vote!
+root@ubuntu:~$ ./srinu.sh
+Enter your age:
+17
+You are not eligible for vote!
+root@ubuntu:~$ ./srinu.sh
+Enter your age:
+18
+root@ubuntu:~$ ./srinu.sh
+Enter your age:
+19
+root@ubuntu:~$
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$
+root@ubuntu:~$ cat srinu.sh
+#! /bin/bash
+
+echo "Enter your age: "
+read a
+if [[ $a -le 17 ]];
+then
+  echo "You are not eligible for vote!"
+else
+  echo "You are eligible for vote!"
+fi
+root@ubuntu:~$
+root@ubuntu:~$ ./srinu.sh
+Enter your age:
+16
+You are not eligible for vote!
+root@ubuntu:~$ ./srinu.sh
+Enter your age:
+17
+You are not eligible for vote!
+root@ubuntu:~$ ./srinu.sh
+Enter your age:
+18
+You are eligible for vote!
+root@ubuntu:~$ ./srinu.sh
+Enter your age:
+19
+You are eligible for vote!
+root@ubuntu:~$
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$
+root@ubuntu:~$ cat srinu.sh
+#! /bin/bash
+echo "Enter your Marks (out of 600): "
+read a
+if [[ $a -ge 0 && $a -lt 200 ]];
+then
+  echo "You failed!"
+elif [[ $a -ge 200 && $a -lt 350 ]];
+then
+  echo "You just passed!"
+elif [[ $a -ge 350 && $a -lt 500 ]];
+then
+  echo "You got second class!"
+elif [[ $a -ge 500 && $a -le 600 ]];
+then
+  echo "You got first class!"
+else
+  echo "Error, try between 0 to 600!"
+fi
+root@ubuntu:~$
+root@ubuntu:~$ ./srinu.sh
+Enter your Marks (out of 600):
+-9
+Error, try between 0 to 600!
+root@ubuntu:~$ ./srinu.sh
+Enter your Marks (out of 600):
+0
+You failed!
+root@ubuntu:~$ ./srinu.sh
+Enter your Marks (out of 600):
+200
+You just passed!
+root@ubuntu:~$ ./srinu.sh
+Enter your Marks (out of 600):
+199
+You failed!
+root@ubuntu:~$ ./srinu.sh
+Enter your Marks (out of 600):
+349
+You just passed!
+root@ubuntu:~$ ./srinu.sh
+Enter your Marks (out of 600):
+350
+You got second class!
+root@ubuntu:~$ ./srinu.sh
+Enter your Marks (out of 600):
+499
+You got second class!
+root@ubuntu:~$ ./srinu.sh
+Enter your Marks (out of 600):
+500
+You got first class!
+root@ubuntu:~$ ./srinu.sh
+Enter your Marks (out of 600):
+599
+You got first class!
+root@ubuntu:~$ ./srinu.sh
+Enter your Marks (out of 600):
+600
+You got first class!
+root@ubuntu:~$ ./srinu.sh
+Enter your Marks (out of 600):
+601
+Error, try between 0 to 600!
+root@ubuntu:~$
+root@ubuntu:~$ cat srinu.sh
+#! /bin/bash
+echo "Enter your Username: "
+read a
+if [[ $a == "tommy.jerry@cn.com" ]];
+then
+  echo -e "Username correct\nEnter your password!: "
+  read -s b
+  if [[ $b == "cn.tj@123" ]];
+  then
+    echo "Login success!"
+  else
+    echo "Login failed, wrong password!"
+  fi
+else
+  echo -e "Login failed, wrong Username:!"
+fi
+root@ubuntu:~$
+root@ubuntu:~$ ./srinu.sh
+Enter your Username:
+tommy.jerry@cn.comk
+Login failed, wrong Username:!
+root@ubuntu:~$ ./srinu.sh
+Enter your Username:
+tommy.jerry@cn.com
+Username correct
+Enter your password!:
+Login failed, wrong password!
+root@ubuntu:~$ ./srinu.sh
+Enter your Username:
+tommy.jerry@cn.com
+Username correct
+Enter your password!:
+Login success!
+root@ubuntu:~$
+root@ubuntu:~$ vi srinu.sh
+root@ubuntu:~$
+root@ubuntu:~$ cat srinu.sh
+#! /bin/bash
+echo "Enter your String: "
+read a
+if [[ -z $a ]];
+then
+  echo "'$a' This is an empty String"
+else
+  echo "'$a' This is non-empty String"
+fi
+root@ubuntu:~$
+root@ubuntu:~$ ./srinu.sh
+Enter your String:
+
+'' This is an empty String
+root@ubuntu:~$ ./srinu.sh
+Enter your String:
+Spandana
+'Spandana' This is non-empty String
+root@ubuntu:~$
+root@ubuntu:~/srinu$ vi srinu.sh 
+root@ubuntu:~/srinu$ 
+root@ubuntu:~/srinu$ cat srinu.sh 
+#!/bin/bash
+echo "Enter the number 1: "
+read a
+echo "Enter the number 2: "
+read b
+echo "Your numbers are: $a and $b"
+if [[ $a -eq $b ]];
+then
+  echo "$a and $b both are equal!"
+else
+  echo "$a and $b both are not-equal!"
+fi
+root@ubuntu:~/srinu$ 
+root@ubuntu:~/srinu$ ./srinu.sh
+Enter the number 1: 
+36
+Enter the number 2: 
+36
+Your numbers are: 36 and 36
+36 and 36 both are equal!
+root@ubuntu:~/srinu$ ./srinu.sh
+Enter the number 1: 
+22
+Enter the number 2: 
+11
+Your numbers are: 22 and 11
+22 and 11 both are not-equal!
+root@ubuntu:~/srinu$
+root@ubuntu:~/srinu$ cat srinu.sh 
+#!/bin/bash
+echo "Enter the number 1: "
+read a
+echo "Enter the number 2: "
+read b
+echo "Your numbers are: $a and $b"
+if [[ $a -ne $b ]];
+then
+  echo "$a and $b both are not-equal!"
+else
+  echo "$a and $b both are equal!"
+fi
+root@ubuntu:~/srinu$ 
+root@ubuntu:~/srinu$ ./srinu.sh
+Enter the number 1: 
+66
+Enter the number 2: 
+66
+Your numbers are: 66 and 66
+66 and 66 both are equal!
+root@ubuntu:~/srinu$ ./srinu.sh
+Enter the number 1: 
+55
+Enter the number 2: 
+44
+Your numbers are: 55 and 44
+55 and 44 both are not-equal!
+root@ubuntu:~/srinu$ 
+root@ubuntu:~/srinu$ cat srinu.sh 
+#!/bin/bash
+echo "Enter the username: "
+read a
+echo "Enter the password: "
+read -s b
+echo "Your Password: $b"
+if [[ $a == "rahul" && $b == "kl" ]];
+then
+  echo "login success!"
+else
+  echo "login failed!"
+fi
+root@ubuntu:~/srinu$ 
+root@ubuntu:~/srinu$ ./srinu.sh
+Enter the username: 
+rahul
+Enter the password: 
+Your Password: kl
+login success!
+root@ubuntu:~/srinu$ ./srinu.sh
+Enter the username: 
+kohli
+Enter the password: 
+Your Password: kl
+login failed!
+root@ubuntu:~/srinu$ ./srinu.sh
+Enter the username: 
+rahul
+Enter the password: 
+Your Password: lk
+login failed!
+root@ubuntu:~/srinu$ 
+root@ubuntu:~/srinu$ vi srinu.sh 
+root@ubuntu:~/srinu$ 
+root@ubuntu:~/srinu$ cat srinu.sh 
+#!/bin/bash
+echo "Enter the username: "
+read a
+echo "Enter the password: "
+read -s b
+echo "Your Password: $b"
+if [[ $a == "rahul" || $b == "kl" ]];
+then
+  echo "login success!"
+else
+  echo "login failed!"
+fi
+root@ubuntu:~/srinu$ 
+root@ubuntu:~/srinu$ ./srinu.sh
+Enter the username: 
+Malinga
+Enter the password: 
+Your Password: kl
+login success!
+root@ubuntu:~/srinu$ ./srinu.sh
+Enter the username: 
+rahul
+Enter the password: 
+Your Password: ganga
+login success!
+root@ubuntu:~/srinu$ ./srinu.sh
+Enter the username: 
+Malinga
+Enter the password: 
+Your Password: Indhu
+login failed!
+root@ubuntu:~/srinu$ 
